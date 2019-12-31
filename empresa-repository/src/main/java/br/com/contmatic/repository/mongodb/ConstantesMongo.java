@@ -10,6 +10,8 @@ public class ConstantesMongo {
 	
 	public static final String COLLECTION = "empresa";
 	
+	public static final String KEY_FIELD = "cnpj";
+	
 	private ConstantesMongo() {
 	}
 	

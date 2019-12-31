@@ -3,7 +3,7 @@ package br.com.contmatic.model.conta;
 import static br.com.contmatic.utilidades.ConstantesString.CODIGO_BANCO;
 import static br.com.contmatic.utilidades.ConstantesString.NUMERO_AGENCIA;
 
-import static br.com.contmatic.utilidades.MensagensErro.DDD_INVALIDO;
+import static br.com.contmatic.utilidades.MensagensErro.CODIGO_BANCO_INVALIDO;
 import static br.com.contmatic.utilidades.MensagensErro.NUMERO_AGENCIA_INVALIDO;
 import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
 
@@ -27,7 +27,7 @@ public class Agencia {
     
     /** The codigo banco. */
     @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = CODIGO_BANCO, message = DDD_INVALIDO)
+    @Pattern(regexp = CODIGO_BANCO, message = CODIGO_BANCO_INVALIDO)
     private String codigoBanco;
 
     /**

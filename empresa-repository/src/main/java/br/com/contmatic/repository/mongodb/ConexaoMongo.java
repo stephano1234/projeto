@@ -5,25 +5,29 @@ import static br.com.contmatic.repository.mongodb.ConstantesMongo.PORTA;
 
 import com.mongodb.MongoClient;
 
-public final class ConexaoMongo {
+public abstract class ConexaoMongo {
 	
-	private static ConexaoMongo instance;
+	private static ConexaoMongo conexao;
 	
-	private MongoClient mongoClient;
-	
-	private ConexaoMongo() {	
-		this.mongoClient = new MongoClient(HOST_NAME, PORTA);
+	private static MongoClient mongoClient;
+		
+	public ConexaoMongo() {
+		conexao = null;
 	}
 	
-	public static synchronized ConexaoMongo getInstance() {
-		if (instance == null) {
-			instance = new ConexaoMongo();
+	protected static final synchronized ConexaoMongo open() {
+		if (conexao == null) {
+			mongoClient = new MongoClient(HOST_NAME, PORTA);
 		}
-		return instance;
+		return conexao;
 	}
 	
-	public MongoClient getMongoClient() {
-		return this.mongoClient;
+	protected final MongoClient getMongoClient() {
+		return mongoClient;
 	}
 	
+	protected static final synchronized void close() {
+		mongoClient.close();
+		conexao = null;
+	}
 }
