@@ -14,6 +14,10 @@ public interface Repository<E> {
 	
 	public Collection<E> read(Object value, String fieldName);
 	
+	public Collection<E> readMany(Collection<?> values, String fieldName);
+	
+	public Collection<E> readAll();
+	
 	public long count();
 	
 }

@@ -123,13 +123,6 @@ public class Empresa {
 	 * Instantiates a new empresa.
 	 */
 	public Empresa() {
-		this.cnpj = "";
-		this.razaoSocial = "";
-		this.dataAbertura = LocalDate.now();
-		this.responsaveis = new HashSet<>();
-		this.enderecos = new HashSet<>();
-		this.tipoEmpresa = TipoEmpresa.MEI;
-		this.tipoPorteEmpresa = TipoPorteEmpresa.EPP;
 	}
 	
 	/**

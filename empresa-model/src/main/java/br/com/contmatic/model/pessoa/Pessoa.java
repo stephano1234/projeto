@@ -114,13 +114,6 @@ public class Pessoa {
 	 * Instantiates a new pessoa.
 	 */
 	public Pessoa() {
-		this.cpf = "";
-		this.nome = "";
-		this.enderecos = new HashSet<>();
-		this.dataNascimento = LocalDate.now();
-		this.tipoGrauInstrucao = TipoGrauInstrucao.ANALFABETO;
-		this.tipoEstadoCivil = TipoEstadoCivil.SOLTEIRO;
-		this.tipoSexo = TipoSexo.MASCULINO;
 	}
 	
 	/**

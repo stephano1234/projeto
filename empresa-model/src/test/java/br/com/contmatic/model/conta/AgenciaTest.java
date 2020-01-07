@@ -137,7 +137,7 @@ public class AgenciaTest {
      * Deve possuir equals hashcode implementados corretamente que diferenciam pelo numero codigo banco.
      */
     @Test
-    public void deve_possuir_equals_hashcode_implementados_corretamente_que_diferenciam_pelo_numero_codigoBanco() {
+    public void deve_possuir_equals_hashcode_implementados_corretamente() {
         EqualsVerifier.forClass(Agencia.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
     }
         

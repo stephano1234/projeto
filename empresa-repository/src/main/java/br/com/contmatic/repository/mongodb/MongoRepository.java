@@ -1,10 +1,7 @@
 package br.com.contmatic.repository.mongodb;
 
-import static br.com.contmatic.repository.mongodb.ConstantesMongo.HOST_NAME;
-import static br.com.contmatic.repository.mongodb.ConstantesMongo.PORTA;
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.bson.Document;
 
@@ -18,8 +15,8 @@ import br.com.contmatic.repository.Repository;
 
 public abstract class MongoRepository<E> implements Repository<E> {
 
-	private MongoClient conexao;
-	
+	private static MongoClient mongoClient = null;
+
 	private MongoCollection<Document> collection;
 
 	private String collectionName;
@@ -28,49 +25,61 @@ public abstract class MongoRepository<E> implements Repository<E> {
 
 	private String keyFieldName;
 
-	public MongoRepository(String databaseName, String collectionName, String keyFieldName) {
+	private String hostName;
+
+	private int porta;
+
+	protected MongoRepository(String databaseName, String collectionName, String keyFieldName, String hostName,
+			int porta) {
 		this.databaseName = databaseName;
 		this.collectionName = collectionName;
 		this.keyFieldName = keyFieldName;
+		this.hostName = hostName;
+		this.porta = porta;
+	}
+
+	private static MongoClient getMongoClient(String hostName, int porta) {
+		if (mongoClient == null) {
+			mongoClient = new MongoClient(hostName, porta);
+		}
+		return mongoClient;
+	}
+
+	private final void open() {
+		MongoDatabase database = getMongoClient(this.hostName, this.porta).getDatabase(databaseName);
+		this.collection = database.getCollection(collectionName);
 	}
 
 	protected abstract E toObject(Document bson);
-	
-	protected abstract Document toBson(E object);
-	
-	private final void open() {
-		conexao = new MongoClient(HOST_NAME, PORTA);
-		MongoDatabase database = conexao.getDatabase(databaseName);
-		this.collection = database.getCollection(collectionName);
-	}
 
 	@Override
 	public final void create(E creatableObject) {
 		this.open();
 		try {
-			this.collection.insertOne(this.toBson(creatableObject));
+			this.collection.insertOne(Document.parse(creatableObject.toString()));
 		} finally {
-			this.close();
+			close();
 		}
 	}
-	
+
 	@Override
 	public final void delete(Object keyFieldValue) {
 		this.open();
 		try {
 			this.collection.deleteOne(Filters.eq(this.keyFieldName, keyFieldValue));
 		} finally {
-			this.close();
-		}		
-	}	
-	
+			close();
+		}
+	}
+
 	@Override
 	public final void update(Object keyFieldValue, E upToDateObject) {
 		this.open();
 		try {
-			this.collection.replaceOne(Filters.eq(this.keyFieldName, keyFieldValue), this.toBson(upToDateObject));
+			this.collection.replaceOne(Filters.eq(this.keyFieldName, keyFieldValue),
+					Document.parse(upToDateObject.toString()));
 		} finally {
-			this.close();
+			close();
 		}
 	}
 
@@ -80,36 +89,87 @@ public abstract class MongoRepository<E> implements Repository<E> {
 		try {
 			return this.toObject(collection.find(Filters.eq(this.keyFieldName, keyFieldValue)).first());
 		} finally {
-			this.close();
+			close();
 		}
 	}
-		
+
 	@Override
 	public final Collection<E> read(Object value, String fieldName) {
-		Collection<E> readableObject = new ArrayList<>();
+		Collection<E> readableObjects = new HashSet<>();
 		this.open();
-		MongoCursor<Document> cursor = collection.find(Filters.eq(fieldName, value)).iterator();
 		try {
-			while (cursor.hasNext()) {
-				readableObject.add(this.toObject(cursor.next()));
+			MongoCursor<Document> cursor = collection.find(Filters.eq(fieldName, value)).iterator();
+			try {
+				while (cursor.hasNext()) {
+					readableObjects.add(this.toObject(cursor.next()));
+				}
+			} finally {
+				cursor.close();
 			}
+			return readableObjects;
 		} finally {
-			cursor.close();
-			this.close();
+			close();
 		}
-		return readableObject;
 	}
-		
+
+	@Override
+	public final Collection<E> readMany(Collection<?> values, String fieldName) {
+		Collection<E> readableObjects = new HashSet<>();
+		this.open();
+		try {
+			for (Object value : values) {
+				MongoCursor<Document> cursor = collection.find(Filters.eq(fieldName, value)).iterator();
+				try {
+					while (cursor.hasNext()) {
+						readableObjects.add(this.toObject(cursor.next()));
+					}
+				} finally {
+					cursor.close();
+				}
+			}
+			return readableObjects;
+		} finally {
+			close();
+		}
+	}
+
+	@Override
+	public final Collection<E> readAll() {
+		Collection<E> readableObjects = new HashSet<>();
+		this.open();
+		try {
+			MongoCursor<Document> cursor = collection.find().iterator();
+			try {
+				while (cursor.hasNext()) {
+					readableObjects.add(this.toObject(cursor.next()));
+				}
+			} finally {
+				cursor.close();
+
+			}
+			return readableObjects;
+		} finally {
+			close();
+		}
+
+	}
+
 	@Override
 	public final long count() {
 		this.open();
-		long quantidadeBson = collection.countDocuments();
-		this.close();
-		return quantidadeBson;
+		try {
+			return collection.countDocuments();
+		} finally {
+			close();
+		}
 	}
-	
-	private final void close() {
-		conexao.close();
+
+	private static final void close() {
+		if (mongoClient != null) {
+			mongoClient.close();
+			mongoClient = null;
+		}
+
 	}
 
 }
