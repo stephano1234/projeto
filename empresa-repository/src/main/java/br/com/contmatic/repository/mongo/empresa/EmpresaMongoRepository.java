@@ -1,4 +1,4 @@
-package br.com.contmatic.repository.empresa;
+package br.com.contmatic.repository.mongo.empresa;
 
 import java.util.List;
 
