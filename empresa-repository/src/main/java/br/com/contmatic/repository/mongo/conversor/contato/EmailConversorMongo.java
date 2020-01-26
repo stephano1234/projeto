@@ -38,7 +38,7 @@ public class EmailConversorMongo {
 	
 	public List<Document> emailsToDocuments(Set<Email> emails) {
 		if (emails == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docEmails = new ArrayList<>();
 		for (Email email : emails) {
@@ -49,7 +49,7 @@ public class EmailConversorMongo {
 	
 	public Set<Email> documentsToEmails(List<Document> docEmails) {
 		if (docEmails == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<Email> emails = new HashSet<>();
 		for (Document docEmail : docEmails) {

@@ -56,7 +56,7 @@ public class ContratoTrabalhoConversorMongo {
 
 	public List<Document> contratoTrabalhosToDocuments(Set<ContratoTrabalho> contratoTrabalhos) {
 		if (contratoTrabalhos == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docContratoTrabalhos = new ArrayList<>();
 		for (ContratoTrabalho contratoTrabalho : contratoTrabalhos) {
@@ -67,7 +67,7 @@ public class ContratoTrabalhoConversorMongo {
 
 	public Set<ContratoTrabalho> documentsToContratoTrabalhos(List<Document> docContratoTrabalhos) {
 		if (docContratoTrabalhos == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<ContratoTrabalho> contratoTrabalhos = new HashSet<>();
 		for (Document docContratoTrabalho : docContratoTrabalhos) {

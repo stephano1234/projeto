@@ -7,26 +7,27 @@ import org.bson.Document;
 import org.junit.Test;
 
 import br.com.contmatic.model.empresa.Empresa;
-
-import br.com.contmatic.random.empresa.EmpresaRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
 
 public class EmpresaConversorMongoTest {
 
 	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
 	
+	private EmpresaRandomBuilder empresaRandomBuilder = new EmpresaRandomBuilder();
+	
 	@Test
-	public void metodos_empresaToDocument_e_documentToEmpresa_devem_fazer_as_conversoes_de_Document_para_Empresa_e_viceversa_corretamente() {
+	public void metodos_empresaToDocument_e_documentToEmpresa_devem_fazer_as_conversoes_corretas_de_Empresa_para_Document_e_de_Document_para_Empresa_respectivamente() {
 		Empresa empresa;
 		Document docEmpresa;
-		String descricaoEmpresaAntesConversao;
-		String descricaoEmpresaDepoisConversao;
-		for (int i = 0; i < 1000; i++) {
-			empresa = EmpresaRandomBuilder.buildValido();
-			descricaoEmpresaAntesConversao = empresa.toString();
+		String jsonEmpresaAntesConversao;
+		String jsonEmpresaDepoisConversao;
+		for (int i = 0; i < 100; i++) {
+			empresa = empresaRandomBuilder.buildValido();
+			jsonEmpresaAntesConversao = empresa.toString();
 			docEmpresa = empresaConversorMongo.empresaToDocument(empresa);
 			empresa = empresaConversorMongo.documentToEmpresa(docEmpresa);
-			descricaoEmpresaDepoisConversao = empresa.toString();
-			assertEquals(descricaoEmpresaAntesConversao, descricaoEmpresaDepoisConversao);
+			jsonEmpresaDepoisConversao = empresa.toString();
+			assertEquals(jsonEmpresaAntesConversao, jsonEmpresaDepoisConversao);
 		}
 	}
 

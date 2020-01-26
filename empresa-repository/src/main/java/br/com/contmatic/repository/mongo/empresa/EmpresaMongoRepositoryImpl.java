@@ -50,113 +50,94 @@ public final class EmpresaMongoRepositoryImpl implements EmpresaMongoRepository 
 
 	@Override
 	public Empresa readByCnpj(String cnpj) {
-		return empresaConversorMongo.documentToEmpresa(this.mongoCollection.find(Filters.eq(FIELD_CNPJ, cnpj))
-				.projection(Projections.fields(Projections.excludeId())).first());
+		return empresaConversorMongo.documentToEmpresa(this.mongoCollection
+				.find(Filters.eq(FIELD_CNPJ, cnpj))
+				.projection(Projections.fields(Projections.excludeId()))
+				.first());
 	}
 
 	@Override
-	public List<List<String>> readCnpjAndRazaoSocialByRazaoSocial(String razaoSocial) {
-		List<List<String>> cnpjsAndRazoesSociais = new ArrayList<>();
+	public List<Empresa> readCnpjAndRazaoSocialByRazaoSocial(String razaoSocial) {
+		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find(Filters.eq(FIELD_RAZAO_SOCIAL, razaoSocial))
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
-				List<String> cnpjAndRazaoSocial = new ArrayList<>();
-				Document filteredDocument = mongoCursor.next();
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_CNPJ));
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_RAZAO_SOCIAL));
-				cnpjsAndRazoesSociais.add(cnpjAndRazaoSocial);
+				empresas.add(empresaConversorMongo.documentToEmpresa(mongoCursor.next()));
 			}
 		} finally {
 			mongoCursor.close();
 		}
-		return cnpjsAndRazoesSociais;
+		return empresas;
 	}
 
 	@Override
-	public List<List<String>> readCnpjAndRazaoSocialByResponsavelCpf(String cpf) {
-		List<List<String>> cnpjsAndRazoesSociais = new ArrayList<>();
+	public List<Empresa> readCnpjAndRazaoSocialByResponsavelCpf(String cpf) {
+		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find(Filters.eq(FIELD_RESPONSAVEIS + ".cpf", cpf))
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
-				List<String> cnpjAndRazaoSocial = new ArrayList<>();
-				Document filteredDocument = mongoCursor.next();
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_CNPJ));
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_RAZAO_SOCIAL));
-				cnpjsAndRazoesSociais.add(cnpjAndRazaoSocial);
+				empresas.add(empresaConversorMongo.documentToEmpresa(mongoCursor.next()));
 			}
 		} finally {
 			mongoCursor.close();
 		}
-		return cnpjsAndRazoesSociais;
+		return empresas;
 	}
 
 	@Override
-	public List<List<String>> readCnpjAndRazaoSocialByTipoEmpresa(TipoEmpresa tipoEmpresa) {
-		List<List<String>> cnpjsAndRazoesSociais = new ArrayList<>();
+	public List<Empresa> readCnpjAndRazaoSocialByTipoEmpresa(TipoEmpresa tipoEmpresa) {
+		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find(Filters.eq(FIELD_TIPO_EMPRESA, tipoEmpresa.name()))
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
-				List<String> cnpjAndRazaoSocial = new ArrayList<>();
-				Document filteredDocument = mongoCursor.next();
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_CNPJ));
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_RAZAO_SOCIAL));
-				cnpjsAndRazoesSociais.add(cnpjAndRazaoSocial);
+				empresas.add(empresaConversorMongo.documentToEmpresa(mongoCursor.next()));
 			}
 		} finally {
 			mongoCursor.close();
 		}
-		return cnpjsAndRazoesSociais;
+		return empresas;
 	}
 
 	@Override
-	public List<List<String>> readCnpjAndRazaoSocialByTipoPorteEmpresa(TipoPorteEmpresa tipoPorteEmpresa) {
-		List<List<String>> cnpjsAndRazoesSociais = new ArrayList<>();
+	public List<Empresa> readCnpjAndRazaoSocialByTipoPorteEmpresa(TipoPorteEmpresa tipoPorteEmpresa) {
+		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find(Filters.eq(FIELD_TIPO_PORTE_EMPRESA, tipoPorteEmpresa.name()))
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
-				List<String> cnpjAndRazaoSocial = new ArrayList<>();
-				Document filteredDocument = mongoCursor.next();
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_CNPJ));
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_RAZAO_SOCIAL));
-				cnpjsAndRazoesSociais.add(cnpjAndRazaoSocial);
-			}
+				empresas.add(empresaConversorMongo.documentToEmpresa(mongoCursor.next()));			}
 		} finally {
 			mongoCursor.close();
 		}
-		return cnpjsAndRazoesSociais;
+		return empresas;
 	}
 
 	@Override
-	public List<List<String>> readAllCnpjAndRazaoSocial() {
-		List<List<String>> cnpjsAndRazoesSociais = new ArrayList<>();
+	public List<Empresa> readAllCnpjAndRazaoSocial() {
+		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find()
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
-				List<String> cnpjAndRazaoSocial = new ArrayList<>();
-				Document filteredDocument = mongoCursor.next();
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_CNPJ));
-				cnpjAndRazaoSocial.add(filteredDocument.getString(FIELD_RAZAO_SOCIAL));
-				cnpjsAndRazoesSociais.add(cnpjAndRazaoSocial);
+				empresas.add(empresaConversorMongo.documentToEmpresa(mongoCursor.next()));
 			}
 		} finally {
 			mongoCursor.close();
 		}
-		return cnpjsAndRazoesSociais;
+		return empresas;
 	}
 
 	@Override

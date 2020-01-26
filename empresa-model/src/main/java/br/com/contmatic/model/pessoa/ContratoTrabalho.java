@@ -1,7 +1,8 @@
 package br.com.contmatic.model.pessoa;
 
-import static br.com.contmatic.utilidades.MensagensErro.DATA_PASSADO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_INICIO_CONTRATO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
@@ -15,23 +16,26 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.joda.time.LocalDate;
 
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
+
 /**
  * The Class ContratoTrabalho.
  */
 public class ContratoTrabalho {
 
     /** The pessoa. */
-    @NotNull(message = VALOR_NULO)
+    @NotNull(message = PESSOA_INVALIDA, groups = {Post.class})
     @Valid
     private Pessoa pessoa;
       
     /** The tipo contrato trabalho. */
-    @NotNull(message = VALOR_NULO)
+    @NotNull(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
     private TipoContratoTrabalho tipoContratoTrabalho;
 
     /** The data inicio contrato. */
-    @NotNull(message = VALOR_NULO)
-    @Past(message = DATA_PASSADO)
+    @NotNull(message = DATA_INICIO_CONTRATO, groups = {Post.class})
+    @Past(message = DATA_INICIO_CONTRATO, groups = {Post.class, Put.class})
     private LocalDate dataInicioContrato;
     
     /**

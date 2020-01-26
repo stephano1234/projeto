@@ -1,8 +1,8 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.NOT_BLANK_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOT_BLANK_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
 import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
 import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
 import static br.com.contmatic.utilidades.Verificadores.verificaErro;
@@ -18,9 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.contmatic.model.contato.TelefoneFixo;
-import br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder;
-import br.com.contmatic.templates.endereco.CidadeRandomBuilder;
-import br.com.contmatic.templates.endereco.EnderecoRandomBuilder;
+import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
+import br.com.contmatic.model.random.endereco.CidadeRandomBuilder;
+import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -224,7 +224,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	endereco.getTelefonesFixo().add(TelefoneFixoRandomBuilder.buildNaoApenasNumeralNumero());
+    	endereco.getTelefonesFixo().add(TelefoneTestFixoRandomBuilder.buildNaoApenasNumeralNumero());
         assertTrue(procuraAlgumErro(endereco));
     }
     

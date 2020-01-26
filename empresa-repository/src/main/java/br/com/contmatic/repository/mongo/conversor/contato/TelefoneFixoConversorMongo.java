@@ -46,7 +46,7 @@ public class TelefoneFixoConversorMongo {
 	
 	public List<Document> telefonesFixoToDocuments(Set<TelefoneFixo> telefonesFixo) {
 		if (telefonesFixo == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docTelefonesFixo = new ArrayList<>();
 		for (TelefoneFixo telefoneFixo : telefonesFixo) {
@@ -57,7 +57,7 @@ public class TelefoneFixoConversorMongo {
 	
 	public Set<TelefoneFixo> documentsToTelefonesFixo(List<Document> docTelefonesFixo) {
 		if (docTelefonesFixo == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<TelefoneFixo> telefonesFixo = new HashSet<>();
 		for (Document docTelefoneFixo : docTelefonesFixo) {

@@ -17,13 +17,13 @@ import br.com.contmatic.model.contato.Celular;
 import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.templates.conta.ContaRandomBuilder;
-import br.com.contmatic.templates.contato.CelularRandomBuilder;
-import br.com.contmatic.templates.contato.EmailRandomBuilder;
-import br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder;
-import br.com.contmatic.templates.endereco.EnderecoRandomBuilder;
-import br.com.contmatic.templates.pessoa.PessoaRandomBuilder;
-import br.com.contmatic.utilidades.MensagensErro;
+import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
+import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
+import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
+import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
+import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
+import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
+import br.com.contmatic.validacoes.utilidades.MensagensErro;
 import br.com.contmatic.utilidades.Verificadores;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -285,7 +285,7 @@ public class PessoaTest {
      */
     @Test
     public void nao_deve_aceitar_celulares_com_elemento_invalido() {
-    	pessoa.getCelulares().add(CelularRandomBuilder.buildNaoApenasNumeralDdd());
+    	pessoa.getCelulares().add(CelularTestRandomBuilder.buildNaoApenasNumeralDdd());
     	assertTrue(procuraAlgumErro(pessoa));
     }
 
@@ -329,7 +329,7 @@ public class PessoaTest {
      */
     @Test
     public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	pessoa.getTelefonesFixo().add(TelefoneFixoRandomBuilder.buildNaoApenasNumeralDdd());
+    	pessoa.getTelefonesFixo().add(TelefoneTestFixoRandomBuilder.buildNaoApenasNumeralDdd());
     	assertTrue(procuraAlgumErro(pessoa));
     }
 
@@ -373,7 +373,7 @@ public class PessoaTest {
      */
     @Test
     public void nao_deve_aceitar_emails_com_elemento_invalido() {
-    	pessoa.getEmails().add(EmailRandomBuilder.buildMaisDeUmArroba());
+    	pessoa.getEmails().add(EmailTestRandomBuilder.buildMaisDeUmArroba());
     	assertTrue(procuraAlgumErro(pessoa));
     }
 
@@ -471,7 +471,7 @@ public class PessoaTest {
      */
     @Test
     public void nao_deve_aceitar_contas_com_elemento_invalido() {
-    	pessoa.getContas().add(ContaRandomBuilder.buildNaoApenasNumeralNumero());
+    	pessoa.getContas().add(ContaTestRandomBuilder.buildNaoApenasNumeralNumero());
     	assertTrue(procuraAlgumErro(pessoa));
     }
 

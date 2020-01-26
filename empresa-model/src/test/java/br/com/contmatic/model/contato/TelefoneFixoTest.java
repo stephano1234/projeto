@@ -1,26 +1,22 @@
 package br.com.contmatic.model.contato;
 
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildMaisQue2NumeraisDdd;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildMaisQue8NumeraisNumero;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildMenosQue2NumeraisDdd;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildMenosQue8NumeraisNumero;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildNaoApenasNumeralDdd;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildNaoApenasNumeralNumero;
-import static br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder.buildValido;
-import static br.com.contmatic.utilidades.MensagensErro.TELEFONE_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.utilidades.Verificadores.verificaErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.contmatic.model.random.contato.TelefoneFixoTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -28,26 +24,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class TelefoneFixoTest {
     
-    /** The telefoneFixo. */
-    private TelefoneFixo telefoneFixo;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        telefoneFixo = buildValido();
-    }
+	private static TelefoneFixoTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = TelefoneFixoTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no ddd.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_ddd() {
-        telefoneFixo.setDdd(null);
-        assertTrue(procuraAlgumErro(telefoneFixo));
+        assertTrue(procuraQualquerViolacao(random.buildNuloDdd(), Post.class));
     }
     
     /**
@@ -55,7 +49,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_mais_que_2_numerais_no_ddd() {
-        assertTrue(procuraAlgumErro(buildMaisQue2NumeraisDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildMaisQue2NumeraisDdd(), Post.class));
     }
     
     /**
@@ -63,7 +57,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_menos_que_2_numerais_no_ddd() {
-        assertTrue(procuraAlgumErro(buildMenosQue2NumeraisDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildMenosQue2NumeraisDdd(), Post.class));
     }
     
     /**
@@ -71,7 +65,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_caractere_nao_numeral_no_ddd() {
-        assertTrue(procuraAlgumErro(buildNaoApenasNumeralDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralDdd(), Post.class));
     }
     
     /**
@@ -79,7 +73,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void deve_aceitar_ddd_valido() {
-        assertFalse(verificaErro(buildValido(), DDD_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), DDD_INVALIDO, Post.class));
     }
     
     /**
@@ -87,8 +81,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_numero() {
-        telefoneFixo.setNumero(null);
-        assertTrue(procuraAlgumErro(telefoneFixo));
+        assertTrue(procuraQualquerViolacao(random.buildNuloNumero(), Post.class));
     }
     
     /**
@@ -96,7 +89,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_mais_que_8_numerais_no_numero() {
-        assertTrue(procuraAlgumErro(buildMaisQue8NumeraisNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildMaisQue8NumeraisNumero(), Post.class));
     }
     
     /**
@@ -104,7 +97,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_menos_que_8_numerais_no_numero() {
-        assertTrue(procuraAlgumErro(buildMenosQue8NumeraisNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildMenosQue8NumeraisNumero(), Post.class));
     }
     
     /**
@@ -112,14 +105,15 @@ public class TelefoneFixoTest {
      */
     @Test
     public void nao_deve_aceitar_caractere_nao_numeral_no_numero() {
-        assertTrue(procuraAlgumErro(buildNaoApenasNumeralNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralNumero(), Post.class));
     }
     
     /**
      * Deve aceitar numero valido.
      */
+    @Test
     public void deve_aceitar_numero_valido() {
-        assertFalse(verificaErro(buildValido(), TELEFONE_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
     }
     
     /**
@@ -135,7 +129,11 @@ public class TelefoneFixoTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(TelefoneFixo.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(TelefoneFixo.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("ddd", "numero")
+        .verify();
     }
     
     /**
@@ -143,7 +141,7 @@ public class TelefoneFixoTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(telefoneFixo));
+        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
     }
     
 }

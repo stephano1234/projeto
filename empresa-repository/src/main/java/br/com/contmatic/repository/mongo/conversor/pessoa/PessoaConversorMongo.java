@@ -127,7 +127,7 @@ public class PessoaConversorMongo {
 	
 	public List<Document> pessoasToDocuments(Set<Pessoa> pessoas) {
 		if (pessoas == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docPessoas = new ArrayList<>();
 		for (Pessoa pessoa : pessoas) {
@@ -138,7 +138,7 @@ public class PessoaConversorMongo {
 	
 	public Set<Pessoa> documentsToPessoas(List<Document> docPessoas) {
 		if (docPessoas == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<Pessoa> pessoas = new HashSet<>();
 		for (Document docPessoa : docPessoas) {

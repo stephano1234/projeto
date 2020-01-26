@@ -1,17 +1,19 @@
 package br.com.contmatic.model.contato;
 
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.templates.contato.EmailRandomBuilder;
+import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -19,26 +21,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class EmailTest {
     
-    /** The email. */
-    private Email email;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        email = EmailRandomBuilder.buildValido();
-    }
+	private static EmailTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = EmailTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no endereco.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_endereco() {
-        email.setEndereco(null);
-        assertTrue(procuraAlgumErro(email));
+        assertTrue(procuraQualquerViolacao(random.buildNuloEndereco(), Post.class));
     }
     
     /**
@@ -46,8 +46,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_endereco() {
-        email.setEndereco("");
-        assertTrue(procuraAlgumErro(email));
+        assertTrue(procuraQualquerViolacao(random.buildVazioEndereco(), Post.class));
     }
         
     /**
@@ -55,7 +54,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildSemArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildSemArroba(), Post.class));
     }
     
     /**
@@ -63,7 +62,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_arroba_precedido_por_caractere_invalido_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildArrobaPrecedidoPorCaractereInvalido()));
+        assertTrue(procuraQualquerViolacao(random.buildArrobaPrecedidoPorCaractereInvalido(), Post.class));
     }
 
     /**
@@ -71,7 +70,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_mais_de_um_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildMaisDeUmArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildMaisDeUmArroba(), Post.class));
     }
     
     /**
@@ -79,23 +78,15 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_ponto_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildSemPonto()));
+        assertTrue(procuraQualquerViolacao(random.buildSemPonto(), Post.class));
     }
-    
-    /**
-     * Deve aceitar valor valido no endereco.
-     */
-    @Test
-    public void deve_aceitar_valor_valido_no_endereco() {
-        assertFalse(procuraAlgumErro(EmailRandomBuilder.buildValido()));
-    }
-    
+        
     /**
      * Nao deve aceitar valor vazio antes do arroba no endereco.
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_antes_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildVazioAntesArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildVazioAntesArroba(), Post.class));
     }
 
     /**
@@ -103,7 +94,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_antes_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildMaiorTamanhoAntesArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoAntesArroba(), Post.class));
     }
 
     /**
@@ -111,7 +102,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_primeiro_valor_invalido_antes_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildPrimeiroCaractereInvalidoAntesArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildPrimeiroCaractereInvalidoAntesArroba(), Post.class));
     }
     
     /**
@@ -119,7 +110,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_antes_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildCaractereInvalidoAntesArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoAntesArroba(), Post.class));
     }
     
     /**
@@ -127,7 +118,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildVazioDepoisArrobaAtePontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildVazioDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
 
     /**
@@ -135,7 +126,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildMaiorTamanhoDepoisArrobaAtePontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
 
     /**
@@ -143,7 +134,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_primeiro_valor_invalido_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildPrimeiroCaractereInvalidoDepoisArrobaAtePontoObrigatorio()));
+    	assertTrue(procuraQualquerViolacao(random.buildPrimeiroCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
     
     /**
@@ -151,7 +142,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildCaractereInvalidoDepoisArrobaAtePontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
     
     /**
@@ -159,7 +150,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_ponto_obrigatorio_depois_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildSemPontoObrigatorioDepoisArroba()));
+        assertTrue(procuraQualquerViolacao(random.buildSemPontoObrigatorioDepoisArroba(), Post.class));
     }
     
     /**
@@ -167,7 +158,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_ponto_precedido_por_caractere_invalido_depois_do_arroba_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildPontoObrigatorioPrecedidoPorCaractereInvalido()));
+        assertTrue(procuraQualquerViolacao(random.buildPontoObrigatorioPrecedidoPorCaractereInvalido(), Post.class));
     }
     
     /**
@@ -175,7 +166,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_menor_que_tamanho_depois_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildMenorTamanhoDepoisPontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildMenorTamanhoDepoisPontoObrigatorio(), Post.class));
     }
     
     /**
@@ -183,7 +174,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_depois_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildMaiorTamanhoDepoisPontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoDepoisPontoObrigatorio(), Post.class));
     }
         
     /**
@@ -191,9 +182,17 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_depois_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraAlgumErro(EmailRandomBuilder.buildCaractereInvalidoDepoisPontoObrigatorio()));
+        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoDepoisPontoObrigatorio(), Post.class));
     }
-        
+    
+    /**
+     * Deve aceitar valor valido no endereco.
+     */
+    @Test
+    public void deve_aceitar_valor_valido_no_endereco() {
+        assertFalse(procuraQualquerViolacao(random.buildValid(), Post.class));
+    }
+
     /**
      * Deve possuir getters e setters implmentados corretamente.
      */
@@ -207,7 +206,11 @@ public class EmailTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(Email.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(Email.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("endereco")
+        .verify();
     }
     
     /**
@@ -215,7 +218,7 @@ public class EmailTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(email));
+        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
     }
     
 }

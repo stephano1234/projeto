@@ -1,11 +1,11 @@
 package br.com.contmatic.model.contato;
 
-import static br.com.contmatic.utilidades.ConstantesString.CELULAR;
-import static br.com.contmatic.utilidades.ConstantesString.DDD;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.CELULAR;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.DDD;
 
-import static br.com.contmatic.utilidades.MensagensErro.CELULAR_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
@@ -16,23 +16,26 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
+
 /**
  * The Class Celular.
  */
 public class Celular {
 
     /** The ddd. */
-    @NotNull(message = VALOR_NULO)   
-    @Pattern(regexp = DDD, message = DDD_INVALIDO)
+    @NotNull(message = DDD_INVALIDO, groups = {Post.class})   
+    @Pattern(regexp = DDD, groups = {Post.class, Put.class}, message = DDD_INVALIDO)
     private String ddd;
     
     /** The numero. */
-    @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = CELULAR, message = CELULAR_INVALIDO)
+    @NotNull(message = CELULAR_INVALIDO, groups = {Post.class})
+    @Pattern(regexp = CELULAR, groups = {Post.class, Put.class}, message = CELULAR_INVALIDO)
     private String numero;
     
     /** The tipo contato celular. */
-    @NotNull(message = VALOR_NULO)
+    @NotNull(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
     private TipoContatoCelular tipoContatoCelular;
     
     /**

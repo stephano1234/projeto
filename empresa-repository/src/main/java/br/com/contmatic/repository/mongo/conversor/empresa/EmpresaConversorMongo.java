@@ -44,6 +44,9 @@ public class EmpresaConversorMongo {
 	private ContaConversorMongo contaConversorMongo = new ContaConversorMongo();
 
 	public Document empresaToDocument(Empresa empresa) {
+		if (empresa == null) {
+			return null;
+		}
 		final Document docEmpresa = new Document();
 		docEmpresa.append(FIELD_CNPJ, null);
 		docEmpresa.append(FIELD_RAZAO_SOCIAL, null);
@@ -83,6 +86,9 @@ public class EmpresaConversorMongo {
 	}
 	
 	public Empresa documentToEmpresa(Document docEmpresa) {
+		if (docEmpresa == null) {
+			return null;
+		}
 		Empresa empresa = new Empresa();
 		if (docEmpresa.get(FIELD_CNPJ, String.class) != null) {
 			empresa.setCnpj(docEmpresa.get(FIELD_CNPJ, String.class));			

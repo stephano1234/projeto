@@ -1,11 +1,18 @@
 package br.com.contmatic.model.pessoa;
 
-import static br.com.contmatic.utilidades.ConstantesString.NOME;
-
-import static br.com.contmatic.utilidades.MensagensErro.DATA_PASSADO;
-import static br.com.contmatic.utilidades.MensagensErro.NOME_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
-
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_PESSOA_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_NASCIMENTO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import java.util.HashSet;
@@ -19,16 +26,19 @@ import javax.validation.constraints.Pattern;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import org.joda.time.LocalDate;
 
-import br.com.contmatic.anotacoes.CPFbr;
-import br.com.contmatic.anotacoes.CollectionComElementoNaoNulo;
 import br.com.contmatic.model.conta.Conta;
 import br.com.contmatic.model.contato.Celular;
 import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
+import br.com.contmatic.validacoes.CPFbr;
+import br.com.contmatic.validacoes.NaoNuloCollection;
+import br.com.contmatic.validacoes.NotEmptyCollection;
+import br.com.contmatic.validacoes.TextDividedBy;
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
 
 /**
  * The Class Pessoa.
@@ -36,55 +46,55 @@ import br.com.contmatic.model.endereco.Endereco;
 public class Pessoa {
 
 	/** The cpf. */
-	@NotNull(message = VALOR_NULO)
-	@CPFbr
+	@NotNull(message = CPF_INVALIDO, groups = {Post.class})
+	@CPFbr(groups = {Post.class, Put.class})
 	private String cpf;
 
 	/** The nome. */
-	@NotNull(message = VALOR_NULO)
-	@Pattern(regexp = NOME, message = NOME_INVALIDO)
+	@NotNull(message = NOME_PESSOA_INVALIDO, groups = {Post.class})
+	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
+	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
 	private String nome;
 
 	/** The enderecos. */
-	@NotNull(message = VALOR_NULO)
-	@CollectionComElementoNaoNulo
+	@NotEmptyCollection(groups = {Post.class}, message = LISTA_ENDERECOS_INVALIDA)
 	@Valid
 	private Set<Endereco> enderecos;
 
 	/** The data nascimento. */
-	@NotNull(message = VALOR_NULO)
-	@Past(message = DATA_PASSADO)
+	@NotNull(message = DATA_NASCIMENTO, groups = {Post.class})
+	@Past(message = DATA_NASCIMENTO, groups = {Post.class, Put.class})
 	private LocalDate dataNascimento;
 
 	/** The celulares. */
-	@CollectionComElementoNaoNulo
+	@NaoNuloCollection(groups = {Post.class}, message = LISTA_CELULARES_INVALIDA)
 	@Valid
 	private Set<Celular> celulares;
 	
 	/** The telefones fixo. */
-	@CollectionComElementoNaoNulo
+	@NaoNuloCollection(groups = {Post.class}, message = LISTA_TELEFONES_INVALIDA)
 	@Valid
 	private Set<TelefoneFixo> telefonesFixo;
 
 	/** The emails. */
-	@CollectionComElementoNaoNulo
+	@NaoNuloCollection(groups = {Post.class}, message = LISTA_EMAILS_INVALIDA)
 	@Valid
 	private Set<Email> emails;
 
 	/** The tipo grau instrucao. */
-	@NotNull(message = VALOR_NULO)
+	@NotNull(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class})
 	private TipoGrauInstrucao tipoGrauInstrucao;
 
 	/** The tipo estado civil. */
-	@NotNull(message = VALOR_NULO)
+	@NotNull(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class})
 	private TipoEstadoCivil tipoEstadoCivil;
 
 	/** The tipo sexo. */
-	@NotNull(message = VALOR_NULO)
+	@NotNull(message = TIPO_SEXO_INVALIDO, groups = {Post.class})
 	private TipoSexo tipoSexo;
 	
 	/** The contas. */
-	@CollectionComElementoNaoNulo
+	@NaoNuloCollection(groups = {Post.class}, message = LISTA_CONTAS_INVALIDA)
 	@Valid
 	private Set<Conta> contas;
 

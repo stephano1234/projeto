@@ -1,17 +1,15 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.utilidades.ConstantesNumericas.TAMANHO_REGULAR;
-
-import static br.com.contmatic.utilidades.ConstantesString.CEP;
-import static br.com.contmatic.utilidades.ConstantesString.NOT_BLANK;
-import static br.com.contmatic.utilidades.ConstantesString.NUMERO_ENDERECO;
-
-import static br.com.contmatic.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.NOT_BLANK_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.TAMANHO_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
-
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
+import static br.com.contmatic.validacoes.utilidades.ConstantesNumericas.TAMANHO_REGULAR;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.CEP;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.NUMERO_ENDERECO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.COMPLEMENTO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LOGRADOURO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ENDERECO_INVALIDO;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import java.util.HashSet;
@@ -26,8 +24,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import br.com.contmatic.anotacoes.CollectionComElementoNaoNulo;
 import br.com.contmatic.model.contato.TelefoneFixo;
+import br.com.contmatic.validacoes.NaoNuloCollection;
+import br.com.contmatic.validacoes.TextDividedBy;
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
 
 /**
  * The Class Endereco.
@@ -35,31 +36,31 @@ import br.com.contmatic.model.contato.TelefoneFixo;
 public class Endereco {
 
     /** The cep. */
-    @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = CEP, message = CEP_INVALIDO)
+    @NotNull(message = CEP_INVALIDO, groups = {Post.class})
+    @Pattern(regexp = CEP, groups = {Post.class, Put.class}, message = CEP_INVALIDO)
     private String cep;
     
     /** The numero. */
-    @Pattern(regexp = NUMERO_ENDERECO, message = NUMERO_ENDERECO_INVALIDO)
+    @Pattern(regexp = NUMERO_ENDERECO, groups = {Post.class, Put.class}, message = NUMERO_ENDERECO_INVALIDO)
     private String numero;
     
     /** The complemento. */
-    @Size(min = 1, max = TAMANHO_REGULAR, message = TAMANHO_INVALIDO)
-    @Pattern(regexp = NOT_BLANK, message = NOT_BLANK_INVALIDO)
+    @Size(min = 1, max = TAMANHO_REGULAR, groups = {Post.class, Put.class}, message = COMPLEMENTO_INVALIDO)
+    @TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = COMPLEMENTO_INVALIDO)
     private String complemento;
     
     /** The logradouro. */
-    @NotNull(message = VALOR_NULO)
+    @NotNull(message = LOGRADOURO_INVALIDO, groups = {Post.class})
     @Valid
     private Logradouro logradouro;
     
 	/** The telefones fixo. */
-	@CollectionComElementoNaoNulo
+    @NaoNuloCollection(groups = {Post.class}, message = LISTA_TELEFONES_INVALIDA)
     @Valid
     private Set<TelefoneFixo> telefonesFixo;
     
     /** The tipo endereco. */
-    @NotNull(message = VALOR_NULO)
+    @NotNull(message = TIPO_ENDERECO_INVALIDO, groups = {Post.class})
     private TipoEndereco tipoEndereco;
     
     /**
@@ -236,8 +237,8 @@ public class Endereco {
     public String toString() {
         return new ToStringBuilder(this, JSON_STYLE)
                 .append("cep", cep)
-                .append("numero", (numero != null) ? numero : "Sem número")
-                .append("complemento", (complemento != null) ? complemento : "Sem informações adicionais do endereço")
+                .append("numero", numero)
+                .append("complemento", complemento)
                 .append("logradouro", logradouro)
                 .append("telefonesFixo", (telefonesFixo != null) ? telefonesFixo : new HashSet<>())
                 .append("tipoEndereco", tipoEndereco)

@@ -1,13 +1,19 @@
 package br.com.contmatic.model.empresa;
 
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,16 +25,18 @@ import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
 import br.com.contmatic.model.pessoa.ContratoTrabalho;
 import br.com.contmatic.model.pessoa.Pessoa;
-import br.com.contmatic.templates.conta.ContaRandomBuilder;
-import br.com.contmatic.templates.contato.CelularRandomBuilder;
-import br.com.contmatic.templates.contato.EmailRandomBuilder;
-import br.com.contmatic.templates.contato.TelefoneFixoRandomBuilder;
-import br.com.contmatic.templates.empresa.EmpresaRandomBuilder;
-import br.com.contmatic.templates.endereco.EnderecoRandomBuilder;
-import br.com.contmatic.templates.pessoa.ContratoTrabalhoRandomBuilder;
-import br.com.contmatic.templates.pessoa.PessoaRandomBuilder;
-import br.com.contmatic.utilidades.MensagensErro;
-import br.com.contmatic.utilidades.Verificadores;
+import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
+import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
+import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
+import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
+import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
+import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
+import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
+import br.com.contmatic.testes.utilidades.Verificadores;
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
+import br.com.contmatic.validacoes.utilidades.MensagensErro;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -46,7 +54,7 @@ public class EmpresaTest {
      */
     @Before
     public void setUp() throws Exception {
-        empresa = EmpresaRandomBuilder.buildValido();
+        empresa = new Empresa();
     }
 
     /**
@@ -55,9 +63,22 @@ public class EmpresaTest {
     @Test
     public void nao_deve_aceitar_valor_nulo_no_cnpj() {
         empresa.setCnpj(null);
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(empresa, Put.class));
     }
     
+//	public static boolean procuraAlgumErro(Object objetoTestado) {
+//		factory = Validation.buildDefaultValidatorFactory();
+//		validator = factory.getValidator();
+//		Set<ConstraintViolation<Object>> violacoes = validator.validate(objetoTestado, Post.class);
+//		return !violacoes.isEmpty();
+//	}
+
+	/** The validator. */
+	private static Validator validator;
+
+	/** The factory. */
+	private static ValidatorFactory factory;
+
     /**
      * Nao deve aceitar valor maior que tamanho no cnpj.
      */
@@ -393,7 +414,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	empresa.getTelefonesFixo().add(TelefoneFixoRandomBuilder.buildMaisQue2NumeraisDdd());
+    	empresa.getTelefonesFixo().add(TelefoneTestFixoRandomBuilder.buildMaisQue2NumeraisDdd());
     	assertTrue(procuraAlgumErro(empresa));
     }
 
@@ -437,7 +458,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_emails_com_elemento_invalido() {
-    	empresa.getEmails().add(EmailRandomBuilder.buildArrobaPrecedidoPorCaractereInvalido());
+    	empresa.getEmails().add(EmailTestRandomBuilder.buildArrobaPrecedidoPorCaractereInvalido());
     	assertTrue(procuraAlgumErro(empresa));
     }
 
@@ -481,7 +502,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_celulares_com_elemento_invalido() {
-    	empresa.getCelulares().add(CelularRandomBuilder.buildMaisQue2NumeraisDdd());
+    	empresa.getCelulares().add(CelularTestRandomBuilder.buildMaisQue2NumeraisDdd());
     	assertTrue(procuraAlgumErro(empresa));
     }
 
@@ -525,7 +546,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_contas_com_elemento_invalido() {
-    	empresa.getContas().add(ContaRandomBuilder.buildMaisQue12NumeraisNumero());
+    	empresa.getContas().add(ContaTestRandomBuilder.buildMaisQue12NumeraisNumero());
     	assertTrue(procuraAlgumErro(empresa));
     }
 

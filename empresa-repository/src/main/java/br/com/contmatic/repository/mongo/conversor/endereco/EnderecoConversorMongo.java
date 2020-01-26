@@ -81,7 +81,7 @@ public class EnderecoConversorMongo {
 
 	public List<Document> enderecosToDocuments(Set<Endereco> enderecos) {
 		if (enderecos == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docEnderecos = new ArrayList<>();
 		for (Endereco endereco : enderecos) {
@@ -92,7 +92,7 @@ public class EnderecoConversorMongo {
 	
 	public Set<Endereco> documentsToEnderecos(List<Document> docEnderecos) {
 		if (docEnderecos == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<Endereco> enderecos = new HashSet<>();
 		for (Document docEndereco : docEnderecos) {

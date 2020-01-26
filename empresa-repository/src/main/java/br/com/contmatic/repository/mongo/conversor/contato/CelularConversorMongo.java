@@ -55,7 +55,7 @@ public class CelularConversorMongo {
 
 	public List<Document> celularsToDocuments(Set<Celular> celulars) {
 		if (celulars == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docCelulars = new ArrayList<>();
 		for (Celular celular : celulars) {
@@ -66,7 +66,7 @@ public class CelularConversorMongo {
 	
 	public Set<Celular> documentsToCelulars(List<Document> docCelulars) {
 		if (docCelulars == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<Celular> celulars = new HashSet<>();
 		for (Document docCelular : docCelulars) {

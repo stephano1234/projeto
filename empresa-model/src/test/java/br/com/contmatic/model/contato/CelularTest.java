@@ -1,26 +1,23 @@
 package br.com.contmatic.model.contato;
 
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildMaisQue2NumeraisDdd;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildMaisQue9NumeraisNumero;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildMenosQue2NumeraisDdd;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildMenosQue9NumeraisNumero;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildNaoApenasNumeralDdd;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildNaoApenasNumeralNumero;
-import static br.com.contmatic.templates.contato.CelularRandomBuilder.buildValido;
-import static br.com.contmatic.utilidades.MensagensErro.CELULAR_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.utilidades.Verificadores.verificaErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -28,26 +25,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class CelularTest {
     
-    /** The celular. */
-    private Celular celular;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        celular = buildValido();
-    }
+	private static CelularTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = CelularTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no ddd.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_ddd() {
-        celular.setDdd(null);
-        assertTrue(procuraAlgumErro(celular));
+        assertTrue(procuraQualquerViolacao(random.buildNuloDdd(), Post.class));
     }
     
     /**
@@ -55,7 +50,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_mais_que_2_numerais_no_ddd() {
-        assertTrue(procuraAlgumErro(buildMaisQue2NumeraisDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildMaisQue2NumeraisDdd(), Post.class));
     }
     
     /**
@@ -63,7 +58,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_menos_que_2_numerais_no_ddd() {
-        assertTrue(procuraAlgumErro(buildMenosQue2NumeraisDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildMenosQue2NumeraisDdd(), Post.class));
     }
     
     /**
@@ -71,7 +66,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_caractere_nao_numeral_no_ddd() {
-        assertTrue(procuraAlgumErro(buildNaoApenasNumeralDdd()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralDdd(), Post.class));
     }
     
     /**
@@ -79,7 +74,7 @@ public class CelularTest {
      */
     @Test
     public void deve_aceitar_ddd_valido() {
-        assertFalse(verificaErro(buildValido(), DDD_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), DDD_INVALIDO, Post.class));
     }
     
     /**
@@ -87,8 +82,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_numero() {
-        celular.setNumero(null);
-        assertTrue(procuraAlgumErro(celular));
+        assertTrue(procuraQualquerViolacao(random.buildNuloNumero(), Post.class));
     }
     
     /**
@@ -96,7 +90,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_mais_que_9_numerais_no_numero() {
-        assertTrue(procuraAlgumErro(buildMaisQue9NumeraisNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildMaisQue9NumeraisNumero(), Post.class));
     }
     
     /**
@@ -104,7 +98,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_menos_que_9_numerais_no_numero() {
-        assertTrue(procuraAlgumErro(buildMenosQue9NumeraisNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildMenosQue9NumeraisNumero(), Post.class));
     }
     
     /**
@@ -112,14 +106,15 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_caractere_nao_numeral_no_numero() {
-        assertTrue(procuraAlgumErro(buildNaoApenasNumeralNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralNumero(), Post.class));
     }
     
     /**
      * Deve aceitar numero valido.
      */
+    @Test
     public void deve_aceitar_numero_valido() {
-        assertFalse(verificaErro(buildValido(), CELULAR_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), CELULAR_INVALIDO, Post.class));
     }
     
     /**
@@ -127,8 +122,7 @@ public class CelularTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_tipoContatoCelular() {
-        celular.setTipoContatoCelular(null);
-        assertTrue(procuraAlgumErro(celular));
+        assertTrue(procuraQualquerViolacao(random.buildNuloTipoContatoCelular(), Post.class));
     }
     
     /**
@@ -136,8 +130,7 @@ public class CelularTest {
      */
     @Test
     public void deve_aceitar_valor_nao_nulo_no_tipoContatoCelular() {
-        celular.setTipoContatoCelular(TipoContatoCelular.APENAS_LIGACAO);
-        assertFalse(procuraAlgumErro(celular));
+        assertFalse(procuraViolacao(random.buildValid(), TIPO_CONTATO_INVALIDO, Post.class));
     }
         
     /**
@@ -153,7 +146,11 @@ public class CelularTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(Celular.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(Celular.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("ddd", "numero")
+        .verify();
     }
     
     /**
@@ -161,7 +158,7 @@ public class CelularTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(celular));
+        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
     }
     
 }

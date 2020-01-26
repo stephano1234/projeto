@@ -53,7 +53,7 @@ public class ContaConversorMongo {
 
 	public List<Document> contasToDocuments(Set<Conta> contas) {
 		if (contas == null) {
-			return null;
+			return new ArrayList<>();
 		}
 		final List<Document> docContas = new ArrayList<>();
 		for (Conta conta : contas) {
@@ -64,7 +64,7 @@ public class ContaConversorMongo {
 	
 	public Set<Conta> documentsToContas(List<Document> docContas) {
 		if (docContas == null) {
-			return null;
+			return new HashSet<>();
 		}
 		final Set<Conta> contas = new HashSet<>();
 		for (Document docConta : docContas) {

@@ -10,8 +10,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.contmatic.templates.pessoa.ContratoTrabalhoRandomBuilder;
-import br.com.contmatic.templates.pessoa.PessoaRandomBuilder;
+import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
+import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
 import br.com.contmatic.utilidades.Verificadores;
 import nl.jqno.equalsverifier.EqualsVerifier;
 

@@ -1,6 +1,6 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.utilidades.MensagensErro.NOME_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_INVALIDO;
 import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
 import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
 import static br.com.contmatic.utilidades.Verificadores.verificaErro;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.contmatic.templates.endereco.CidadeRandomBuilder;
+import br.com.contmatic.model.random.endereco.CidadeRandomBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -31,7 +31,7 @@ public class CidadeTest {
      */
     @Before
     public void setUp() throws Exception {
-        cidade = CidadeRandomBuilder.buildValido();
+        cidade = CidadeRandomBuilder.build();
     }
 
     /**
@@ -105,7 +105,7 @@ public class CidadeTest {
      */
     @Test
     public void deve_aceitar_nome_valido() {
-        assertFalse(verificaErro(CidadeRandomBuilder.buildValido(), NOME_INVALIDO));
+        assertFalse(verificaErro(CidadeRandomBuilder.build(), NOME_INVALIDO));
     }
     
     /**

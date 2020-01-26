@@ -1,6 +1,6 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.utilidades.MensagensErro.NOME_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_INVALIDO;
 import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
 import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
 import static br.com.contmatic.utilidades.Verificadores.verificaErro;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.contmatic.templates.endereco.BairroRandomBuilder;
+import br.com.contmatic.model.random.endereco.BairroRandomBuilder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
