@@ -1,6 +1,5 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
 import static br.com.contmatic.validacoes.utilidades.ConstantesNumericas.TAMANHO_REGULAR;
 import static br.com.contmatic.validacoes.utilidades.ConstantesString.CEP;
 import static br.com.contmatic.validacoes.utilidades.ConstantesString.NUMERO_ENDERECO;
@@ -26,7 +25,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.validacoes.NaoNuloCollection;
-import br.com.contmatic.validacoes.TextDividedBy;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
 
@@ -46,7 +44,6 @@ public class Endereco {
     
     /** The complemento. */
     @Size(min = 1, max = TAMANHO_REGULAR, groups = {Post.class, Put.class}, message = COMPLEMENTO_INVALIDO)
-    @TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = COMPLEMENTO_INVALIDO)
     private String complemento;
     
     /** The logradouro. */

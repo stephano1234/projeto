@@ -1,19 +1,24 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_INVALIDO;
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.utilidades.Verificadores.verificaErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CIDADE_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_BAIRRO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_CIDADE_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_UF_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.model.random.endereco.BairroRandomBuilder;
+import br.com.contmatic.model.random.endereco.BairroTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -21,26 +26,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class BairroTest {
     
-    /** The bairro. */
-    private Bairro bairro;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        bairro = BairroRandomBuilder.buildValido();
-    }
+	private static BairroTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = BairroTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no nome.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_nome() {
-        bairro.setNome(null);
-        assertTrue(procuraAlgumErro(bairro));
+        assertTrue(procuraQualquerViolacao(random.buildNuloNome(), Post.class));
     }
     
     /**
@@ -48,8 +51,7 @@ public class BairroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_nome() {
-    	bairro.setNome("");
-        assertTrue(procuraAlgumErro(bairro));
+        assertTrue(procuraQualquerViolacao(random.buildVazioNome(), Post.class));
     }
     
     /**
@@ -57,15 +59,7 @@ public class BairroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildMaiorTamanhoNome()));
-    }
-
-    /**
-     * Nao deve aceitar valor com apenas um caractere no nome.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_apenas_um_caractere_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildApenasUmCaractereNome()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoNome(), Post.class));
     }
 
     /**
@@ -73,23 +67,25 @@ public class BairroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_apenas_espaco_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildApenasEspacoNome()));
+        assertTrue(procuraQualquerViolacao(random.buildApenasEspacoNome(), Post.class));
     }
     
-    /**
-     * Nao deve aceitar valor com primeiro caractere invalido no nome.
-     */
     @Test
-    public void nao_deve_aceitar_valor_com_primeiro_caractere_minusculo_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildPrimeiroCaractereMinusculoNome()));
+    public void nao_deve_aceitar_valor_com_espaco_no_inicio_no_nome() {
+        assertTrue(procuraQualquerViolacao(random.buildInicioEspacoNome(), Post.class));
     }
-
+    
+    @Test
+    public void nao_deve_aceitar_valor_com_apenas_espaco_no_fim_no_nome() {
+        assertTrue(procuraQualquerViolacao(random.buildFimEspacoNome(), Post.class));
+    }
+    
     /**
      * Nao deve aceitar valor com um caractere invalido no nome.
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_nao_letra_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildNaoApenasLetraNome()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasLetraEspacoNome(), Post.class));
     }
     
     /**
@@ -97,7 +93,7 @@ public class BairroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_espacos_juntos_no_nome() {
-        assertTrue(procuraAlgumErro(BairroRandomBuilder.buildEspacoDuploNome()));
+        assertTrue(procuraQualquerViolacao(random.buildEspacoSeguidoDeEspacoNome(), Post.class));
     }
     
     /**
@@ -105,24 +101,30 @@ public class BairroTest {
      */
     @Test
     public void deve_aceitar_nome_valido() {
-        assertFalse(verificaErro(BairroRandomBuilder.buildValido(), NOME_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), NOME_BAIRRO_INVALIDO, Post.class));
     }
     
     /**
      * Nao deve aceitar valor nulo no tipo uf.
      */
     @Test
-    public void nao_deve_aceitar_valor_nulo_no_cidade() {
-        bairro.setCidade(null);
-        assertTrue(procuraAlgumErro(bairro));
+    public void nao_deve_aceitar_valor_nulo_na_cidade() {
+        assertTrue(procuraQualquerViolacao(random.buildNuloCidade(), Post.class));
+    }
+    
+    @Test
+    public void nao_deve_aceitar_valor_invalido_na_cidade() {
+        assertTrue(procuraQualquerViolacao(random.buildCidadeInvalido(), Post.class));
     }
     
     /**
      * Deve aceitar valor nao nulo no tipo uf.
      */
     @Test
-    public void deve_aceitar_valor_valido_nao_nulo_no_cidade() {
-        assertFalse(procuraAlgumErro(BairroRandomBuilder.buildValido()));
+    public void deve_aceitar_cidade_valida() {
+        assertFalse(procuraViolacao(random.buildValid(), CIDADE_INVALIDA, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), NOME_CIDADE_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), TIPO_UF_INVALIDO, Post.class));
     }
     
     /**
@@ -138,7 +140,11 @@ public class BairroTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(Bairro.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(Bairro.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("nome", "cidade")
+        .verify();
     }
     
     /**
@@ -146,7 +152,7 @@ public class BairroTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(bairro));
+    	assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
     }
     
 }

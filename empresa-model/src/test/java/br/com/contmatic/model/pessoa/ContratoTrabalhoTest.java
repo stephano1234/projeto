@@ -1,18 +1,26 @@
 package br.com.contmatic.model.pessoa;
 
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_INICIO_CONTRATO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTRATO_INVALIDO;
+import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
-import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
-import br.com.contmatic.utilidades.Verificadores;
+import com.jparams.verifier.tostring.ToStringVerifier;
+
+import br.com.contmatic.model.random.pessoa.ContratoTrabalhoTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -20,26 +28,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class ContratoTrabalhoTest {
     
-    /** The contrato trabalho. */
-    private ContratoTrabalho contratoTrabalho;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        contratoTrabalho = ContratoTrabalhoRandomBuilder.buildValido();
-    }
+	private static ContratoTrabalhoTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = ContratoTrabalhoTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar pessoa nulo.
      */
     @Test
     public void nao_deve_aceitar_pessoa_nulo() {
-    	contratoTrabalho.setPessoa(null);
-    	assertTrue(procuraAlgumErro(contratoTrabalho));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloPessoa(), Post.class));
     }
     
     /**
@@ -47,8 +53,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void nao_deve_aceitar_pessoa_invalido() {
-    	contratoTrabalho.setPessoa(PessoaRandomBuilder.buildApenasEspacoNome());
-    	assertTrue(procuraAlgumErro(contratoTrabalho));
+    	assertTrue(procuraQualquerViolacao(random.buildInvalidaPessoa(), Post.class));
     }
 
     /**
@@ -56,7 +61,8 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void deve_aceitar_pessoa_nao_nulo_valido() {
-    	assertFalse(procuraAlgumErro(contratoTrabalho));
+    	assertFalse(procuraViolacao(random.buildValid(), PESSOA_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), CPF_INVALIDO, Post.class));
     }
     
     /**
@@ -64,8 +70,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void nao_deve_aceitar_tipoContratoTrabalho_nulo() {
-    	contratoTrabalho.setTipoContratoTrabalho(null);
-    	assertTrue(procuraAlgumErro(contratoTrabalho));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloTipoContratoTrabalho(), Post.class));
     }
 
     /**
@@ -73,8 +78,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void deve_aceitar_tipoContratoTrabalho_nao_nulo() {
-    	contratoTrabalho.setTipoContratoTrabalho(TipoContratoTrabalho.AUTONOMO);
-    	assertFalse(procuraAlgumErro(contratoTrabalho));
+    	assertFalse(procuraViolacao(random.buildValid(), TIPO_CONTRATO_INVALIDO, Post.class));
     }
     
     /**
@@ -82,8 +86,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void nao_deve_aceitar_dataInicioContrato_nulo() {
-    	contratoTrabalho.setDataInicioContrato(null);
-    	assertTrue(procuraAlgumErro(contratoTrabalho));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloDataInicioContrato(), Post.class));
     }
     
     /**
@@ -91,7 +94,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void nao_deve_aceitar_dataInicioContrato_futura() {
-    	assertTrue(procuraAlgumErro(ContratoTrabalhoRandomBuilder.buildDataFuturaDataInicioContrato()));
+    	assertTrue(procuraQualquerViolacao(random.buildDataFuturaDataInicioContrato(), Post.class));
     }
 
     /**
@@ -99,7 +102,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void deve_aceitar_dataInicioContrato_passada() {
-    	assertFalse(procuraAlgumErro(contratoTrabalho));
+    	assertFalse(procuraViolacao(random.buildValid(), DATA_INICIO_CONTRATO, Post.class));
     }
     
     /**
@@ -107,7 +110,7 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void deve_possuir_getters_e_setters_implmentados_corretamente() {
-    	assertTrue(Verificadores.verificaEncapsulamentos(ContratoTrabalho.class));
+    	assertTrue(verificaEncapsulamentos(ContratoTrabalho.class));
     }
     
     /**
@@ -115,7 +118,11 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(ContratoTrabalho.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(ContratoTrabalho.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("pessoa")
+        .verify();
     }
     
     /**
@@ -123,6 +130,10 @@ public class ContratoTrabalhoTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(contratoTrabalho));
-    }    
+        ToStringVerifier
+        .forClass(ContratoTrabalho.class)
+        .withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE)
+        .verify();
+    } 
+    
 }

@@ -1,26 +1,32 @@
 package br.com.contmatic.model.endereco;
 
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.BAIRRO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOT_BLANK_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.COMPLEMENTO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LOGRADOURO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOURO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.utilidades.Verificadores.verificaErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ENDERECO_INVALIDO;
+import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.model.contato.TelefoneFixo;
-import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
-import br.com.contmatic.model.random.endereco.CidadeRandomBuilder;
-import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
+import com.jparams.verifier.tostring.ToStringVerifier;
+
+import br.com.contmatic.model.random.endereco.EnderecoTestRandomBuilder;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -28,26 +34,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class EnderecoTest {
 
-    /** The endereco. */
-    private Endereco endereco;
-    
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        endereco = EnderecoRandomBuilder.buildValido();
-    }
+	private static EnderecoTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = EnderecoTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		random.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no cep.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_cep() {
-        endereco.setCep(null);
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildNuloCep(), Post.class));
     }
     
     /**
@@ -55,7 +59,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_cep() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildMaiorTamanhoCep()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoCep(), Post.class));
     }
     
     /**
@@ -63,7 +67,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_menor_que_tamanho_no_cep() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildMenorTamanhoCep()));
+        assertTrue(procuraQualquerViolacao(random.buildMenorTamanhoCep(), Post.class));
     }
     
     /**
@@ -71,7 +75,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_cep() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildNaoApenasNumeralCep()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralCep(), Post.class));
     }
     
     /**
@@ -79,7 +83,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_aceitar_cep_valido() {
-        assertFalse(verificaErro(EnderecoRandomBuilder.buildValido(), CEP_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), CEP_INVALIDO, Post.class));
     }
 
     /**
@@ -87,8 +91,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_aceitar_valor_nulo_no_numero() {
-    	endereco.setNumero(null);
-    	assertFalse(procuraAlgumErro(endereco));
+    	assertFalse(procuraQualquerViolacao(random.buildNuloNumero(), Post.class));
     }
     
     /**
@@ -96,8 +99,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_numero() {
-        endereco.setNumero("");
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildVazioNumero(), Post.class));
     }
     
     /**
@@ -105,7 +107,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_numero() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildMaiorTamanhoNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoNumero(), Post.class));
     }
     
     /**
@@ -113,7 +115,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_numero() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildNaoApenasNumeralNumero()));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralNumero(), Post.class));
     }
     
     /**
@@ -121,16 +123,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_aceitar_numero_valido() {
-        assertFalse(verificaErro(EnderecoRandomBuilder.buildValido(), NUMERO_ENDERECO_INVALIDO));
-    }
-    
-    /**
-     * Deve aceitar valor nulo no complemento.
-     */
-    @Test
-    public void deve_aceitar_valor_nulo_no_complemento() {
-    	endereco.setComplemento(null);
-    	assertFalse(procuraAlgumErro(endereco));
+        assertFalse(procuraViolacao(random.buildValid(), NUMERO_ENDERECO_INVALIDO, Post.class));
     }
     
     /**
@@ -138,8 +131,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_complemento() {
-        endereco.setComplemento("");
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildVazioComplemento(), Post.class));
     }
     
     /**
@@ -147,15 +139,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_complemento() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildMaiorTamanhoComplemento()));
-    }
-    
-    /**
-     * Nao deve aceitar valor com apenas espaco no complemento.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_apenas_espaco_no_complemento() {
-        assertTrue(procuraAlgumErro(EnderecoRandomBuilder.buildApenasEspacoComplemento()));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoComplemento(), Post.class));
     }
     
     /**
@@ -163,7 +147,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_aceitar_complemento_valido() {
-        assertFalse(verificaErro(EnderecoRandomBuilder.buildValido(), NOT_BLANK_INVALIDO));
+        assertFalse(procuraViolacao(random.buildValid(), COMPLEMENTO_INVALIDO, Post.class));
     }
     
     /**
@@ -171,8 +155,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_logradouro() {
-        endereco.setLogradouro(null);
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildNuloLogradouro(), Post.class));
     }
     
     /**
@@ -180,34 +163,25 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_logradouro_invalido() {
-    	endereco.getLogradouro().getBairro().setCidade(CidadeRandomBuilder.buildPrimeiroCaractereMinusculoNome());
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildLogradouroInvalido(), Post.class));
     }
     
     /**
      * Deve aceitar logradouro nao nulo valido.
      */
     @Test
-    public void deve_aceitar_logradouro_nao_nulo_valido() {
-        assertFalse(procuraAlgumErro(EnderecoRandomBuilder.buildValido()));
+    public void deve_aceitar_logradouro_valido() {
+        assertFalse(procuraViolacao(random.buildValid(), LOGRADOURO_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), NOME_LOGRADOURO_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), BAIRRO_INVALIDO, Post.class));
     }
     
     /**
      * Deve aceitar valor nulo no telefones fixo.
      */
     @Test
-    public void deve_aceitar_valor_nulo_no_telefonesFixo() {
-    	endereco.setTelefonesFixo(null);
-    	assertFalse(procuraAlgumErro(endereco));
-    }
-
-    /**
-     * Nao deve aceitar telefones fixo vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_vazio() {
-        endereco.setTelefonesFixo(new HashSet<TelefoneFixo>());
-        assertTrue(procuraAlgumErro(endereco));
+    public void nao_deve_aceitar_valor_nulo_no_telefonesFixo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloTelefonesFixo(), Post.class));
     }
 
     /**
@@ -215,8 +189,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_telefonesFixo_com_elemento_nulo() {
-        endereco.getTelefonesFixo().add(null);
-    	assertTrue(procuraAlgumErro(endereco));
+    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoNulo(), Post.class));
     }
     
     /**
@@ -224,16 +197,17 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	endereco.getTelefonesFixo().add(TelefoneTestFixoRandomBuilder.buildNaoApenasNumeralNumero());
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoInvalido(), Post.class));
     }
     
     /**
      * Deve aceitar telefones fixo nao vazio sem elemento nulo apenas elemento valido.
      */
     @Test
-    public void deve_aceitar_telefonesFixo_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-        assertFalse(procuraAlgumErro(EnderecoRandomBuilder.buildValido()));
+    public void deve_aceitar_telefonesFixo_valido() {
+        assertFalse(procuraViolacao(random.buildValid(), LISTA_TELEFONES_INVALIDA, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), DDD_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
     }
     
     /**
@@ -241,8 +215,7 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_tipoEndereco() {
-        endereco.setTipoEndereco(null);
-        assertTrue(procuraAlgumErro(endereco));
+        assertTrue(procuraQualquerViolacao(random.buildNuloTipoEndereco(), Post.class));
     }
     
     /**
@@ -250,8 +223,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_aceitar_valor_nao_nulo_no_tipoEndereco() {
-        endereco.setTipoEndereco(TipoEndereco.COMERCIAL);
-        assertFalse(procuraAlgumErro(endereco));
+        assertFalse(procuraViolacao(random.buildValid(), TIPO_ENDERECO_INVALIDO, Post.class));
     }
     
     /**
@@ -267,7 +239,11 @@ public class EnderecoTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(Endereco.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
+        EqualsVerifier
+        .forClass(Endereco.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("cep")
+        .verify();
     }
     
     /**
@@ -275,7 +251,10 @@ public class EnderecoTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(endereco));
+        ToStringVerifier
+        .forClass(Endereco.class)
+        .withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE)
+        .verify();
     }
     
 }

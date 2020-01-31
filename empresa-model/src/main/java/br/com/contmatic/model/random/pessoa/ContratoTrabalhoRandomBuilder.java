@@ -11,9 +11,9 @@ public class ContratoTrabalhoRandomBuilder {
 	
 	private PessoaRandomBuilder pessoaRandomBuilder = new PessoaRandomBuilder();
 
-	public ContratoTrabalho buildValido() {
+	public ContratoTrabalho build() {
 		final ContratoTrabalho contratoTrabalho = new ContratoTrabalho();
-		contratoTrabalho.setPessoa(pessoaRandomBuilder.buildValido());
+		contratoTrabalho.setPessoa(pessoaRandomBuilder.build());
 		contratoTrabalho.setDataInicioContrato(LocalDate.now().minusDays(nextInt(1, 1000)));
 		contratoTrabalho.setTipoContratoTrabalho(TipoContratoTrabalho.values()[nextInt(0, TipoContratoTrabalho.values().length)]);
 		return contratoTrabalho;

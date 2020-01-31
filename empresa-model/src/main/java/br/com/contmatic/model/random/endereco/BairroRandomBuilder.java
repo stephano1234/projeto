@@ -15,7 +15,7 @@ public class BairroRandomBuilder {
     
     public static final String ESPACO = " ";
 
-	public Bairro buildValido() {
+	public Bairro build() {
 		final Bairro bairro = new Bairro();
 		bairro.setNome(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), LETRAS_MAIUSCULAS, ESPACO));
 		bairro.setCidade(cidadeRandomBuilder.build());

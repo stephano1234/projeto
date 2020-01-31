@@ -6,14 +6,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import br.com.contmatic.model.empresa.Empresa;
-import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
 import br.com.contmatic.repository.configuracao.mongodb.MongoConnection;
 
 public class PopulateEmpresaMongoCollection {
 
 	private EmpresaMongoRepository empresaMongoRepository;
 
-	private EmpresaRandomBuilder random = new EmpresaRandomBuilder();
+	private EmpresaTestRandomBuilder random = new EmpresaTestRandomBuilder();
 
 	@Test
 	public void popula_collection_empresa_com_20000_dados_validos_e_com_cnpjs_unicos() {
@@ -22,7 +22,7 @@ public class PopulateEmpresaMongoCollection {
 			empresaMongoRepository = new EmpresaMongoRepositoryImpl(MongoConnection.getInstance().getMongoDatabase());
 			int i = 0;
 			while (i < 20000) {
-				empresa = random.buildValido();
+				empresa = random.build();
 				if (empresaMongoRepository.readByCnpj(empresa.getCnpj()) == null) {
 					empresaMongoRepository.create(empresa);
 					i++;

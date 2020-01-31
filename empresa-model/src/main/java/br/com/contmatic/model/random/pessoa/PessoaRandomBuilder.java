@@ -19,9 +19,9 @@ import br.com.contmatic.model.pessoa.TipoEstadoCivil;
 import br.com.contmatic.model.pessoa.TipoGrauInstrucao;
 import br.com.contmatic.model.pessoa.TipoSexo;
 import br.com.contmatic.model.random.conta.ContaRandomBuilder;
-import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
-import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
-import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
+import br.com.contmatic.model.random.contato.CelularRandomBuilder;
+import br.com.contmatic.model.random.contato.EmailRandomBuilder;
+import br.com.contmatic.model.random.contato.TelefoneFixoRandomBuilder;
 import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
 
 public class PessoaRandomBuilder {
@@ -36,22 +36,22 @@ public class PessoaRandomBuilder {
     
 	private EnderecoRandomBuilder enderecoRandomBuilder = new EnderecoRandomBuilder();
 	
-	private CelularTestRandomBuilder celularRandomBuilder = new CelularTestRandomBuilder();
+	private CelularRandomBuilder celularRandomBuilder = new CelularRandomBuilder();
 	
-	private TelefoneTestFixoRandomBuilder telefoneFixoRandomBuilder = new TelefoneTestFixoRandomBuilder();
+	private TelefoneFixoRandomBuilder telefoneFixoRandomBuilder = new TelefoneFixoRandomBuilder();
 	
-	private EmailTestRandomBuilder emailRandomBuilder = new EmailTestRandomBuilder();
+	private EmailRandomBuilder emailRandomBuilder = new EmailRandomBuilder();
 	
 	private ContaRandomBuilder contaRandomBuilder = new ContaRandomBuilder();
 	
-	public Pessoa buildValido() {
+	public Pessoa build() {
 		final Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(cpfValido());
 		pessoa.setNome(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), LETRAS_MAIUSCULAS, ESPACO));
 		Set<Endereco> enderecos = new HashSet<>();
 		int quantidadeCollection = nextInt(1, ELEMENTOS_ARRAY_GERADA);
 		for (int i = 0; i < quantidadeCollection; i++) {
-			enderecos.add(enderecoRandomBuilder.buildValido());
+			enderecos.add(enderecoRandomBuilder.build());
 		}
 		pessoa.setEnderecos(enderecos);
 		pessoa.setDataNascimento(LocalDate.now().minusYears(nextInt(1, 30)));

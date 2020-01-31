@@ -33,7 +33,7 @@ import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
 import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
 import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
 
-public class EmpresaRandomBuilder {
+public class EmpresaTestRandomBuilder {
 
 	public static Empresa buildValido() {
 		Empresa empresa = new Empresa();

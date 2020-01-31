@@ -29,10 +29,10 @@ import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
 import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
 import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
 import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
-import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
-import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
-import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
-import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
+import br.com.contmatic.model.random.endereco.EnderecoTestRandomBuilder;
+import br.com.contmatic.model.random.pessoa.ContratoTrabalhoTestRandomBuilder;
+import br.com.contmatic.model.random.pessoa.PessoaTestRandomBuilder;
 import br.com.contmatic.testes.utilidades.Verificadores;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
@@ -84,7 +84,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_cnpj() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildMaiorTamanhoCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildMaiorTamanhoCnpj()));
     }
     
     /**
@@ -92,7 +92,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_menor_que_tamanho_no_cnpj() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildMenorTamanhoCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildMenorTamanhoCnpj()));
     }
     
     /**
@@ -100,7 +100,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_cnpj() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildNaoApenasNumeralCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildNaoApenasNumeralCnpj()));
     }
     
     /**
@@ -108,7 +108,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_apenas_numeros_repetidos_no_cnpj() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildNumerosRepetidosCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildNumerosRepetidosCnpj()));
     }
     
     /**
@@ -116,7 +116,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_cnpj_com_primeiro_digito_verificador_invalido() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildPrimeiroDigitoVerificadorInvalidoCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildPrimeiroDigitoVerificadorInvalidoCnpj()));
     }    
 
     /**
@@ -124,7 +124,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_cnpj_com_segundo_digito_verificador_invalido() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildSegundoDigitoVerificadorInvalidoCnpj()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildSegundoDigitoVerificadorInvalidoCnpj()));
     }    
 
     /**
@@ -158,7 +158,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildMaiorTamanhoRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildMaiorTamanhoRazaoSocial()));
     }
     
     /**
@@ -166,7 +166,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_apenas_um_caractere_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildApenasUmCaractereRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildApenasUmCaractereRazaoSocial()));
     }
     
     /**
@@ -174,7 +174,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_primeiro_caractere_invalido_no_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildPrimeiroCaractereInvalido()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildPrimeiroCaractereInvalido()));
     }
 
     /**
@@ -182,7 +182,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_ultimo_caractere_invalido_no_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildUltimoCaractereInvalido()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildUltimoCaractereInvalido()));
     }
     
     /**
@@ -190,7 +190,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildCaractereInvalidoRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildCaractereInvalidoRazaoSocial()));
     }
     
     /**
@@ -198,7 +198,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_espacos_juntos_no_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildEspacoDuploRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildEspacoDuploRazaoSocial()));
     }
 
     /**
@@ -206,7 +206,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_pontos_juntos_no_meio_do_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildPontoDuploRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildPontoDuploRazaoSocial()));
     }
 
     /**
@@ -214,7 +214,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_pontos_juntos_no_final_do_razaoSocial() {
-        assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildPontoDuploNoFinalRazaoSocial()));
+        assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildPontoDuploNoFinalRazaoSocial()));
     }
     
     /**
@@ -239,7 +239,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_dataAbertura_futura() {
-    	assertTrue(procuraAlgumErro(EmpresaRandomBuilder.buildDataAberturaDataFutura()));
+    	assertTrue(procuraAlgumErro(EmpresaTestRandomBuilder.buildDataAberturaDataFutura()));
     }
 
     /**
@@ -282,7 +282,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_responsaveis_com_elemento_invalido() {
-    	empresa.getResponsaveis().add(PessoaRandomBuilder.buildApenasEspacoNome());
+    	empresa.getResponsaveis().add(PessoaTestRandomBuilder.buildApenasEspacoNome());
     	assertTrue(procuraAlgumErro(empresa));
     }
 
@@ -326,7 +326,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_contratosTrabalho_com_elemento_invalido() {
-    	empresa.getContratosTrabalho().add(ContratoTrabalhoRandomBuilder.buildDataFuturaDataInicioContrato());
+    	empresa.getContratosTrabalho().add(ContratoTrabalhoTestRandomBuilder.buildDataFuturaDataInicioContrato());
     	assertTrue(procuraAlgumErro(empresa));
     }
 
@@ -370,7 +370,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_enderecos_com_elemento_invalido() {
-    	empresa.getEnderecos().add(EnderecoRandomBuilder.buildApenasEspacoComplemento());
+    	empresa.getEnderecos().add(EnderecoTestRandomBuilder.buildApenasEspacoComplemento());
     	assertTrue(procuraAlgumErro(empresa));
     }
 

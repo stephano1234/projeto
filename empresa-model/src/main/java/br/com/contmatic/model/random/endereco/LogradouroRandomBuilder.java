@@ -15,10 +15,10 @@ public class LogradouroRandomBuilder {
     
     public static final String ESPACO = " ";
 	
-	public Logradouro buildValido() {
+	public Logradouro build() {
 		final Logradouro logradouro = new Logradouro();
 		logradouro.setNome(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), LETRAS_MAIUSCULAS, ESPACO));
-		logradouro.setBairro(bairroRandomBuilder.buildValido());
+		logradouro.setBairro(bairroRandomBuilder.build());
 		return logradouro;
 	}
 	

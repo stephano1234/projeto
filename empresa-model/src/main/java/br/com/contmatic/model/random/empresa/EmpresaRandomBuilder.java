@@ -21,9 +21,9 @@ import br.com.contmatic.model.endereco.Endereco;
 import br.com.contmatic.model.pessoa.ContratoTrabalho;
 import br.com.contmatic.model.pessoa.Pessoa;
 import br.com.contmatic.model.random.conta.ContaRandomBuilder;
-import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
-import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
-import br.com.contmatic.model.random.contato.TelefoneTestFixoRandomBuilder;
+import br.com.contmatic.model.random.contato.CelularRandomBuilder;
+import br.com.contmatic.model.random.contato.EmailRandomBuilder;
+import br.com.contmatic.model.random.contato.TelefoneFixoRandomBuilder;
 import br.com.contmatic.model.random.endereco.EnderecoRandomBuilder;
 import br.com.contmatic.model.random.pessoa.ContratoTrabalhoRandomBuilder;
 import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
@@ -44,15 +44,15 @@ public class EmpresaRandomBuilder {
 	
 	private EnderecoRandomBuilder enderecoRandomBuilder = new EnderecoRandomBuilder();
 	
-	private CelularTestRandomBuilder celularRandomBuilder = new CelularTestRandomBuilder();
+	private CelularRandomBuilder celularRandomBuilder = new CelularRandomBuilder();
 	
-	private TelefoneTestFixoRandomBuilder telefoneFixoRandomBuilder = new TelefoneTestFixoRandomBuilder();
+	private TelefoneFixoRandomBuilder telefoneFixoRandomBuilder = new TelefoneFixoRandomBuilder();
 	
-	private EmailTestRandomBuilder emailRandomBuilder = new EmailTestRandomBuilder();
+	private EmailRandomBuilder emailRandomBuilder = new EmailRandomBuilder();
 	
 	private ContaRandomBuilder contaRandomBuilder = new ContaRandomBuilder();
 	
-	public Empresa buildValido() {
+	public Empresa build() {
 		final Empresa empresa = new Empresa();
 		empresa.setCnpj(cnpjValido());
 		empresa.setRazaoSocial(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), LETRAS_MAIUSCULAS, ESPACO));
@@ -60,19 +60,19 @@ public class EmpresaRandomBuilder {
 		Set<Pessoa> responsaveis = new HashSet<>();
 		int quantidadeCollection = nextInt(1, ELEMENTOS_ARRAY_GERADA);
 		for (int i = 0; i < quantidadeCollection; i++) {
-			responsaveis.add(pessoaRandomBuilder.buildValido());
+			responsaveis.add(pessoaRandomBuilder.build());
 		}
 		empresa.setResponsaveis(responsaveis);
 		Set<ContratoTrabalho> contratosTrabalho = new HashSet<>();
 		quantidadeCollection = nextInt(0, ELEMENTOS_ARRAY_GERADA);
 		for (int i = 0; i < quantidadeCollection; i++) {
-			contratosTrabalho.add(contratoTrabalhoRandomBuilder.buildValido());
+			contratosTrabalho.add(contratoTrabalhoRandomBuilder.build());
 		}
 		empresa.setContratosTrabalho(contratosTrabalho);
 		Set<Endereco> enderecos = new HashSet<>();
 		quantidadeCollection = nextInt(1, ELEMENTOS_ARRAY_GERADA);
 		for (int i = 0; i < quantidadeCollection; i++) {
-			enderecos.add(enderecoRandomBuilder.buildValido());
+			enderecos.add(enderecoRandomBuilder.build());
 		}
 		empresa.setEnderecos(enderecos);
 		Set<Celular> celulares = new HashSet<>();
