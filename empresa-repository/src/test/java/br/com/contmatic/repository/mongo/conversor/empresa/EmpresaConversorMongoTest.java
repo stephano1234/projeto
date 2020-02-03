@@ -7,13 +7,13 @@ import org.bson.Document;
 import org.junit.Test;
 
 import br.com.contmatic.model.empresa.Empresa;
-import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
 
 public class EmpresaConversorMongoTest {
 
 	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
 	
-	private EmpresaTestRandomBuilder empresaRandomBuilder = new EmpresaTestRandomBuilder();
+	private EmpresaRandomBuilder empresaRandomBuilder = new EmpresaRandomBuilder();
 	
 	@Test
 	public void metodos_empresaToDocument_e_documentToEmpresa_devem_fazer_as_conversoes_corretas_de_Empresa_para_Document_e_de_Document_para_Empresa_respectivamente() {
@@ -27,6 +27,8 @@ public class EmpresaConversorMongoTest {
 			docEmpresa = empresaConversorMongo.empresaToDocument(empresa);
 			empresa = empresaConversorMongo.documentToEmpresa(docEmpresa);
 			jsonEmpresaDepoisConversao = empresa.toString();
+			System.out.println((i + 1) + "º objeto antes da conversão  | " + jsonEmpresaAntesConversao);
+			System.out.println((i + 1) + "º objeto depois da conversão | " + jsonEmpresaDepoisConversao);
 			assertEquals(jsonEmpresaAntesConversao, jsonEmpresaDepoisConversao);
 		}
 	}

@@ -27,7 +27,7 @@ public class PessoaTestRandomBuilder {
 
 	private static final int TAMANHO_REGULAR = 100;
 
-	private static final int CPF = 14;
+	private static final int CPF = 11;
 
 	private static final String APENAS_NUMERAL = "[0-9]";
 
@@ -320,6 +320,22 @@ public class PessoaTestRandomBuilder {
 		pessoa.setCpf(pessoaValida.getCpf());
 		pessoa.setNome(pessoaValida.getNome());
 		pessoa.setEnderecos(null);
+		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
+		pessoa.setCelulares(pessoaValida.getCelulares());
+		pessoa.setTelefonesFixo(pessoaValida.getTelefonesFixo());
+		pessoa.setEmails(pessoaValida.getEmails());
+		pessoa.setTipoGrauInstrucao(pessoaValida.getTipoGrauInstrucao());
+		pessoa.setTipoEstadoCivil(pessoaValida.getTipoEstadoCivil());
+		pessoa.setTipoSexo(pessoaValida.getTipoSexo());
+		pessoa.setContas(pessoaValida.getContas());
+		return pessoa;
+	}
+
+	public Pessoa buildVazioEnderecos() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setCpf(pessoaValida.getCpf());
+		pessoa.setNome(pessoaValida.getNome());
+		pessoa.setEnderecos(new HashSet<>());
 		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
 		pessoa.setCelulares(pessoaValida.getCelulares());
 		pessoa.setTelefonesFixo(pessoaValida.getTelefonesFixo());

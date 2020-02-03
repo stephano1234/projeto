@@ -189,7 +189,12 @@ public class PessoaTest {
     public void nao_deve_aceitar_enderecos_nulo() {
     	assertTrue(procuraQualquerViolacao(random.buildNuloEnderecos(), Post.class));
     }
-        
+
+    @Test
+    public void nao_deve_aceitar_enderecos_vazio() {
+    	assertTrue(procuraQualquerViolacao(random.buildVazioEnderecos(), Post.class));
+    }
+
     /**
      * Nao deve aceitar enderecos com pelo menos um elemento nulo.
      */

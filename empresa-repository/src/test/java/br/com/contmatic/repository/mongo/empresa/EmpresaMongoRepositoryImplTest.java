@@ -21,8 +21,8 @@ import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.model.empresa.TipoEmpresa;
 import br.com.contmatic.model.empresa.TipoPorteEmpresa;
 import br.com.contmatic.model.pessoa.Pessoa;
-import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
-import br.com.contmatic.model.random.pessoa.PessoaTestRandomBuilder;
+import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
+import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
 import br.com.contmatic.repository.mongo.conversor.empresa.EmpresaConversorMongo;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -50,9 +50,9 @@ public class EmpresaMongoRepositoryImplTest {
 	
 	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
 	
-	private EmpresaTestRandomBuilder empresaRandomBuilder = new EmpresaTestRandomBuilder();
+	private EmpresaRandomBuilder empresaRandomBuilder = new EmpresaRandomBuilder();
 	
-	private PessoaTestRandomBuilder pessoaRandomBuilder = new PessoaTestRandomBuilder();
+	private PessoaRandomBuilder pessoaRandomBuilder = new PessoaRandomBuilder();
 	
 	@Before
 	public void setUp() throws Exception {
