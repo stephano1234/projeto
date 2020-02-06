@@ -32,8 +32,8 @@ public class ContaTestRandomBuilder {
 		return instance;
 	}
 	
-	public void cleanBuilder() {
-		randomAgencia.cleanBuilder();
+	public static void cleanBuilder() {
+		AgenciaTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 	

@@ -3,6 +3,7 @@ package br.com.contmatic.model.random;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static org.junit.Assert.assertFalse;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import br.com.contmatic.model.empresa.Empresa;
@@ -11,7 +12,12 @@ import br.com.contmatic.validacoes.groups.Post;
 
 public class AllRandomBuilderTest {
 	
-	Empresa empresa;
+	private Empresa empresa;
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		EmpresaRandomBuilder.closeBuilder();
+	}
 	
 	@Test
 	public void gera_1000_objetos_randomicos_e_verifica_se_todos_sao_validos_de_acordo_com_as_regras_estabelecidas() {

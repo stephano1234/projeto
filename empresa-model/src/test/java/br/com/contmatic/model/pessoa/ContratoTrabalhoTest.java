@@ -36,7 +36,7 @@ public class ContratoTrabalhoTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		ContratoTrabalhoTestRandomBuilder.cleanBuilder();
 	}
 
     /**

@@ -48,7 +48,7 @@ public class PessoaTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		PessoaTestRandomBuilder.cleanBuilder();
 	}
 
     /**

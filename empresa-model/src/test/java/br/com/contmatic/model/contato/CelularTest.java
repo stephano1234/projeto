@@ -35,7 +35,7 @@ public class CelularTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		CelularTestRandomBuilder.cleanBuilder();
 	}
 
     /**

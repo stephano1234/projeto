@@ -26,7 +26,7 @@ public class TelefoneFixoTestRandomBuilder {
 		return instance;
 	}
 	
-	public void cleanBuilder() {
+	public static void cleanBuilder() {
 		instance = null;
 	}
 

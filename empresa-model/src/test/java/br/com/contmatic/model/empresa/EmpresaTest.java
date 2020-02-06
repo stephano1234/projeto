@@ -51,7 +51,7 @@ public class EmpresaTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		EmpresaTestRandomBuilder.cleanBuilder();
 	}
 
     /**

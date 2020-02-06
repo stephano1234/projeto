@@ -36,7 +36,7 @@ public class LogradouroTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		LogradouroTestRandomBuilder.cleanBuilder();
 	}
 
     /**

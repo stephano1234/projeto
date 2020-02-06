@@ -72,14 +72,14 @@ public class EmpresaTestRandomBuilder {
 		return empresaValida;
 	}
 	
-	public void cleanBuilder() {
-		randomEmail.cleanBuilder();
-		randomCelular.cleanBuilder();
-		randomConta.cleanBuilder();
-		randomEndereco.cleanBuilder();
-		randomTelefoneFixo.cleanBuilder();
-		randomPessoa.cleanBuilder();
-		randomContratoTrabalho.cleanBuilder();
+	public static void cleanBuilder() {
+		EmailTestRandomBuilder.cleanBuilder();
+		CelularTestRandomBuilder.cleanBuilder();
+		ContaTestRandomBuilder.cleanBuilder();
+		EnderecoTestRandomBuilder.cleanBuilder();
+		TelefoneFixoTestRandomBuilder.cleanBuilder();
+		PessoaTestRandomBuilder.cleanBuilder();
+		ContratoTrabalhoTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 

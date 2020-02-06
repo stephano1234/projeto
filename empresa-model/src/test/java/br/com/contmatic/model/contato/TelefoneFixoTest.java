@@ -34,7 +34,7 @@ public class TelefoneFixoTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		TelefoneFixoTestRandomBuilder.cleanBuilder();
 	}
 
     /**

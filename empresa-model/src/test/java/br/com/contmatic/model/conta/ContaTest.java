@@ -37,7 +37,7 @@ public class ContaTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		ContaTestRandomBuilder.cleanBuilder();
 	}
 
 	/**

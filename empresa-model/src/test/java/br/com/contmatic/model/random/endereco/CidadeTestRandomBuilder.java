@@ -28,7 +28,7 @@ public class CidadeTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
+	public static void cleanBuilder() {
 		instance = null;
 	}
 

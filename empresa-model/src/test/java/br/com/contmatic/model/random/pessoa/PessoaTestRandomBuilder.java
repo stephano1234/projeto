@@ -60,12 +60,12 @@ public class PessoaTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
-		randomEmail.cleanBuilder();
-		randomCelular.cleanBuilder();
-		randomConta.cleanBuilder();
-		randomEndereco.cleanBuilder();
-		randomTelefoneFixo.cleanBuilder();
+	public static void cleanBuilder() {
+		EmailTestRandomBuilder.cleanBuilder();
+		CelularTestRandomBuilder.cleanBuilder();
+		ContaTestRandomBuilder.cleanBuilder();
+		EnderecoTestRandomBuilder.cleanBuilder();
+		TelefoneFixoTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 

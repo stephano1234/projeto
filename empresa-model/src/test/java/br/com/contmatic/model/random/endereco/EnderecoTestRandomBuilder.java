@@ -42,9 +42,9 @@ public class EnderecoTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
-		randomLogradouro.cleanBuilder();
-		randomTelefoneFixo.cleanBuilder();
+	public static void cleanBuilder() {
+		LogradouroTestRandomBuilder.cleanBuilder();
+		TelefoneFixoTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 	

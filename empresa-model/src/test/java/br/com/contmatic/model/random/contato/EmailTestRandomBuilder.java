@@ -32,7 +32,7 @@ public class EmailTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
+	public static void cleanBuilder() {
 		instance = null;
 	}
 

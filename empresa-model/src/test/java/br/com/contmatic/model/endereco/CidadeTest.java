@@ -34,7 +34,7 @@ public class CidadeTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		CidadeTestRandomBuilder.cleanBuilder();
 	}
 
     /**

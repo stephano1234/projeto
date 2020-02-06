@@ -34,7 +34,7 @@ public class AgenciaTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		AgenciaTestRandomBuilder.cleanBuilder();
 	}
 	
     /**

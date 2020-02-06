@@ -36,7 +36,7 @@ public class BairroTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		BairroTestRandomBuilder.cleanBuilder();
 	}
 
     /**

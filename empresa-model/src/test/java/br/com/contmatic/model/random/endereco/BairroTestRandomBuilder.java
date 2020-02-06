@@ -30,8 +30,8 @@ public class BairroTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
-		randomCidade.cleanBuilder();
+	public static void cleanBuilder() {
+		CidadeTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 

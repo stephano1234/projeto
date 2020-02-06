@@ -21,8 +21,8 @@ public class ContratoTrabalhoTestRandomBuilder {
 		return instance;
 	}
 
-	public void cleanBuilder() {
-		randomPessoa.cleanBuilder();
+	public static void cleanBuilder() {
+		PessoaTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 

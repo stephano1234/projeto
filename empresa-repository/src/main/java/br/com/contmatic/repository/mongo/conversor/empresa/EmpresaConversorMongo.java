@@ -45,8 +45,7 @@ public class EmpresaConversorMongo {
 
 	private static EmpresaConversorMongo instance;
 	
-	private EmpresaConversorMongo() {
-		
+	private EmpresaConversorMongo() {	
 	}
 	
 	public static EmpresaConversorMongo getInstance() {

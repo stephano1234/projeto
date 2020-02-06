@@ -31,7 +31,7 @@ public class EmailTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		EmailTestRandomBuilder.cleanBuilder();
 	}
 
     /**

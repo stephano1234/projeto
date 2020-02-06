@@ -36,7 +36,7 @@ public class AgenciaTestRandomBuilder {
 		return instance;
 	}
 	
-	public void cleanBuilder() {
+	public static void cleanBuilder() {
 		instance = null;
 	}
 	

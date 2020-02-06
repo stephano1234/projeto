@@ -42,7 +42,7 @@ public class EnderecoTest {
 	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		random.cleanBuilder();
+		EnderecoTestRandomBuilder.cleanBuilder();
 	}
 
     /**
