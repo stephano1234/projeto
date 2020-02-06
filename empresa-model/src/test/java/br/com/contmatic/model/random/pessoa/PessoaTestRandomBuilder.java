@@ -35,7 +35,7 @@ public class PessoaTestRandomBuilder {
 
 	private static final String ESPACO = " ";
 
-	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
+	public static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
 
 	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
@@ -268,7 +268,7 @@ public class PessoaTestRandomBuilder {
 	public Pessoa buildMaiorTamanhoNome() {
 		Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(pessoaValida.getCpf());
-		pessoa.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, LETRAS_MAIUSCULAS, ESPACO));
+		pessoa.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, VALIDO_NOME, ESPACO));
 		pessoa.setEnderecos(pessoaValida.getEnderecos());
 		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
 		pessoa.setCelulares(pessoaValida.getCelulares());
@@ -285,7 +285,7 @@ public class PessoaTestRandomBuilder {
 		Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(pessoaValida.getCpf());
 		pessoa.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				INVALIDO_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, VALIDO_NOME));
 		pessoa.setEnderecos(pessoaValida.getEnderecos());
 		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
 		pessoa.setCelulares(pessoaValida.getCelulares());
@@ -301,8 +301,8 @@ public class PessoaTestRandomBuilder {
 	public Pessoa buildEspacoSeguidoDeEspacoNome() {
 		Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(pessoaValida.getCpf());
-		pessoa.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS) + "  "
-				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS));
+		pessoa.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME) + "  "
+				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME));
 		pessoa.setEnderecos(pessoaValida.getEnderecos());
 		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
 		pessoa.setCelulares(pessoaValida.getCelulares());

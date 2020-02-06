@@ -11,7 +11,7 @@ public class BairroTestRandomBuilder {
 
 	private static final String ESPACO = " ";
 
-	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
+	public static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
 
 	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
@@ -76,7 +76,7 @@ public class BairroTestRandomBuilder {
 
 	public Bairro buildMaiorTamanhoNome() {
 		Bairro bairro = new Bairro();
-		bairro.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, LETRAS_MAIUSCULAS, ESPACO));
+		bairro.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, VALIDO_NOME, ESPACO));
 		bairro.setCidade(bairroValido.getCidade());
 		return bairro;
 	}
@@ -84,15 +84,15 @@ public class BairroTestRandomBuilder {
 	public Bairro buildNaoApenasLetraEspacoNome() {
 		Bairro bairro = new Bairro();
 		bairro.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				INVALIDO_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, VALIDO_NOME));
 		bairro.setCidade(bairroValido.getCidade());
 		return bairro;
 	}
 
 	public Bairro buildEspacoSeguidoDeEspacoNome() {
 		Bairro bairro = new Bairro();
-		bairro.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS) + "  "
-				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS));
+		bairro.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME) + "  "
+				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME));
 		bairro.setCidade(bairroValido.getCidade());
 		return bairro;
 	}

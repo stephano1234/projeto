@@ -30,7 +30,7 @@ public class PessoaRandomBuilder {
 	
     private static final int TAMANHO_REGULAR = 100;
     
-    private static final String NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
+    private static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
     
     private static final String ESPACO = " ";
     
@@ -47,7 +47,7 @@ public class PessoaRandomBuilder {
 	public Pessoa build() {
 		final Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(cpfValido());
-		pessoa.setNome(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), NOME, ESPACO));
+		pessoa.setNome(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), VALIDO_NOME, ESPACO));
 		Set<Endereco> enderecos = new HashSet<>();
 		int quantidadeCollection = nextInt(1, ELEMENTOS_ARRAY_GERADA);
 		for (int i = 0; i < quantidadeCollection; i++) {

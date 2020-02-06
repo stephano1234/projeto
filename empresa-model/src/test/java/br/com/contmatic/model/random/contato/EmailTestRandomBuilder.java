@@ -19,7 +19,7 @@ public class EmailTestRandomBuilder {
 
 	private static final String INVALIDO_ENTRE_ARROBA_E_PONTO_OBRIGATORIO = "[^a-z0-9.-]";
 
-	private static final String INVALIDO_DEPOIS_PONTO_OBRIGATORIO = "[^a-z]";
+	private static final String INVALIDO_DEPOIS_PONTO_OBRIGATORIO = "[^a-z.]";
 
 	private final Email emailValido = new EmailRandomBuilder().build();
 

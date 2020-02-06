@@ -11,7 +11,7 @@ public class CidadeTestRandomBuilder {
 
 	private static final String ESPACO = " ";
 
-	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
+	public static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
 
 	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
@@ -73,7 +73,7 @@ public class CidadeTestRandomBuilder {
 
 	public Cidade buildMaiorTamanhoNome() {
 		Cidade cidade = new Cidade();
-		cidade.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, LETRAS_MAIUSCULAS, ESPACO));
+		cidade.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, VALIDO_NOME, ESPACO));
 		cidade.setTipoUf(cidadeValida.getTipoUf());
 		return cidade;
 	}
@@ -81,15 +81,15 @@ public class CidadeTestRandomBuilder {
 	public Cidade buildNaoApenasLetraEspacoNome() {
 		Cidade cidade = new Cidade();
 		cidade.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				INVALIDO_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, VALIDO_NOME));
 		cidade.setTipoUf(cidadeValida.getTipoUf());
 		return cidade;
 	}
 
 	public Cidade buildEspacoSeguidoDeEspacoNome() {
 		Cidade cidade = new Cidade();
-		cidade.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS) + "  "
-				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS));
+		cidade.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME) + "  "
+				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME));
 		cidade.setTipoUf(cidadeValida.getTipoUf());
 		return cidade;
 	}

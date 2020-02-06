@@ -34,7 +34,7 @@ public class EmpresaRandomBuilder {
     
     private static final int TAMANHO_REGULAR = 100;
     
-    private static final String NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
+    private static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
     
     private static final String ESPACO = " ";
 	
@@ -72,7 +72,7 @@ public class EmpresaRandomBuilder {
 	public Empresa build() {
 		final Empresa empresa = new Empresa();
 		empresa.setCnpj(cnpjValido());
-		empresa.setRazaoSocial(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), NOME, ESPACO));
+		empresa.setRazaoSocial(generateStringBySizeAndRegexWithSeparator(nextInt(1, TAMANHO_REGULAR + 1), VALIDO_NOME, ESPACO));
 		empresa.setDataAbertura(LocalDate.now().minusDays(nextInt(1, 10000)));
 		Set<Pessoa> responsaveis = new HashSet<>();
 		int quantidadeCollection = nextInt(1, ELEMENTOS_ARRAY_GERADA);

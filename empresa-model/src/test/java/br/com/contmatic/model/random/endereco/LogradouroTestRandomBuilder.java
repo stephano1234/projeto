@@ -11,7 +11,7 @@ public class LogradouroTestRandomBuilder {
 
 	private static final String ESPACO = " ";
 
-	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
+	public static final String VALIDO_NOME = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-ªº\\.']";
 
 	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
@@ -76,7 +76,7 @@ public class LogradouroTestRandomBuilder {
 
 	public Logradouro buildMaiorTamanhoNome() {
 		Logradouro logradouro = new Logradouro();
-		logradouro.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, LETRAS_MAIUSCULAS, ESPACO));
+		logradouro.setNome(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, VALIDO_NOME, ESPACO));
 		logradouro.setBairro(logradouroValido.getBairro());
 		return logradouro;
 	}
@@ -84,15 +84,15 @@ public class LogradouroTestRandomBuilder {
 	public Logradouro buildNaoApenasLetraEspacoNome() {
 		Logradouro logradouro = new Logradouro();
 		logradouro.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				INVALIDO_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, VALIDO_NOME));
 		logradouro.setBairro(logradouroValido.getBairro());
 		return logradouro;
 	}
 
 	public Logradouro buildEspacoSeguidoDeEspacoNome() {
 		Logradouro logradouro = new Logradouro();
-		logradouro.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS) + "  "
-				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), LETRAS_MAIUSCULAS));
+		logradouro.setNome(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME) + "  "
+				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME));
 		logradouro.setBairro(logradouroValido.getBairro());
 		return logradouro;
 	}
