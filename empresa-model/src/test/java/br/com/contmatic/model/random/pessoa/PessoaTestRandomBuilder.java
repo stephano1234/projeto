@@ -37,7 +37,7 @@ public class PessoaTestRandomBuilder {
 
 	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
 
-	public static final String CARACTERES_INVALIDOS_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ ]";
+	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
 	private static final TelefoneFixoTestRandomBuilder randomTelefoneFixo = TelefoneFixoTestRandomBuilder.getInstance();
 
@@ -285,7 +285,7 @@ public class PessoaTestRandomBuilder {
 		Pessoa pessoa = new Pessoa();
 		pessoa.setCpf(pessoaValida.getCpf());
 		pessoa.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				CARACTERES_INVALIDOS_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, LETRAS_MAIUSCULAS));
 		pessoa.setEnderecos(pessoaValida.getEnderecos());
 		pessoa.setDataNascimento(pessoaValida.getDataNascimento());
 		pessoa.setCelulares(pessoaValida.getCelulares());

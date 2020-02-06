@@ -13,19 +13,16 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFON
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.model.conta.Conta;
@@ -34,6 +31,7 @@ import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
 import br.com.contmatic.validacoes.CPFbr;
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.NaoNuloCollection;
 import br.com.contmatic.validacoes.NotEmptyCollection;
 import br.com.contmatic.validacoes.TextDividedBy;
@@ -46,12 +44,12 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Pessoa {
 
 	/** The cpf. */
-	@NotNull(message = CPF_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = CPF_INVALIDO, groups = {Post.class})
 	@CPFbr(groups = {Post.class, Put.class})
 	private String cpf;
 
 	/** The nome. */
-	@NotNull(message = NOME_PESSOA_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = NOME_PESSOA_INVALIDO, groups = {Post.class})
 	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
 	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
 	private String nome;
@@ -62,7 +60,7 @@ public class Pessoa {
 	private Set<Endereco> enderecos;
 
 	/** The data nascimento. */
-	@NotNull(message = DATA_NASCIMENTO, groups = {Post.class})
+	@NaoNulo(message = DATA_NASCIMENTO, groups = {Post.class})
 	@Past(message = DATA_NASCIMENTO, groups = {Post.class, Put.class})
 	private LocalDate dataNascimento;
 
@@ -82,15 +80,15 @@ public class Pessoa {
 	private Set<Email> emails;
 
 	/** The tipo grau instrucao. */
-	@NotNull(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class})
 	private TipoGrauInstrucao tipoGrauInstrucao;
 
 	/** The tipo estado civil. */
-	@NotNull(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class})
 	private TipoEstadoCivil tipoEstadoCivil;
 
 	/** The tipo sexo. */
-	@NotNull(message = TIPO_SEXO_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_SEXO_INVALIDO, groups = {Post.class})
 	private TipoSexo tipoSexo;
 	
 	/** The contas. */
@@ -363,18 +361,41 @@ public class Pessoa {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, JSON_STYLE)
-				.append("cpf", cpf)
-				.append("nome", nome)
-				.append("enderecos", enderecos)
-				.append("dataNascimento", dataNascimento)
-				.append("celulares", (celulares != null) ? celulares : new HashSet<>())
-				.append("telefonesFixo", (telefonesFixo != null) ? telefonesFixo : new HashSet<>())
-				.append("emails", (emails != null) ? emails : new HashSet<>())
-				.append("tipoGrauInstrucao", tipoGrauInstrucao)
-				.append("tipoEstadoCivil", tipoEstadoCivil)
-				.append("tipoSexo", tipoSexo)
-				.append("contas", (contas != null) ? contas : new HashSet<>())
+		return new StringBuilder()
+				.append("{")
+				.append("cpf:")
+				.append(cpf)
+				.append(",")
+				.append("nome:")
+				.append(nome)
+				.append(",")
+				.append("enderecos:")
+				.append(enderecos)
+				.append(",")
+				.append("dataNascimento:")
+				.append(dataNascimento)
+				.append(",")
+				.append("celulares:")
+				.append(celulares)
+				.append(",")
+				.append("telefonesFixo:")
+				.append(telefonesFixo)
+				.append(",")
+				.append("emails:")
+				.append(emails)
+				.append(",")
+				.append("tipoGrauInstrucao:")
+				.append(tipoGrauInstrucao != null ? tipoGrauInstrucao.name() : null)
+				.append(",")
+				.append("tipoEstadoCivil:")
+				.append(tipoEstadoCivil != null ? tipoEstadoCivil.name() : null)
+				.append(",")
+				.append("tipoSexo:")
+				.append(tipoSexo != null ? tipoSexo.name() : null)
+				.append(",")
+				.append("contas:")
+				.append(contas)
+				.append("}")
 				.toString();
 	}
 

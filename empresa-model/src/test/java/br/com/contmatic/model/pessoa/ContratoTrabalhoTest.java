@@ -7,7 +7,6 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_INICIO_CONTRATO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTRATO_INVALIDO;
-import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -132,7 +131,6 @@ public class ContratoTrabalhoTest {
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
         ToStringVerifier
         .forClass(ContratoTrabalho.class)
-        .withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE)
         .verify();
     } 
     

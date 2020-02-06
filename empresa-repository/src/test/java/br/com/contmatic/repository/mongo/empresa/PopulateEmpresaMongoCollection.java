@@ -13,16 +13,16 @@ public class PopulateEmpresaMongoCollection {
 
 	private EmpresaMongoRepository empresaMongoRepository;
 
-	private EmpresaRandomBuilder random = new EmpresaRandomBuilder();
+	private static final EmpresaRandomBuilder empresaRandomBuilder = EmpresaRandomBuilder.getInstance();
 
 	@Test
 	public void popula_collection_empresa_com_20000_dados_validos_e_com_cnpjs_unicos() {
 		try {
 			Empresa empresa = null;
-			empresaMongoRepository = new EmpresaMongoRepositoryImpl(MongoConnection.getInstance().getMongoDatabase());
+			empresaMongoRepository = EmpresaMongoRepositoryImpl.getInstance(MongoConnection.getInstance().getMongoDatabase());
 			int i = 0;
 			while (i < 20000) {
-				empresa = random.build();
+				empresa = empresaRandomBuilder.build();
 				if (empresaMongoRepository.readByCnpj(empresa.getCnpj()) == null) {
 					empresaMongoRepository.create(empresa);
 					i++;
@@ -32,6 +32,7 @@ public class PopulateEmpresaMongoCollection {
 			}
 			assertEquals(20000l, empresaMongoRepository.countAll());
 		} finally {
+			EmpresaMongoRepositoryImpl.closeRepository();
 			MongoConnection.getInstance().close();
 		}
 	}
@@ -40,12 +41,12 @@ public class PopulateEmpresaMongoCollection {
 	public void zera_database_projeto() {
 		try {
 			MongoConnection.getInstance().getMongoDatabase().drop();
-			empresaMongoRepository = new EmpresaMongoRepositoryImpl(MongoConnection.getInstance().getMongoDatabase());
+			empresaMongoRepository = EmpresaMongoRepositoryImpl.getInstance(MongoConnection.getInstance().getMongoDatabase());
 			assertTrue(empresaMongoRepository.countAll() == 0l);
 		} finally {
+			EmpresaMongoRepositoryImpl.closeRepository();
 			MongoConnection.getInstance().close();
 		}
 	}
 
 }
-//

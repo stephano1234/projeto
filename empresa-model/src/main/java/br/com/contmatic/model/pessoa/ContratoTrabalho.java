@@ -4,18 +4,15 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_INICIO_C
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.joda.time.LocalDate;
 
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
 
@@ -25,16 +22,16 @@ import br.com.contmatic.validacoes.groups.Put;
 public class ContratoTrabalho {
 
     /** The pessoa. */
-    @NotNull(message = PESSOA_INVALIDA, groups = {Post.class})
+    @NaoNulo(message = PESSOA_INVALIDA, groups = {Post.class})
     @Valid
     private Pessoa pessoa;
       
     /** The tipo contrato trabalho. */
-    @NotNull(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
     private TipoContratoTrabalho tipoContratoTrabalho;
 
     /** The data inicio contrato. */
-    @NotNull(message = DATA_INICIO_CONTRATO, groups = {Post.class})
+    @NaoNulo(message = DATA_INICIO_CONTRATO, groups = {Post.class})
     @Past(message = DATA_INICIO_CONTRATO, groups = {Post.class, Put.class})
     private LocalDate dataInicioContrato;
     
@@ -150,10 +147,17 @@ public class ContratoTrabalho {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("pessoa", pessoa)
-                .append("tipoContratoTrabalho", tipoContratoTrabalho)
-                .append("dataInicioContrato", dataInicioContrato)
+        return new StringBuilder()
+        		.append("{")
+                .append("pessoa:")
+                .append(pessoa)
+                .append(",")
+                .append("tipoContratoTrabalho:")
+                .append(tipoContratoTrabalho != null ? tipoContratoTrabalho.name() : null)
+                .append(",")
+                .append("dataInicioContrato:")
+                .append(dataInicioContrato)
+                .append("}")
                 .toString();
     }
     

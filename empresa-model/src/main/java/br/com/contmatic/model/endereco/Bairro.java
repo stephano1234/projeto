@@ -6,16 +6,13 @@ import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_BAIRRO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CIDADE_INVALIDA;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.TextDividedBy;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
@@ -26,13 +23,13 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Bairro {
 
     /** The nome. */
-    @NotNull(message = NOME_BAIRRO_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = NOME_BAIRRO_INVALIDO, groups = {Post.class})
     @TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_BAIRRO_INVALIDO)
     @Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_BAIRRO_INVALIDO)
     private String nome;
     
     /** The cidade. */
-    @NotNull(message = CIDADE_INVALIDA, groups = {Post.class})
+    @NaoNulo(message = CIDADE_INVALIDA, groups = {Post.class})
     @Valid
     private Cidade cidade;
     
@@ -130,9 +127,14 @@ public class Bairro {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("nome", nome)
-                .append("cidade", cidade)
+        return new StringBuilder()
+        		.append("{")
+                .append("nome:")
+                .append(nome)
+                .append(",")
+                .append("cidade:")
+                .append(cidade)
+                .append("}")
                 .toString();
     }
     

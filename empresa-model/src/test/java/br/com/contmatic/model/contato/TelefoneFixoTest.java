@@ -3,9 +3,8 @@ package br.com.contmatic.model.contato;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -14,6 +13,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.contato.TelefoneFixoTestRandomBuilder;
 import br.com.contmatic.validacoes.groups.Post;
@@ -141,7 +142,9 @@ public class TelefoneFixoTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
+    	ToStringVerifier
+    	.forClass(TelefoneFixo.class)
+    	.verify();
     }
     
 }

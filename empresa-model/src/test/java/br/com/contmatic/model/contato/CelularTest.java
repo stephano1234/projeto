@@ -3,7 +3,6 @@ package br.com.contmatic.model.contato;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
@@ -15,6 +14,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
 import br.com.contmatic.validacoes.groups.Post;
@@ -158,7 +159,9 @@ public class CelularTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
+    	ToStringVerifier
+    	.forClass(Celular.class)
+    	.verify();
     }
     
 }

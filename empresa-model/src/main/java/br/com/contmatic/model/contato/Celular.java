@@ -7,15 +7,12 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVAL
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
 
@@ -25,17 +22,17 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Celular {
 
     /** The ddd. */
-    @NotNull(message = DDD_INVALIDO, groups = {Post.class})   
+    @NaoNulo(message = DDD_INVALIDO, groups = {Post.class})   
     @Pattern(regexp = DDD, groups = {Post.class, Put.class}, message = DDD_INVALIDO)
     private String ddd;
     
     /** The numero. */
-    @NotNull(message = CELULAR_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = CELULAR_INVALIDO, groups = {Post.class})
     @Pattern(regexp = CELULAR, groups = {Post.class, Put.class}, message = CELULAR_INVALIDO)
     private String numero;
     
     /** The tipo contato celular. */
-    @NotNull(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = TIPO_CONTATO_INVALIDO, groups = {Post.class})
     private TipoContatoCelular tipoContatoCelular;
     
     /**
@@ -152,10 +149,17 @@ public class Celular {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("ddd", ddd)
-                .append("numero", numero)
-                .append("tipoContatoCelular", tipoContatoCelular)
+        return new StringBuilder()
+        		.append("{")
+                .append("ddd:")
+                .append(ddd)
+                .append(",")
+                .append("numero:")
+                .append(numero)
+                .append(",")
+                .append("tipoContatoCelular:")
+                .append(tipoContatoCelular != null ? tipoContatoCelular.name() : null)
+                .append("}")
                 .toString();
     }
     

@@ -13,7 +13,7 @@ public class LogradouroTestRandomBuilder {
 
 	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
 
-	public static final String CARACTERES_INVALIDOS_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ ]";
+	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
 	private static final int TAMANHO_REGULAR = 100;
 
@@ -84,7 +84,7 @@ public class LogradouroTestRandomBuilder {
 	public Logradouro buildNaoApenasLetraEspacoNome() {
 		Logradouro logradouro = new Logradouro();
 		logradouro.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				CARACTERES_INVALIDOS_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, LETRAS_MAIUSCULAS));
 		logradouro.setBairro(logradouroValido.getBairro());
 		return logradouro;
 	}

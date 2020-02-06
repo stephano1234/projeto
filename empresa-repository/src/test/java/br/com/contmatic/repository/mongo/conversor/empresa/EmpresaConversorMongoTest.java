@@ -1,8 +1,10 @@
 package br.com.contmatic.repository.mongo.conversor.empresa;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import org.bson.Document;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -11,25 +13,27 @@ import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
 
 public class EmpresaConversorMongoTest {
 
-	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
+	private static final EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
 	
-	private EmpresaRandomBuilder empresaRandomBuilder = new EmpresaRandomBuilder();
+	private static final EmpresaRandomBuilder empresaRandomBuilder = EmpresaRandomBuilder.getInstance();
+	
+	private static final Logger logger = Logger.getLogger(EmpresaConversorMongoTest.class.getName());
 	
 	@Test
 	public void metodos_empresaToDocument_e_documentToEmpresa_devem_fazer_as_conversoes_corretas_de_Empresa_para_Document_e_de_Document_para_Empresa_respectivamente() {
-		Empresa empresa;
-		Document docEmpresa;
-		String jsonEmpresaAntesConversao;
-		String jsonEmpresaDepoisConversao;
-		for (int i = 0; i < 100; i++) {
-			empresa = empresaRandomBuilder.build();
-			jsonEmpresaAntesConversao = empresa.toString();
-			docEmpresa = empresaConversorMongo.empresaToDocument(empresa);
-			empresa = empresaConversorMongo.documentToEmpresa(docEmpresa);
-			jsonEmpresaDepoisConversao = empresa.toString();
-			System.out.println((i + 1) + "º objeto antes da conversão  | " + jsonEmpresaAntesConversao);
-			System.out.println((i + 1) + "º objeto depois da conversão | " + jsonEmpresaDepoisConversao);
-			assertEquals(jsonEmpresaAntesConversao, jsonEmpresaDepoisConversao);
+		Empresa empresaAntesConversao = new Empresa();
+		Empresa empresaDepoisConversao = new Empresa();
+		try {
+			for (int i = 0; i < 100; i++) {
+				empresaAntesConversao = empresaRandomBuilder.build();
+				empresaDepoisConversao = empresaConversorMongo.documentToEmpresa(empresaConversorMongo.empresaToDocument(empresaAntesConversao));
+				logger.log(Level.INFO, "{0}º conversão testada", i + 1);
+				assertEquals(empresaAntesConversao.toString(), empresaDepoisConversao.toString());
+			}			
+		} catch(AssertionError e) {
+			logger.log(Level.SEVERE, "Objeto antes da conversão  : {0}", empresaAntesConversao);
+			logger.log(Level.SEVERE, "Objeto depois da conversão : {0}", empresaDepoisConversao);
+			fail();
 		}
 	}
 

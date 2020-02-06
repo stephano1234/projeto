@@ -13,7 +13,7 @@ public class BairroTestRandomBuilder {
 
 	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
 
-	public static final String CARACTERES_INVALIDOS_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ ]";
+	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
 	private static final int TAMANHO_REGULAR = 100;
 
@@ -84,7 +84,7 @@ public class BairroTestRandomBuilder {
 	public Bairro buildNaoApenasLetraEspacoNome() {
 		Bairro bairro = new Bairro();
 		bairro.setNome(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				CARACTERES_INVALIDOS_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, LETRAS_MAIUSCULAS));
 		bairro.setCidade(bairroValido.getCidade());
 		return bairro;
 	}

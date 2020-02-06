@@ -6,14 +6,12 @@ import static br.com.contmatic.validacoes.utilidades.ConstantesString.TELEFONE;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
 
@@ -23,12 +21,12 @@ import br.com.contmatic.validacoes.groups.Put;
 public class TelefoneFixo {
 
     /** The ddd. */
-    @NotNull(message = DDD_INVALIDO, groups = {Post.class})   
+    @NaoNulo(message = DDD_INVALIDO, groups = {Post.class})   
     @Pattern(regexp = DDD, groups = {Post.class, Put.class}, message = DDD_INVALIDO)
     private String ddd;
     
     /** The numero. */
-    @NotNull(message = TELEFONE_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = TELEFONE_INVALIDO, groups = {Post.class})
     @Pattern(regexp = TELEFONE, groups = {Post.class, Put.class}, message = TELEFONE_INVALIDO)
     private String numero;
     
@@ -126,9 +124,14 @@ public class TelefoneFixo {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("ddd", ddd)
-                .append("numero", numero)
+        return new StringBuilder()
+        		.append("{")
+                .append("ddd:")
+                .append(ddd)
+                .append(",")
+                .append("numero:")
+                .append(numero)
+                .append("}")
                 .toString();
     }
     

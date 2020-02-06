@@ -13,7 +13,6 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOU
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ENDERECO_INVALIDO;
-import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -141,7 +140,12 @@ public class EnderecoTest {
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_complemento() {
         assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoComplemento(), Post.class));
     }
-    
+
+    @Test
+    public void nao_deve_aceitar_valor_invalido_no_complemento() {
+        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoComplemento(), Post.class));
+    }
+
     /**
      * Deve aceitar complemento valido.
      */
@@ -253,7 +257,6 @@ public class EnderecoTest {
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
         ToStringVerifier
         .forClass(Endereco.class)
-        .withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE)
         .verify();
     }
     

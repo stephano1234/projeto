@@ -1,7 +1,7 @@
 package br.com.contmatic.model.empresa;
 
 import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.RAZAO_SOCIAL;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CNPJ_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
@@ -14,19 +14,15 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFON
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.RAZAO_SOCIAL_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_EMPRESA_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.model.conta.Conta;
@@ -37,6 +33,7 @@ import br.com.contmatic.model.endereco.Endereco;
 import br.com.contmatic.model.pessoa.ContratoTrabalho;
 import br.com.contmatic.model.pessoa.Pessoa;
 import br.com.contmatic.validacoes.CNPJbr;
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.NaoNuloCollection;
 import br.com.contmatic.validacoes.NotEmptyCollection;
 import br.com.contmatic.validacoes.TextDividedBy;
@@ -50,18 +47,18 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Empresa {
 
 	/** The cnpj. */
-	@NotNull(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
+	@NaoNulo(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
 	@CNPJbr(groups = {Post.class, Put.class, Delete.class})
 	private String cnpj;
 
 	/** The razao social. */
-	@NotNull(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class})
 	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
-	@Pattern(regexp = RAZAO_SOCIAL, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
+	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
 	private String razaoSocial;
 
 	/** The data abertura. */
-	@NotNull(message = DATA_ABERTURA, groups = {Post.class})
+	@NaoNulo(message = DATA_ABERTURA, groups = {Post.class})
 	@Past(message = DATA_ABERTURA, groups = {Post.class, Put.class})
 	private LocalDate dataAbertura;
 
@@ -101,11 +98,11 @@ public class Empresa {
 	private Set<Conta> contas;
 
 	/** The tipo empresa. */
-	@NotNull(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class})
 	private TipoEmpresa tipoEmpresa;
 
 	/** The tipo porte empresa. */
-	@NotNull(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class})
 	private TipoPorteEmpresa tipoPorteEmpresa;
 
 	/**
@@ -391,19 +388,44 @@ public class Empresa {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, JSON_STYLE)
-				.append("cnpj", cnpj)
-				.append("razaoSocial", razaoSocial)
-				.append("dataAbertura", dataAbertura)
-				.append("responsaveis", responsaveis)
-				.append("contratosTrabalho", (contratosTrabalho != null) ? contratosTrabalho : new HashSet<>())	
-				.append("enderecos", enderecos)		
-				.append("telefonesFixo", (telefonesFixo != null) ? telefonesFixo : new HashSet<>())
-				.append("emails", (emails != null) ? emails : new HashSet<>())
-				.append("celulares", (celulares != null) ? celulares : new HashSet<>())
-				.append("contas", (contas != null) ? contas : new HashSet<>())
-				.append("tipoEmpresa", tipoEmpresa)
-				.append("tipoPorteEmpresa", tipoPorteEmpresa)
+		return new StringBuilder()
+				.append("{")
+				.append("cnpj:")
+				.append(cnpj)
+				.append(",")
+				.append("razaoSocial:")
+				.append(razaoSocial)
+				.append(",")
+				.append("dataAbertura:")
+				.append(dataAbertura)
+				.append(",")
+				.append("responsaveis:")
+				.append(responsaveis)
+				.append(",")
+				.append("contratosTrabalho:")
+				.append(contratosTrabalho)
+				.append(",")
+				.append("enderecos:")
+				.append(enderecos)
+				.append(",")
+				.append("telefonesFixo:")
+				.append(telefonesFixo)
+				.append(",")
+				.append("emails:")
+				.append(emails)
+				.append(",")
+				.append("celulares:")
+				.append(celulares)
+				.append(",")
+				.append("contas:")
+				.append(contas)
+				.append(",")
+				.append("tipoEmpresa:")
+				.append(tipoEmpresa != null ? tipoEmpresa.name() : null)
+				.append(",")
+				.append("tipoPorteEmpresa:")
+				.append(tipoPorteEmpresa != null ? tipoPorteEmpresa.name() : null)
+				.append("}")
 				.toString();
 	}
 	

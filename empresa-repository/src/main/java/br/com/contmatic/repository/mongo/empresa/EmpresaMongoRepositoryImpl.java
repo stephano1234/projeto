@@ -27,12 +27,25 @@ public final class EmpresaMongoRepositoryImpl implements EmpresaMongoRepository 
 
 	private MongoCollection<Document> mongoCollection;
 
-	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
+	private static final EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
 	
-	public EmpresaMongoRepositoryImpl(MongoDatabase mongoDatabase) {
+	private static EmpresaMongoRepositoryImpl instance;
+		
+	public static EmpresaMongoRepositoryImpl getInstance(MongoDatabase mongoDatabase) {
+		if (instance == null) {
+			instance = new EmpresaMongoRepositoryImpl(mongoDatabase);
+		}
+		return instance;
+	}
+	
+	private EmpresaMongoRepositoryImpl(MongoDatabase mongoDatabase) {
 		this.mongoCollection = mongoDatabase.getCollection("empresa");
 	}
 
+	public static void closeRepository() {
+		instance = null;
+	}
+	
 	@Override
 	public void create(Empresa empresa) {
 		this.mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));

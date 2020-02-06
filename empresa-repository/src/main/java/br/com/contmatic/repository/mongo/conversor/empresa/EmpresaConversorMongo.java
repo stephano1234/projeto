@@ -43,6 +43,23 @@ public class EmpresaConversorMongo {
 	
 	private ContaConversorMongo contaConversorMongo = new ContaConversorMongo();
 
+	private static EmpresaConversorMongo instance;
+	
+	private EmpresaConversorMongo() {
+		
+	}
+	
+	public static EmpresaConversorMongo getInstance() {
+		if (instance == null) {
+			instance = new EmpresaConversorMongo();
+		}
+		return instance;
+	}
+	
+	public static void closeConversor() {
+		instance = null;
+	}
+	
 	public Document empresaToDocument(Empresa empresa) {
 		if (empresa == null) {
 			return null;

@@ -3,7 +3,6 @@ package br.com.contmatic.model.conta;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaToStringJSONSTYLE;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.AGENCIA_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CODIGO_BANCO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_AGENCIA_INVALIDO;
@@ -17,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
 import br.com.contmatic.validacoes.groups.Post;
@@ -143,7 +144,9 @@ public class ContaTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(random.buildValid()));
+    	ToStringVerifier
+    	.forClass(Conta.class)
+    	.verify();
     }
     
 }

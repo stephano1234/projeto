@@ -41,7 +41,7 @@ public class EmpresaTestRandomBuilder {
 
 	public static final String LETRAS_MAIUSCULAS = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ]";
 
-	public static final String CARACTERES_INVALIDOS_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ ]";
+	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
 	private static final TelefoneFixoTestRandomBuilder randomTelefoneFixo = TelefoneFixoTestRandomBuilder.getInstance();
 
@@ -57,7 +57,7 @@ public class EmpresaTestRandomBuilder {
 
 	private static final ContratoTrabalhoTestRandomBuilder randomContratoTrabalho = ContratoTrabalhoTestRandomBuilder.getInstance();
 	
-	private final Empresa empresaValida = new EmpresaRandomBuilder().build();
+	private final Empresa empresaValida = EmpresaRandomBuilder.getInstance().build();
 	
 	private static EmpresaTestRandomBuilder instance;
 	
@@ -308,7 +308,7 @@ public class EmpresaTestRandomBuilder {
 		Empresa empresa = new Empresa();
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
-				CARACTERES_INVALIDOS_NOME, LETRAS_MAIUSCULAS));
+				INVALIDO_NOME, LETRAS_MAIUSCULAS));
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
 		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());

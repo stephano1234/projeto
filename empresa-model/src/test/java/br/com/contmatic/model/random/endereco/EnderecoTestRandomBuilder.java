@@ -13,8 +13,10 @@ import br.com.contmatic.model.random.contato.TelefoneFixoTestRandomBuilder;
 
 public class EnderecoTestRandomBuilder {
 
-	private static final String ANY = ".";
+	private static final String COMPLEMENTO = "[A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-\\.)('ªº°,:\\/\\\\ ]";
 
+	private static final String INVALIDO_COMPLEMENTO = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ&\\-\\.)('ªº°,:\\/\\\\ ]";
+	
 	private static final String SEM_NUMERAL = "[^0-9]";
 
 	private static final int CEP = 8;
@@ -153,7 +155,18 @@ public class EnderecoTestRandomBuilder {
 		Endereco endereco = new Endereco();
 		endereco.setCep(enderecoValido.getCep());
 		endereco.setNumero(enderecoValido.getNumero());
-		endereco.setComplemento(generateStringBySizeAndRegex(TAMANHO_REGULAR + 1, ANY));
+		endereco.setComplemento(generateStringBySizeAndRegex(TAMANHO_REGULAR + 1, COMPLEMENTO));
+		endereco.setLogradouro(enderecoValido.getLogradouro());
+		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
+		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
+		return endereco;
+	}
+
+	public Endereco buildCaractereInvalidoComplemento() {
+		Endereco endereco = new Endereco();
+		endereco.setCep(enderecoValido.getCep());
+		endereco.setNumero(enderecoValido.getNumero());
+		endereco.setComplemento(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR + 1), INVALIDO_COMPLEMENTO));
 		endereco.setLogradouro(enderecoValido.getLogradouro());
 		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
 		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());

@@ -1,6 +1,7 @@
 package br.com.contmatic.repository.mongo.empresa;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -16,13 +17,13 @@ import org.junit.Test;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.model.empresa.TipoEmpresa;
 import br.com.contmatic.model.empresa.TipoPorteEmpresa;
 import br.com.contmatic.model.pessoa.Pessoa;
 import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
-import br.com.contmatic.model.random.pessoa.PessoaRandomBuilder;
 import br.com.contmatic.repository.mongo.conversor.empresa.EmpresaConversorMongo;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -48,11 +49,9 @@ public class EmpresaMongoRepositoryImplTest {
 	
 	private EmpresaMongoRepository empresaMongoRepository;
 	
-	private EmpresaConversorMongo empresaConversorMongo = new EmpresaConversorMongo();
+	private static final EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
 	
-	private EmpresaRandomBuilder empresaRandomBuilder = new EmpresaRandomBuilder();
-	
-	private PessoaRandomBuilder pessoaRandomBuilder = new PessoaRandomBuilder();
+	private static final EmpresaRandomBuilder empresaRandomBuilder = EmpresaRandomBuilder.getInstance();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -60,64 +59,144 @@ public class EmpresaMongoRepositoryImplTest {
 		mongodProcess = mongodExecutable.start();
 		mongoClient = new MongoClient("localhost", 12345);
 		mongoDatabase = mongoClient.getDatabase("projeto");
-		empresaMongoRepository = new EmpresaMongoRepositoryImpl(mongoDatabase);
+		empresaMongoRepository = EmpresaMongoRepositoryImpl.getInstance(mongoDatabase);
 		mongoCollection = mongoDatabase.getCollection("empresa");
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		EmpresaMongoRepositoryImpl.closeRepository();
 		mongodProcess.stop();
 		mongodExecutable.stop();
 	}
-
+	
 	@Test
 	public void deve_salvar_uma_empresa_mantendo_a_integridade_dos_dados_na_collection_empresa_de_uma_database_do_mongodb() {
-		Empresa empresa = empresaRandomBuilder.build();
-		empresaMongoRepository.create(empresa);
-		Document actualDocument = mongoCollection.find().first();
-		actualDocument.remove("_id");
-		Document expectedDocument = empresaConversorMongo.empresaToDocument(empresa);
-		assertEquals(expectedDocument, actualDocument);
+		Empresa empresaAntesPersistir = empresaRandomBuilder.build();
+		empresaMongoRepository.create(empresaAntesPersistir);
+		Empresa empresaAposPersistir = empresaConversorMongo.documentToEmpresa(mongoCollection.find().first());
+		assertEquals(empresaAntesPersistir.toString(), empresaAposPersistir.toString());
 	}
 	
 	@Test
 	public void deve_deletar_a_empresa_especificada_pelo_cnpj_na_collection_empresa_de_uma_database_do_mongodb() {
-		Empresa empresa = empresaRandomBuilder.build();
-		mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));
-		empresaMongoRepository.delete(empresa.getCnpj());
-		assertTrue(mongoCollection.countDocuments() == 0l);
+		Empresa empresaParaDeletar = empresaRandomBuilder.build();
+		mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaDeletar));
+		Empresa empresaParaNaoDeletar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoDeletar = empresaRandomBuilder.build();
+			while (empresaParaNaoDeletar.getCnpj().equals(empresaParaDeletar.getCnpj())) {
+				empresaParaNaoDeletar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoDeletar));
+		}
+		long qtdRegistrosAntesDelete = mongoCollection.countDocuments();
+		empresaMongoRepository.delete(empresaParaDeletar.getCnpj());
+		assertTrue(qtdRegistrosAntesDelete - 1 == mongoCollection.countDocuments());
+		assertNull(mongoCollection.find(Filters.eq("cnpj", empresaParaDeletar.getCnpj())).first());
 	}
 
 	@Test
 	public void quando_deletar_nao_deve_alterar_a_collection_empresa_de_uma_database_do_mongodb_caso_nao_haja_o_cnpj_especificado_na_mesma() {
-		
+		Empresa empresaParaDeletar = empresaRandomBuilder.build();
+		Empresa empresaParaNaoDeletar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoDeletar = empresaRandomBuilder.build();
+			while (empresaParaNaoDeletar.getCnpj().equals(empresaParaDeletar.getCnpj())) {
+				empresaParaNaoDeletar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoDeletar));
+		}
+		long qtdRegistrosAntesDelete = mongoCollection.countDocuments();
+		empresaMongoRepository.delete(empresaParaDeletar.getCnpj());
+		assertNull(mongoCollection.find(Filters.eq("cnpj", empresaParaDeletar.getCnpj())).first());		
+		assertTrue(qtdRegistrosAntesDelete == mongoCollection.countDocuments());
 	}
 	
 	@Test
 	public void ao_substituir_pelo_cnpj_uma_empresa_na_collection_empresa_de_uma_database_do_mongodb_deve_desaparecer_o_registro_da_empresa_desatualizada_caso_sejam_diferentes() {
 		Empresa empresaDesatualizada = empresaRandomBuilder.build();
 		Empresa empresaAtualizada = empresaRandomBuilder.build();
+		while (empresaAtualizada.toString().equals(empresaDesatualizada.toString())) {
+			empresaAtualizada = empresaRandomBuilder.build();
+		}
+		empresaAtualizada.setCnpj(empresaDesatualizada.getCnpj());
 		mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaDesatualizada));
+		Empresa empresaParaNaoAtualizar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			while (empresaParaNaoAtualizar.getCnpj().equals(empresaDesatualizada.getCnpj())) {
+				empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoAtualizar));
+		}
 		empresaMongoRepository.update(empresaDesatualizada.getCnpj(), empresaAtualizada);
-		Document actualDocument = mongoCollection.find().first();
-		actualDocument.remove("_id");
-		Document expectedDocument = empresaConversorMongo.empresaToDocument(empresaAtualizada);
-		assertEquals(expectedDocument, actualDocument);
+		assertEquals(1l, mongoCollection.countDocuments(Filters.eq("cnpj", empresaAtualizada.getCnpj())));
+		Document doc = mongoCollection.find(Filters.eq("cnpj", empresaAtualizada.getCnpj())).first();
+		doc.remove("_id");
+		Empresa empresaAposAtualizacao = empresaConversorMongo.documentToEmpresa(doc);
+		assertNotEquals(empresaDesatualizada.toString(), empresaAposAtualizacao.toString());
 	}
 
 	@Test
 	public void ao_substituir_pelo_cnpj_uma_empresa_na_collection_empresa_de_uma_database_do_mongodb_deve_armazenar_o_registro_da_empresa_atualizada() {
-		
+		Empresa empresaDesatualizada = empresaRandomBuilder.build();
+		Empresa empresaAtualizada = empresaRandomBuilder.build();
+		while (empresaAtualizada.toString().equals(empresaDesatualizada.toString())) {
+			empresaAtualizada = empresaRandomBuilder.build();
+		}
+		empresaAtualizada.setCnpj(empresaDesatualizada.getCnpj());
+		mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaDesatualizada));
+		Empresa empresaParaNaoAtualizar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			while (empresaParaNaoAtualizar.getCnpj().equals(empresaDesatualizada.getCnpj())) {
+				empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoAtualizar));
+		}
+		empresaMongoRepository.update(empresaDesatualizada.getCnpj(), empresaAtualizada);
+		assertEquals(1l, mongoCollection.countDocuments(Filters.eq("cnpj", empresaAtualizada.getCnpj())));
+		Document doc = mongoCollection.find(Filters.eq("cnpj", empresaAtualizada.getCnpj())).first();
+		doc.remove("_id");
+		Empresa empresaAposAtualizacao = empresaConversorMongo.documentToEmpresa(doc);
+		assertEquals(empresaAtualizada.toString(), empresaAposAtualizacao.toString());
 	}
 
 	@Test
 	public void ao_substituir_pelo_cnpj_uma_empresa_na_collection_empresa_de_uma_database_do_mongodb_nao_deve_alterar_a_collection_caso_as_empresas_tenham_todos_os_campos_iguais() {
-		
+		Empresa empresa = empresaRandomBuilder.build();
+		mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));
+		Empresa empresaParaNaoAtualizar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			while (empresaParaNaoAtualizar.getCnpj().equals(empresa.getCnpj())) {
+				empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoAtualizar));
+		}
+		empresaMongoRepository.update(empresa.getCnpj(), empresa);
+		assertEquals(1l, mongoCollection.countDocuments(Filters.eq("cnpj", empresa.getCnpj())));
+		Document doc = mongoCollection.find(Filters.eq("cnpj", empresa.getCnpj())).first();
+		doc.remove("_id");
+		Empresa empresaAposAtualizacao = empresaConversorMongo.documentToEmpresa(doc);
+		assertEquals(empresa.toString(), empresaAposAtualizacao.toString());		
 	}	
 	
 	@Test
 	public void quando_substituir_procurando_pelo_cnpj_nao_deve_alterar_a_collection_empresa_de_uma_database_do_mongodb_caso_nao_haja_o_cnpj_especificado_na_mesma() {
-		
+		Empresa empresa = empresaRandomBuilder.build();
+		Empresa empresaParaNaoAtualizar = null;
+		for (int i = 0; i < 10; i++) {
+			empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			while (empresaParaNaoAtualizar.getCnpj().equals(empresa.getCnpj())) {
+				empresaParaNaoAtualizar = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaParaNaoAtualizar));
+		}
+		empresaMongoRepository.update(empresa.getCnpj(), empresa);
+		assertEquals(0l, mongoCollection.countDocuments(Filters.eq("cnpj", empresa.getCnpj())));
+		assertNull(mongoCollection.find(Filters.eq("cnpj", empresa.getCnpj())).first());
 	}
 
 	@Test
@@ -159,6 +238,12 @@ public class EmpresaMongoRepositoryImplTest {
 		String razaoSocialFiltro = empresaPassaFiltro.getRazaoSocial();
 		List<Empresa> expectedEmpresas = new ArrayList<>();
 		expectedEmpresas.add(empresaPassaFiltro);
+		for (int i = 0; i < 9; i++) {
+			empresaPassaFiltro = empresaRandomBuilder.build();
+			empresaPassaFiltro.setRazaoSocial(razaoSocialFiltro);
+			expectedEmpresas.add(empresaPassaFiltro);
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaPassaFiltro));
+		}
 		for (int i = 0; i < 10; i++) {
 			Empresa empresaNaoPassaFiltro = empresaRandomBuilder.build();
 			while (empresaNaoPassaFiltro.getRazaoSocial().equals(razaoSocialFiltro)) {
@@ -176,12 +261,22 @@ public class EmpresaMongoRepositoryImplTest {
 
 	@Test
 	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_com_razaoSocial_procurada_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		Empresa empresaPassaFiltro = empresaRandomBuilder.build();
+		String razaoSocialFiltro = empresaPassaFiltro.getRazaoSocial();
+		for (int i = 0; i < 10; i++) {
+			Empresa empresaNaoPassaFiltro = empresaRandomBuilder.build();
+			while (empresaNaoPassaFiltro.getRazaoSocial().equals(razaoSocialFiltro)) {
+				empresaNaoPassaFiltro = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));
+		}
+		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByRazaoSocial(razaoSocialFiltro);
+		assertEquals(0, empresasFiltradas.size());
 	}
 	
 	@Test
 	public void deve_ler_os_campos_cnpj_e_razaoSocial_das_empresas_filtradas_pelo_campo_cpf_dos_elementos_do_campo_responsaveis_na_collection_empresa_de_uma_database_do_mongodb() {
-		Pessoa responsavelFiltro = pessoaRandomBuilder.build();
+		Pessoa responsavelFiltro = (Pessoa) empresaRandomBuilder.build().getResponsaveis().toArray()[0];
 		String cpfFiltro = responsavelFiltro.getCpf();
 		List<Empresa> expectedEmpresas = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
@@ -207,7 +302,17 @@ public class EmpresaMongoRepositoryImplTest {
 	
 	@Test
 	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_com_cpf_dos_elementos_do_campo_responsaveis_procurada_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		Pessoa responsavelFiltro = (Pessoa) empresaRandomBuilder.build().getResponsaveis().toArray()[0];
+		String cpfFiltro = responsavelFiltro.getCpf();
+		for (int i = 0; i < 10; i++) {
+			Empresa empresaNaoPassaFiltro = empresaRandomBuilder.build();
+			while (empresaNaoPassaFiltro.getResponsaveis().contains(responsavelFiltro)) {
+				empresaNaoPassaFiltro = empresaRandomBuilder.build();
+			}
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));			
+		}
+		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByResponsavelCpf(cpfFiltro);
+		assertEquals(0, empresasFiltradas.size());
 	}
 
 	@Test
@@ -231,7 +336,15 @@ public class EmpresaMongoRepositoryImplTest {
 
 	@Test
 	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_com_tipoEmpresa_procurada_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		TipoEmpresa filtro = TipoEmpresa.values()[RandomUtils.nextInt(0, TipoEmpresa.values().length)];
+		for (int i = 0; i < 20; i++) {
+			Empresa empresa = empresaRandomBuilder.build();
+			if (!empresa.getTipoEmpresa().equals(filtro)) {
+				mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
+			}
+		}
+		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoEmpresa(filtro);
+		assertEquals(0, empresasFiltradas.size());
 	}
 
 	@Test
@@ -255,7 +368,15 @@ public class EmpresaMongoRepositoryImplTest {
 
 	@Test
 	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_com_tipoPorteEmpresa_procurada_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		TipoPorteEmpresa filtro = TipoPorteEmpresa.values()[RandomUtils.nextInt(0, TipoPorteEmpresa.values().length)];
+		for (int i = 0; i < 20; i++) {
+			Empresa empresa = empresaRandomBuilder.build();
+			if (!empresa.getTipoPorteEmpresa().equals(filtro)) {
+				mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
+			}
+		}
+		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoPorteEmpresa(filtro);
+		assertEquals(0, empresasFiltradas.size());		
 	}
 
 	@Test
@@ -276,7 +397,8 @@ public class EmpresaMongoRepositoryImplTest {
 
 	@Test
 	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		List<Empresa> empresas = empresaMongoRepository.readAllCnpjAndRazaoSocial();
+		assertEquals(0, empresas.size());
 	}
 
 	@Test
@@ -292,7 +414,8 @@ public class EmpresaMongoRepositoryImplTest {
 	
 	@Test
 	public void deve_trazer_zero_caso_nao_haja_empresa_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
-		
+		long quantidadeComputada = empresaMongoRepository.countAll();
+		assertEquals(0l, quantidadeComputada);		
 	}
 	
 }

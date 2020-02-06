@@ -4,14 +4,12 @@ import static br.com.contmatic.validacoes.utilidades.ConstantesString.EMAIL;
 
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.groups.Post;
 import br.com.contmatic.validacoes.groups.Put;
 
@@ -21,7 +19,7 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Email {
 
     /** The endereco. */
-    @NotNull(message = EMAIL_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = EMAIL_INVALIDO, groups = {Post.class})
     @Pattern(regexp = EMAIL, groups = {Post.class, Put.class}, message = EMAIL_INVALIDO)
     private String endereco;
     
@@ -97,8 +95,11 @@ public class Email {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("endereco", endereco)
+        return new StringBuilder()
+        		.append("{")
+                .append("endereco:")
+                .append(endereco)
+                .append("}")
                 .toString();
     }
     
