@@ -19,6 +19,9 @@ public class CelularTestRandomBuilder {
 	
 	private static CelularTestRandomBuilder instance;
 	
+	private CelularTestRandomBuilder() {
+	}
+	
 	public static CelularTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new CelularTestRandomBuilder();

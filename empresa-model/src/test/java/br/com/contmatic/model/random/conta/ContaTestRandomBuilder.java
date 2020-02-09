@@ -25,6 +25,9 @@ public class ContaTestRandomBuilder {
 	
 	private static ContaTestRandomBuilder instance;
 	
+	private ContaTestRandomBuilder() {
+	}
+	
 	public static ContaTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new ContaTestRandomBuilder();

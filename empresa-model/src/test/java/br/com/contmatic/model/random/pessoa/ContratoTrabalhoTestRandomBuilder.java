@@ -14,6 +14,9 @@ public class ContratoTrabalhoTestRandomBuilder {
 
 	private static ContratoTrabalhoTestRandomBuilder instance;
 
+	private ContratoTrabalhoTestRandomBuilder() {
+	}
+	
 	public static ContratoTrabalhoTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new ContratoTrabalhoTestRandomBuilder();

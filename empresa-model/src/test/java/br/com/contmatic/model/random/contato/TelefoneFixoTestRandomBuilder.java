@@ -19,6 +19,9 @@ public class TelefoneFixoTestRandomBuilder {
 	
 	private static TelefoneFixoTestRandomBuilder instance;
 	
+	private TelefoneFixoTestRandomBuilder() {
+	}
+	
 	public static TelefoneFixoTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new TelefoneFixoTestRandomBuilder();

@@ -23,6 +23,9 @@ public class BairroTestRandomBuilder {
 
 	private static BairroTestRandomBuilder instance;
 
+	private BairroTestRandomBuilder() {
+	}
+	
 	public static BairroTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new BairroTestRandomBuilder();

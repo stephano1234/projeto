@@ -35,6 +35,9 @@ public class EnderecoTestRandomBuilder {
 
 	private static EnderecoTestRandomBuilder instance;
 
+	private EnderecoTestRandomBuilder() {
+	}
+	
 	public static EnderecoTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new EnderecoTestRandomBuilder();

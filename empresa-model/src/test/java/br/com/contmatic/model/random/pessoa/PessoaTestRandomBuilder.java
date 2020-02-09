@@ -51,6 +51,9 @@ public class PessoaTestRandomBuilder {
 
 	private final Pessoa pessoaValida = new PessoaRandomBuilder().build();
 
+	private PessoaTestRandomBuilder() {
+	}
+	
 	private static PessoaTestRandomBuilder instance;
 
 	public static PessoaTestRandomBuilder getInstance() {

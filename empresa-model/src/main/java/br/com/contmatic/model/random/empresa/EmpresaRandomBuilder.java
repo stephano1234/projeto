@@ -54,8 +54,7 @@ public class EmpresaRandomBuilder {
 	
 	private static EmpresaRandomBuilder instance;
 	
-	private EmpresaRandomBuilder() {
-		
+	private EmpresaRandomBuilder() {	
 	}
 	
 	public static EmpresaRandomBuilder getInstance() {

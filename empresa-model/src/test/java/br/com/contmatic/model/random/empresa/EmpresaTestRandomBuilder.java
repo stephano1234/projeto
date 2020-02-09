@@ -61,6 +61,9 @@ public class EmpresaTestRandomBuilder {
 	
 	private static EmpresaTestRandomBuilder instance;
 	
+	private EmpresaTestRandomBuilder() {
+	}
+	
 	public static EmpresaTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new EmpresaTestRandomBuilder();

@@ -23,6 +23,9 @@ public class LogradouroTestRandomBuilder {
 
 	private static LogradouroTestRandomBuilder instance;
 
+	private LogradouroTestRandomBuilder() {
+	}
+	
 	public static LogradouroTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new LogradouroTestRandomBuilder();

@@ -11,7 +11,9 @@ import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
 import org.bson.Document;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.mongodb.MongoClient;
@@ -49,9 +51,22 @@ public class EmpresaMongoRepositoryImplTest {
 	
 	private EmpresaMongoRepository empresaMongoRepository;
 	
-	private static final EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
+	private static EmpresaConversorMongo empresaConversorMongo;
 	
-	private static final EmpresaRandomBuilder empresaRandomBuilder = EmpresaRandomBuilder.getInstance();
+	private static EmpresaRandomBuilder empresaRandomBuilder;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		empresaConversorMongo = EmpresaConversorMongo.getInstance();
+		empresaRandomBuilder = EmpresaRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		EmpresaConversorMongo.closeConversor();
+		EmpresaRandomBuilder.closeBuilder();
+		EmpresaMongoRepositoryImpl.closeRepository();
+	}
 	
 	@Before
 	public void setUp() throws Exception {

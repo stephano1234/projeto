@@ -21,6 +21,9 @@ public class CidadeTestRandomBuilder {
 
 	private static CidadeTestRandomBuilder instance;
 
+	private CidadeTestRandomBuilder() {
+	}
+	
 	public static CidadeTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new CidadeTestRandomBuilder();

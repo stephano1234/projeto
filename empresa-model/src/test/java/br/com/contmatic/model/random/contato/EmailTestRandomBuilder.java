@@ -25,6 +25,9 @@ public class EmailTestRandomBuilder {
 
 	private static EmailTestRandomBuilder instance;
 
+	private EmailTestRandomBuilder() {
+	}
+	
 	public static EmailTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new EmailTestRandomBuilder();
