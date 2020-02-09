@@ -9,6 +9,7 @@
 	<modules>
 		<module>empresa-model</module>
 		<module>empresa-repository</module>
+		<module>empresa-service</module>
 	</modules>
 	<dependencies>
 		<dependency>
