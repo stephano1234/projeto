@@ -1,58 +1,40 @@
 package br.com.contmatic.model.empresa;
 
-import static br.com.contmatic.utilidades.ConstantesTesteNumericas.ELEMENTOS_ARRAY_GERADA;
-
-import static br.com.contmatic.utilidades.Verificadores.procuraAlgumErro;
-import static br.com.contmatic.utilidades.Verificadores.verificaConstrutor;
-import static br.com.contmatic.utilidades.Verificadores.verificaToStringJSONSTYLE;
-
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CNPJ_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTRATOS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.RAZAO_SOCIAL_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_EMPRESA_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
-
-import static org.apache.commons.lang3.RandomUtils.nextInt;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
-import static pl.pojo.tester.api.assertion.Method.GETTER;
-import static pl.pojo.tester.api.assertion.Method.SETTER;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.model.conta.Conta;
-import br.com.contmatic.model.contato.Celular;
-import br.com.contmatic.model.contato.Email;
-import br.com.contmatic.model.contato.TelefoneFixo;
-import br.com.contmatic.model.empresa.Empresa;
-import br.com.contmatic.model.empresa.TipoEmpresa;
-import br.com.contmatic.model.empresa.TipoPorteEmpresa;
-import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.model.pessoa.ContratoTrabalho;
-import br.com.contmatic.model.pessoa.Pessoa;
-import br.com.contmatic.templates.conta.ContaTemplateFixtureFactory;
-import br.com.contmatic.templates.contato.CelularTemplateFixtureFactory;
-import br.com.contmatic.templates.contato.EmailTemplateFixtureFactory;
-import br.com.contmatic.templates.contato.TelefoneFixoTemplateFixtureFactory;
-import br.com.contmatic.templates.empresa.EmpresaTemplateFixtureFactory;
-import br.com.contmatic.templates.endereco.EnderecoTemplateFixtureFactory;
-import br.com.contmatic.templates.pessoa.ContratoTrabalhoTemplateFixtureFactory;
-import br.com.contmatic.templates.pessoa.PessoaTemplateFixtureFactory;
-import br.com.six2six.fixturefactory.Fixture;
+import com.jparams.verifier.tostring.ToStringVerifier;
 
+import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
+import br.com.contmatic.testes.utilidades.Verificadores;
+import br.com.contmatic.validacoes.groups.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -60,95 +42,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class EmpresaTest {
     
-    /** The empresa. */
-    private Empresa empresa;
-    
-    /** The outro empresa. */
-    private Empresa outroEmpresa;
-    
-    /** The responsaveis. */
-    private Set<Pessoa> responsaveis = new HashSet<Pessoa>();
-    
-    /** The contratos trabalho. */
-    private Set<ContratoTrabalho> contratosTrabalho = new HashSet<ContratoTrabalho>();
-    
-    /** The enderecos. */
-    private Set<Endereco> enderecos = new HashSet<Endereco>();
-        
-    /** The telefones fixo. */
-    private Set<TelefoneFixo> telefonesFixo = new HashSet<TelefoneFixo>();
-
-    /** The emails. */
-    private Set<Email> emails = new HashSet<Email>();
-    
-    /** The celulares. */
-    private Set<Celular> celulares = new HashSet<Celular>();
-
-    /** The contas. */
-    private Set<Conta> contas = new HashSet<Conta>();
-
-    /**
-     * Sets the up before class.
-     *
-     * @throws Exception the exception
-     */
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        new EmpresaTemplateFixtureFactory().load();
-        new PessoaTemplateFixtureFactory().load();
-        new ContratoTrabalhoTemplateFixtureFactory().load();
-        new EnderecoTemplateFixtureFactory().load();
-        new TelefoneFixoTemplateFixtureFactory().load();
-        new EmailTemplateFixtureFactory().load();
-        new CelularTemplateFixtureFactory().load();
-        new ContaTemplateFixtureFactory().load();
-    }
-
-    /**
-     * Tear down after class.
-     *
-     * @throws Exception the exception
-     */
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
-    /**
-     * Sets the up.
-     *
-     * @throws Exception the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        empresa = Fixture.from(Empresa.class).gimme("valido");
-        outroEmpresa = Fixture.from(Empresa.class).gimme("outroValido");
-        for (int i = 0; i < nextInt(1, ELEMENTOS_ARRAY_GERADA); i++) {
-        	responsaveis.add(Fixture.from(Pessoa.class).gimme("valido"));
-        	contratosTrabalho.add(Fixture.from(ContratoTrabalho.class).gimme("valido"));
-        	enderecos.add(Fixture.from(Endereco.class).gimme("valido"));        	
-        	telefonesFixo.add(Fixture.from(TelefoneFixo.class).gimme("valido"));
-        	emails.add(Fixture.from(Email.class).gimme("valido"));
-        	celulares.add(Fixture.from(Celular.class).gimme("valido"));
-        	contas.add(Fixture.from(Conta.class).gimme("valido"));
-        }
-    }
-
-    /**
-     * Tear down.
-     *
-     * @throws Exception the exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
+	private static EmpresaTestRandomBuilder random;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		random = EmpresaTestRandomBuilder.getInstance();
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+		EmpresaTestRandomBuilder.cleanBuilder();
+	}
 
     /**
      * Nao deve aceitar valor nulo no cnpj.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_cnpj() {
-        empresa.setCnpj(null);
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildNuloCnpj(), Post.class));
     }
     
     /**
@@ -156,8 +67,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_cnpj() {
-        empresa = Fixture.from(Empresa.class).gimme("maiorTamanhoCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoCnpj(), Post.class));
     }
     
     /**
@@ -165,8 +75,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_menor_que_tamanho_no_cnpj() {
-        empresa = Fixture.from(Empresa.class).gimme("menorTamanhoCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildMenorTamanhoCnpj(), Post.class));
     }
     
     /**
@@ -174,8 +83,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_cnpj() {
-        empresa = Fixture.from(Empresa.class).gimme("comUmCaractereInvalidoCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralCnpj(), Post.class));
     }
     
     /**
@@ -183,8 +91,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_apenas_numeros_repetidos_no_cnpj() {
-        empresa = Fixture.from(Empresa.class).gimme("numerosRepetidosCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildNumerosRepetidosCnpj(), Post.class));
     }
     
     /**
@@ -192,8 +99,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_cnpj_com_primeiro_digito_verificador_invalido() {
-        empresa = Fixture.from(Empresa.class).gimme("comPrimeiroDigitoVerificadorInvalidoCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildPrimeiroDigitoVerificadorInvalidoCnpj(), Post.class));
     }    
 
     /**
@@ -201,261 +107,102 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_cnpj_com_segundo_digito_verificador_invalido() {
-        empresa = Fixture.from(Empresa.class).gimme("comSegundoDigitoVerificadorInvalidoCnpj");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildSegundoDigitoVerificadorInvalidoCnpj(), Post.class));
     }    
-
+    
     /**
      * Deve aceitar cnpj valido.
      */
     @Test
     public void deve_aceitar_cnpj_valido() {
-        empresa = Fixture.from(Empresa.class).gimme("cnpjValido");
-        assertFalse(procuraAlgumErro(empresa));
+        assertFalse(procuraViolacao(random.buildValid(), CNPJ_INVALIDO, Post.class));
     }
     
     /**
-     * Nao deve aceitar valor nulo no razao social.
+     * Nao deve aceitar valor nulo no razaoSocial.
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_razaoSocial() {
-        empresa.setRazaoSocial(null);
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildNuloRazaoSocial(), Post.class));
     }
-
+    
     /**
-     * Nao deve aceitar valor vazio no razao social.
+     * Nao deve aceitar valor vazio no razaoSocial.
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_razaoSocial() {
-    	empresa.setRazaoSocial("");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildVazioRazaoSocial(), Post.class));
     }
     
     /**
-     * Nao deve aceitar valor maior que tamanho no razao social.
+     * Nao deve aceitar valor maior que tamanho no razaoSocial.
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("maiorTamanhoRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar valor com apenas um caractere razao social.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_apenas_um_caractere_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("umCaractereRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar valor com primeiro caractere invalido no razao social.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_primeiro_caractere_invalido_no_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comPrimeiroCaractereInvalido");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoRazaoSocial(), Post.class));
     }
 
     /**
-     * Nao deve aceitar valor com ultimo caractere invalido no razao social.
+     * Nao deve aceitar valor com apenas espaco no razaoSocial.
      */
     @Test
-    public void nao_deve_aceitar_valor_com_ultimo_caractere_invalido_no_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comUltimoCaractereInvalido");
-        assertTrue(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_valor_com_apenas_espaco_no_razaoSocial() {
+        assertTrue(procuraQualquerViolacao(random.buildApenasEspacoRazaoSocial(), Post.class));
+    }
+    
+    @Test
+    public void nao_deve_aceitar_valor_com_espaco_no_inicio_no_razaoSocial() {
+        assertTrue(procuraQualquerViolacao(random.buildInicioEspacoRazaoSocial(), Post.class));
+    }
+    
+    @Test
+    public void nao_deve_aceitar_valor_com_apenas_espaco_no_fim_no_razaoSocial() {
+        assertTrue(procuraQualquerViolacao(random.buildFimEspacoRazaoSocial(), Post.class));
     }
     
     /**
-     * Nao deve aceitar valor com um caractere invalido no razao social.
+     * Nao deve aceitar valor com um caractere invalido no razaoSocial.
      */
     @Test
-    public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comUmCaractereInvalidoRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_valor_com_um_caractere_nao_letra_no_razaoSocial() {
+        assertTrue(procuraQualquerViolacao(random.buildNaoApenasLetraEspacoRazaoSocial(), Post.class));
     }
     
     /**
-     * Nao deve aceitar valor com dois espacos juntos no razao social.
+     * Nao deve aceitar valor com dois espacos juntos no razaoSocial.
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_espacos_juntos_no_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comEspacoDuploRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
-    }
-
-    /**
-     * Nao deve aceitar valor com dois pontos juntos no meio do razao social.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_dois_pontos_juntos_no_meio_do_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comPontoDuploRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
-    }
-
-    /**
-     * Nao deve aceitar valor com dois pontos juntos no final do razao social.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_com_dois_pontos_juntos_no_final_do_razaoSocial() {
-        empresa = Fixture.from(Empresa.class).gimme("comPontoDuploNoFinalRazaoSocial");
-        assertTrue(procuraAlgumErro(empresa));
+        assertTrue(procuraQualquerViolacao(random.buildEspacoSeguidoDeEspacoRazaoSocial(), Post.class));
     }
     
     /**
-     * Deve aceitar razao social valido.
+     * Deve aceitar razaoSocial valido.
      */
     @Test
     public void deve_aceitar_razaoSocial_valido() {
-        empresa = Fixture.from(Empresa.class).gimme("razaoSocialValido");
-        assertFalse(procuraAlgumErro(empresa));
+        assertFalse(procuraViolacao(random.buildValid(), RAZAO_SOCIAL_INVALIDO, Post.class));
     }
-
-    /**
-     * Nao deve aceitar data abertura nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_dataAbertura_nulo() {
-    	empresa.setDataAbertura(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar data abertura futura.
-     */
-    @Test
-    public void nao_deve_aceitar_dataAbertura_futura() {
-    	empresa = Fixture.from(Empresa.class).gimme("dataAberturaFutura");
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-
-    /**
-     * Deve aceitar data abertura passada.
-     */
-    @Test
-    public void deve_aceitar_dataAbertura_passada() {
-    	empresa = Fixture.from(Empresa.class).gimme("dataAberturaPassada");
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar responsaveis nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_responsaveis_nulo() {
-    	empresa.setResponsaveis(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar responsaveis vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_responsaveis_vazio() {
-    	empresa.setResponsaveis(new HashSet<Pessoa>());
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar responsaveis com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_responsaveis_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getResponsaveis().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar responsaveis com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_responsaveis_com_elemento_invalido() {
-    	empresa.getResponsaveis().add(Fixture.from(Pessoa.class).gimme("comSegundoDigitoVerificadorInvalidoCpf"));
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-
-    /**
-     * Deve aceitar responsaveis nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_responsaveis_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setResponsaveis(responsaveis);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Deve aceitar contratos trabalho nulo.
-     */
-    @Test
-    public void deve_aceitar_contratosTrabalho_nulo() {
-    	empresa.setContratosTrabalho(null);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar contratos trabalho vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_vazio() {
-    	empresa.setContratosTrabalho(new HashSet<ContratoTrabalho>());
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar contratos trabalho com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getContratosTrabalho().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-       
-    /**
-     * Nao deve aceitar contratos trabalho com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_com_elemento_invalido() {
-    	empresa.getContratosTrabalho().add(new ContratoTrabalho(Fixture.from(Pessoa.class)
-    	.gimme("comSegundoDigitoVerificadorInvalidoCpf"), null, null));
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-
-    /**
-     * Deve aceitar contratos trabalho nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_contratosTrabalho_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setContratosTrabalho(contratosTrabalho);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
+        
     /**
      * Nao deve aceitar enderecos nulo.
      */
     @Test
     public void nao_deve_aceitar_enderecos_nulo() {
-    	empresa.setEnderecos(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloEnderecos(), Post.class));
     }
-    
-    /**
-     * Nao deve aceitar enderecos vazio.
-     */
+        
     @Test
     public void nao_deve_aceitar_enderecos_vazio() {
-    	empresa.setEnderecos(new HashSet<Endereco>());
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildVazioEnderecos(), Post.class));
     }
-    
+
     /**
      * Nao deve aceitar enderecos com pelo menos um elemento nulo.
      */
     @Test
     public void nao_deve_aceitar_enderecos_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getEnderecos().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildEnderecosComElementoNulo(), Post.class));
     }
     
     /**
@@ -463,125 +210,119 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_enderecos_com_elemento_invalido() {
-    	empresa.getEnderecos().add(Fixture.from(Endereco.class).gimme("comUmCaractereInvalidoCep"));
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildEnderecosComElementoInvalido(), Post.class));
     }
 
     /**
      * Deve aceitar enderecos nao vazio sem elemento nulo apenas elemento valido.
      */
     @Test
-    public void deve_aceitar_enderecos_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setEnderecos(enderecos);
-    	assertFalse(procuraAlgumErro(empresa));
+    public void deve_aceitar_enderecos_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_ENDERECOS_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), CEP_INVALIDO, Post.class));
     }
 
     /**
-     * Deve aceitar telefones fixo nulo.
+     * Nao deve aceitar responsaveis nulo.
      */
     @Test
-    public void deve_aceitar_telefonesFixo_nulo() {
-    	empresa.setTelefonesFixo(null);
-    	assertFalse(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_responsaveis_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloResponsaveis(), Post.class));
     }
-    
-    /**
-     * Nao deve aceitar telefones fixo vazio.
-     */
+
     @Test
-    public void nao_deve_aceitar_telefonesFixo_vazio() {
-    	empresa.setTelefonesFixo(new HashSet<TelefoneFixo>());
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar telefones fixo com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getTelefonesFixo().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar telefones fixo com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	empresa.getTelefonesFixo().add(Fixture.from(TelefoneFixo.class).gimme("comUmCaractereInvalidoNumero"));
-    	assertTrue(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_responsaveis_vazio() {
+    	assertTrue(procuraQualquerViolacao(random.buildVazioResponsaveis(), Post.class));
     }
 
     /**
-     * Deve aceitar telefones fixo nao vazio sem elemento nulo apenas elemento valido.
+     * Nao deve aceitar responsaveis com pelo menos um elemento nulo.
      */
     @Test
-    public void deve_aceitar_telefonesFixo_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setTelefonesFixo(telefonesFixo);
-    	assertFalse(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_responsaveis_com_pelo_menos_um_elemento_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildResponsaveisComElementoNulo(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar responsaveis com elemento invalido.
+     */
+    @Test
+    public void nao_deve_aceitar_responsaveis_com_elemento_invalido() {
+    	assertTrue(procuraQualquerViolacao(random.buildResponsaveisComElementoInvalido(), Post.class));
     }
 
     /**
-     * Deve aceitar emails nulo.
+     * Deve aceitar responsaveis nao vazio sem elemento nulo apenas elemento valido.
      */
     @Test
-    public void deve_aceitar_emails_nulo() {
-    	empresa.setEmails(null);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar emails vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_vazio() {
-    	empresa.setEmails(new HashSet<Email>());
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar emails com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getEmails().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar emails com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_com_elemento_invalido() {
-    	empresa.getEmails().add(Fixture.from(Email.class).gimme("comUmCaractereInvalidoAntesArrobaEndereco"));
-    	assertTrue(procuraAlgumErro(empresa));
+    public void deve_aceitar_responsaveis_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_RESPONSAVEIS_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), CPF_INVALIDO, Post.class));
     }
 
     /**
-     * Deve aceitar emails nao vazio sem elemento nulo apenas elemento valido.
+     * Nao deve aceitar contratosTrabalho nulo.
      */
     @Test
-    public void deve_aceitar_emails_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setEmails(emails);
-    	assertFalse(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_contratosTrabalho_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloContratosTrabalho(), Post.class));
+    }
+        
+    /**
+     * Nao deve aceitar contratosTrabalho com pelo menos um elemento nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_contratosTrabalho_com_pelo_menos_um_elemento_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildContratosTrabalhoComElementoNulo(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar contratosTrabalho com elemento invalido.
+     */
+    @Test
+    public void nao_deve_aceitar_contratosTrabalho_com_elemento_invalido() {
+    	assertTrue(procuraQualquerViolacao(random.buildContratosTrabalhoComElementoInvalido(), Post.class));
+    }
+
+    /**
+     * Deve aceitar contratosTrabalho nao vazio sem elemento nulo apenas elemento valido.
+     */
+    @Test
+    public void deve_aceitar_contratosTrabalho_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CONTRATOS_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), PESSOA_INVALIDA, Post.class));
+    }
+
+    /**
+     * Nao deve aceitar data nascimento nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_dataAbertura_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloDataAbertura(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar data nascimento futura.
+     */
+    @Test
+    public void nao_deve_aceitar_dataAbertura_futura() {
+    	assertTrue(procuraQualquerViolacao(random.buildDataFuturaDataAbertura(), Post.class));
+    }
+
+    /**
+     * Deve aceitar data nascimento passada.
+     */
+    @Test
+    public void deve_aceitar_dataNascimento_valida() {
+    	assertFalse(procuraViolacao(random.buildValid(), DATA_ABERTURA, Post.class));
     }
 
     /**
      * Deve aceitar celulares nulo.
      */
     @Test
-    public void deve_aceitar_celulares_nulo() {
-    	empresa.setCelulares(null);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar celulares vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_celulares_vazio() {
-    	empresa.setCelulares(new HashSet<Celular>());
-    	assertTrue(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_celulares_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloCelulares(), Post.class));
     }
     
     /**
@@ -589,8 +330,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_celulares_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getCelulares().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildCelularesComElementoNulo(), Post.class));
     }
     
     /**
@@ -598,35 +338,90 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_celulares_com_elemento_invalido() {
-    	empresa.getCelulares().add(Fixture.from(Celular.class).gimme("comUmCaractereInvalidoNumero"));
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildCelularesComElementoInvalido(), Post.class));
     }
 
     /**
      * Deve aceitar celulares nao vazio sem elemento nulo apenas elemento valido.
      */
     @Test
-    public void deve_aceitar_celulares_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setCelulares(celulares);
-    	assertFalse(procuraAlgumErro(empresa));
+    public void deve_aceitar_celulares_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CELULARES_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), CELULAR_INVALIDO, Post.class));
+    }
+
+    /**
+     * Deve aceitar telefones fixo nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_telefonesFixo_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloTelefonesFixo(), Post.class));
     }
     
+    /**
+     * Nao deve aceitar telefones fixo com pelo menos um elemento nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_telefonesFixo_com_pelo_menos_um_elemento_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoNulo(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar telefones fixo com elemento invalido.
+     */
+    @Test
+    public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
+    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoInvalido(), Post.class));
+    }
+
+    /**
+     * Deve aceitar telefones fixo nao vazio sem elemento nulo apenas elemento valido.
+     */
+    @Test
+    public void deve_aceitar_telefonesFixo_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_TELEFONES_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
+    }
+
+    /**
+     * Deve aceitar emails nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_emails_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloEmails(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar emails com pelo menos um elemento nulo.
+     */
+    @Test
+    public void nao_deve_aceitar_emails_com_pelo_menos_um_elemento_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildEmailsComElementoNulo(), Post.class));
+    }
+    
+    /**
+     * Nao deve aceitar emails com elemento invalido.
+     */
+    @Test
+    public void nao_deve_aceitar_emails_com_elemento_invalido() {
+    	assertTrue(procuraQualquerViolacao(random.buildEmailsComElementoInvalido(), Post.class));
+    }
+
+    /**
+     * Deve aceitar emails nao vazio sem elemento nulo apenas elemento valido.
+     */
+    @Test
+    public void deve_aceitar_emails_valido() {
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_EMAILS_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), EMAIL_INVALIDO, Post.class));
+    }
+
     /**
      * Deve aceitar contas nulo.
      */
     @Test
-    public void deve_aceitar_contas_nulo() {
-    	empresa.setContas(null);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Nao deve aceitar contas vazio.
-     */
-    @Test
-    public void nao_deve_aceitar_contas_vazio() {
-    	empresa.setContas(new HashSet<Conta>());
-    	assertTrue(procuraAlgumErro(empresa));
+    public void nao_deve_aceitar_contas_nulo() {
+    	assertTrue(procuraQualquerViolacao(random.buildNuloContas(), Post.class));
     }
     
     /**
@@ -634,8 +429,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_contas_com_pelo_menos_um_elemento_nulo() {
-    	empresa.getContas().add(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildContasComElementoNulo(), Post.class));
     }
     
     /**
@@ -643,8 +437,7 @@ public class EmpresaTest {
      */
     @Test
     public void nao_deve_aceitar_contas_com_elemento_invalido() {
-    	empresa.getContas().add(Fixture.from(Conta.class).gimme("comUmCaractereInvalidoNumero"));
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildContasComElementoInvalido(), Post.class));
     }
 
     /**
@@ -652,235 +445,49 @@ public class EmpresaTest {
      */
     @Test
     public void deve_aceitar_contas_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	empresa.setContas(contas);
-    	assertFalse(procuraAlgumErro(empresa));
+    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CONTAS_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), NUMERO_CONTA_INVALIDO, Post.class));
     }
-    
+
     /**
-     * Nao deve aceitar tipo empresa nulo.
+     * Nao deve aceitar tipo grau instrucao nulo.
      */
     @Test
     public void nao_deve_aceitar_tipoEmpresa_nulo() {
-    	empresa.setTipoEmpresa(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloTipoEmpresa(), Post.class));
     }
 
     /**
-     * Deve aceitar tipo empresa nao nulo.
+     * Deve aceitar tipo grau instrucao nao nulo.
      */
     @Test
     public void deve_aceitar_tipoEmpresa_nao_nulo() {
-    	empresa.setTipoEmpresa(TipoEmpresa.SOCIEDADE);
-    	assertFalse(procuraAlgumErro(empresa));
+    	assertFalse(procuraViolacao(random.buildValid(), TIPO_EMPRESA_INVALIDO, Post.class));
     }
 
     /**
-     * Nao deve aceitar tipo porte empresa nulo.
+     * Nao deve aceitar tipo estado civil nulo.
      */
     @Test
     public void nao_deve_aceitar_tipoPorteEmpresa_nulo() {
-    	empresa.setTipoPorteEmpresa(null);
-    	assertTrue(procuraAlgumErro(empresa));
+    	assertTrue(procuraQualquerViolacao(random.buildNuloTipoPorteEmpresa(), Post.class));
     }
 
     /**
-     * Deve aceitar tipo porte empresa nao nulo.
+     * Deve aceitar tipo estado civil nao nulo.
      */
     @Test
     public void deve_aceitar_tipoPorteEmpresa_nao_nulo() {
-    	empresa.setTipoPorteEmpresa(TipoPorteEmpresa.EPP);
-    	assertFalse(procuraAlgumErro(empresa));
-    }
-    
-    /**
-     * Gets the cnpj deve trazer o valor armazenado em cnpj.
-     *
-     * @return the cnpj deve trazer o valor armazenado em cnpj
-     */
-    @Test
-    public void getCnpj_deve_trazer_o_valor_armazenado_em_cnpj() {
-        empresa.setCnpj("13282774000102");
-        assertThat(empresa.getCnpj(), is(equalTo("13282774000102")));
-    }
-    
-    /**
-     * Gets the razao social deve trazer o valor armazenado em razao social.
-     *
-     * @return the razao social deve trazer o valor armazenado em razao social
-     */
-    @Test
-    public void getRazaoSocial_deve_trazer_o_valor_armazenado_em_razaoSocial() {
-        empresa.setRazaoSocial("Empresa SA");
-        assertThat(empresa.getRazaoSocial(), is(equalTo("Empresa SA")));
+    	assertFalse(procuraViolacao(random.buildValid(), TIPO_PORTE_EMPRESA_INVALIDO, Post.class));
     }
 
-    /**
-     * Gets the data abertura deve trazer o valor armazenado em data abertura.
-     *
-     * @return the data abertura deve trazer o valor armazenado em data abertura
-     */
-    @Test
-    public void getDataAbertura_deve_trazer_o_valor_armazenado_em_dataAbertura() {
-        empresa.setDataAbertura(LocalDate.parse("1990-02-12"));
-        assertThat(empresa.getDataAbertura(), is(equalTo(LocalDate.parse("1990-02-12"))));
-    }    
     
     /**
-     * Gets the responsaveis deve trazer o valor armazenado em responsaveis.
-     *
-     * @return the responsaveis deve trazer o valor armazenado em responsaveis
+     * Deve possuir getters e setters implmentados corretamente.
      */
     @Test
-    public void getResponsaveis_deve_trazer_o_valor_armazenado_em_responsaveis() {
-        empresa.setResponsaveis(responsaveis);
-        assertThat(empresa.getResponsaveis(), is(equalTo(responsaveis)));
-    }
-    
-    /**
-     * Gets the contratos trabalho deve trazer o valor armazenado em contratos trabalho.
-     *
-     * @return the contratos trabalho deve trazer o valor armazenado em contratos trabalho
-     */
-    @Test
-    public void getContratosTrabalho_deve_trazer_o_valor_armazenado_em_contratosTrabalho() {
-        empresa.setContratosTrabalho(contratosTrabalho);
-        assertThat(empresa.getContratosTrabalho(), is(equalTo(contratosTrabalho)));
-    }
-    
-    /**
-     * Gets the enderecos deve trazer o valor armazenado em enderecos.
-     *
-     * @return the enderecos deve trazer o valor armazenado em enderecos
-     */
-    @Test
-    public void getEnderecos_deve_trazer_o_valor_armazenado_em_enderecos() {
-        empresa.setEnderecos(enderecos);
-        assertThat(empresa.getEnderecos(), is(equalTo(enderecos)));
-    }
-    
-    /**
-     * Gets the telefones fixo deve trazer o valor armazenado em telefones fixo.
-     *
-     * @return the telefones fixo deve trazer o valor armazenado em telefones fixo
-     */
-    @Test
-    public void getTelefonesFixo_deve_trazer_o_valor_armazenado_em_telefonesFixo() {
-        empresa.setTelefonesFixo(telefonesFixo);
-        assertThat(empresa.getTelefonesFixo(), is(equalTo(telefonesFixo)));
-    }
-    
-    /**
-     * Gets the emails deve trazer o valor armazenado em emails.
-     *
-     * @return the emails deve trazer o valor armazenado em emails
-     */
-    @Test
-    public void getEmails_deve_trazer_o_valor_armazenado_em_emails() {
-        empresa.setEmails(emails);
-        assertThat(empresa.getEmails(), is(equalTo(emails)));
-    }
-
-    /**
-     * Gets the celulares deve trazer o valor armazenado em celulares.
-     *
-     * @return the celulares deve trazer o valor armazenado em celulares
-     */
-    @Test
-    public void getCelulares_deve_trazer_o_valor_armazenado_em_celulares() {
-        empresa.setCelulares(celulares);
-        assertThat(empresa.getCelulares(), is(equalTo(celulares)));
-    }
-    
-    /**
-     * Gets the contas deve trazer o valor armazenado em contas.
-     *
-     * @return the contas deve trazer o valor armazenado em contas
-     */
-    @Test
-    public void getContas_deve_trazer_o_valor_armazenado_em_contas() {
-        empresa.setContas(contas);
-        assertThat(empresa.getContas(), is(equalTo(contas)));
-    }
-    
-    /**
-     * Gets the tipo empresa deve trazer o valor armazenado em tipo empresa.
-     *
-     * @return the tipo empresa deve trazer o valor armazenado em tipo empresa
-     */
-    @Test
-    public void getTipoEmpresa_deve_trazer_o_valor_armazenado_em_tipoEmpresa() {
-        empresa.setTipoEmpresa(TipoEmpresa.SOCIEDADE);
-        assertThat(empresa.getTipoEmpresa(), is(equalTo(TipoEmpresa.SOCIEDADE)));
-    }
-    
-    /**
-     * Gets the tipo porte empresa deve trazer o valor armazenado em tipo porte empresa.
-     *
-     * @return the tipo porte empresa deve trazer o valor armazenado em tipo porte empresa
-     */
-    @Test
-    public void getTipoPorteEmpresa_deve_trazer_o_valor_armazenado_em_tipoPorteEmpresa() {
-        empresa.setTipoPorteEmpresa(TipoPorteEmpresa.EPP);
-        assertThat(empresa.getTipoPorteEmpresa(), is(equalTo(TipoPorteEmpresa.EPP)));
-    }
-    
-    /**
-     * Deve haver metodo get publico para cada atributo.
-     */
-    @Test
-    public void deve_haver_metodo_get_publico_para_cada_atributo() {
-        assertPojoMethodsFor(Empresa.class).testing(GETTER).areWellImplemented();
-    }
-    
-    /**
-     * Deve haver metodo set publico para cada atributo.
-     */
-    @Test
-    public void deve_haver_metodo_set_publico_para_cada_atributo() {
-        assertPojoMethodsFor(Empresa.class).testing(SETTER).areWellImplemented();
-    }
-    
-    /**
-     * Verifica construtor publico com argumentos especificados e implementacao correta.
-     */
-    @Test
-    public void verifica_construtor_publico_com_argumentos_especificados_e_implementacao_correta() {
-        Object[] valores = {"13282774000102", "Empresa SA", LocalDate.parse("1990-02-12"), responsaveis, enderecos, TipoEmpresa.SOCIEDADE, TipoPorteEmpresa.EPP};
-        assertTrue(verificaConstrutor(Empresa.class, valores, String.class, String.class, LocalDate.class, Set.class, Set.class, TipoEmpresa.class, TipoPorteEmpresa.class));
-    }
-    
-    /**
-     * Hashcode deve retornar mesmos codigos com cnpj igual.
-     */
-    @Test
-    public void hashcode_deve_retornar_mesmos_codigos_com_cnpj_igual() {
-        outroEmpresa.setCnpj(empresa.getCnpj());
-        assertThat(empresa.hashCode(), is(equalTo(outroEmpresa.hashCode())));
-    }
-        
-    /**
-     * Hashcode deve retornar diferentes codigos com cnpj diferente.
-     */
-    @Test
-    public void hashcode_deve_retornar_diferentes_codigos_com_cnpj_diferente() {
-        assertThat(empresa.hashCode(), is(not(equalTo(outroEmpresa.hashCode()))));
-    }
-        
-    /**
-     * Equals deve retornar true com cnpj igual.
-     */
-    @Test
-    public void equals_deve_retornar_true_com_cnpj_igual() {
-        outroEmpresa.setCnpj(empresa.getCnpj());
-        assertTrue(empresa.equals(outroEmpresa));
-    }
-        
-    /**
-     * Equals deve retornar false com cnpj diferente.
-     */
-    @Test
-    public void equals_deve_retornar_false_com_cnpj_diferente() {
-        assertFalse(empresa.equals(outroEmpresa));
+    public void deve_possuir_getters_e_setters_implmentados_corretamente() {
+    	assertTrue(Verificadores.verificaEncapsulamentos(Empresa.class));
     }
     
     /**
@@ -888,151 +495,11 @@ public class EmpresaTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier.forClass(Empresa.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).verify();
-    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo cnpj no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_cnpj_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setCnpj("13282774000102");
-        assertTrue(empresa.toString().contains("13282774000102"));
-    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo razao social no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_razaoSocial_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setRazaoSocial("Empresa SA");
-        assertTrue(empresa.toString().contains("Empresa SA"));
-    }
-
-    /**
-     * Verifica existencia do texto que representa o atributo data abertura no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_dataAbertura_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setDataAbertura(LocalDate.parse("1990-02-12"));
-        assertTrue(empresa.toString().contains("1990-02-12"));
-    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo responsaveis no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_responsaveis_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setResponsaveis(responsaveis);
-        assertTrue(empresa.toString().contains(responsaveis.toString()));
-    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo contratos trabalho no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_contratosTrabalho_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setContratosTrabalho(contratosTrabalho);
-        assertTrue(empresa.toString().contains(contratosTrabalho.toString()));
-    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo enderecos no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_enderecos_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setEnderecos(enderecos);
-        assertTrue(empresa.toString().contains(enderecos.toString()));
-    }
-
-    /**
-     * Verifica existencia do texto que representa o atributo telefones fixo no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_telefonesFixo_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setTelefonesFixo(telefonesFixo);
-        assertTrue(empresa.toString().contains(telefonesFixo.toString()));
-    }
-
-    /**
-     * Verifica texto gerado pelo metodo to string quando atributo telefones fixo nulo.
-     */
-//    @Test
-//    public void verifica_texto_gerado_pelo_metodo_toString_quando_atributo_telefonesFixo_nulo() {
-//        empresa.setTelefonesFixo(null);
-//        assertTrue(empresa.toString().contains("Sem telefone fixo"));
-//    }
-
-    /**
-     * Verifica existencia do texto que representa o atributo emails no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_emails_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setEmails(emails);
-        assertTrue(empresa.toString().contains(emails.toString()));
-    }
-
-    /**
-     * Verifica texto gerado pelo metodo to string quando atributo emails nulo.
-     */
-//    @Test
-//    public void verifica_texto_gerado_pelo_metodo_toString_quando_atributo_emails_nulo() {
-//        empresa.setEmails(null);
-//        assertTrue(empresa.toString().contains("Sem e-mail"));
-//    }
-
-    /**
-     * Verifica existencia do texto que representa o atributo celulares no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_celulares_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setCelulares(celulares);
-        assertTrue(empresa.toString().contains(celulares.toString()));
-    }
-
-    /**
-     * Verifica texto gerado pelo metodo to string quando atributo celulares nulo.
-     */
-//    @Test
-//    public void verifica_texto_gerado_pelo_metodo_toString_quando_atributo_celulares_nulo() {
-//        empresa.setCelulares(null);
-//        assertTrue(empresa.toString().contains("Sem celular"));
-//    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo contas no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_contas_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setContas(contas);
-        assertTrue(empresa.toString().contains(contas.toString()));
-    }
-
-    /**
-     * Verifica texto gerado pelo metodo to string quando atributo contas nulo.
-     */
-//    @Test
-//    public void verifica_texto_gerado_pelo_metodo_toString_quando_atributo_contas_nulo() {
-//        empresa.setContas(null);
-//        assertTrue(empresa.toString().contains("Sem conta banc\\u00E1ria"));
-//    }
-    
-    /**
-     * Verifica existencia do texto que representa o atributo tipo empresa no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_tipoEmpresa_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setTipoEmpresa(TipoEmpresa.SOCIEDADE);
-        assertTrue(empresa.toString().contains(TipoEmpresa.SOCIEDADE.name()));
-    }
-
-    /**
-     * Verifica existencia do texto que representa o atributo tipo porte empresa no texto gerado pelo metodo to string.
-     */
-    @Test
-    public void verifica_existencia_do_texto_que_representa_o_atributo_tipoPorteEmpresa_no_texto_gerado_pelo_metodo_toString() {
-        empresa.setTipoPorteEmpresa(TipoPorteEmpresa.EPP);
-        assertTrue(empresa.toString().contains(TipoPorteEmpresa.EPP.name()));
+        EqualsVerifier
+        .forClass(Empresa.class)
+        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
+        .withOnlyTheseFields("cnpj")
+        .verify();
     }
     
     /**
@@ -1040,7 +507,9 @@ public class EmpresaTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-        assertTrue(verificaToStringJSONSTYLE(empresa));
+    	ToStringVerifier
+    	.forClass(Empresa.class)
+    	.verify();
     }
     
 }

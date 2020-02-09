@@ -1,19 +1,19 @@
 package br.com.contmatic.model.conta;
 
-import static br.com.contmatic.utilidades.ConstantesString.CODIGO_BANCO;
-import static br.com.contmatic.utilidades.ConstantesString.NUMERO_AGENCIA;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.CODIGO_BANCO;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.NUMERO_AGENCIA;
 
-import static br.com.contmatic.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.NUMERO_AGENCIA_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.CODIGO_BANCO_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_AGENCIA_INVALIDO;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
 
 /**
  * The Class Agencia.
@@ -21,13 +21,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Agencia {
     
     /** The numero. */
-    @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = NUMERO_AGENCIA, message = NUMERO_AGENCIA_INVALIDO)
+    @NaoNulo(message = NUMERO_AGENCIA_INVALIDO, groups = {Post.class})
+    @Pattern(regexp = NUMERO_AGENCIA, groups = {Post.class, Put.class}, message = NUMERO_AGENCIA_INVALIDO)
     private String numero;
     
     /** The codigo banco. */
-    @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = CODIGO_BANCO, message = DDD_INVALIDO)
+    @NaoNulo(message = CODIGO_BANCO_INVALIDO, groups = {Post.class})
+    @Pattern(regexp = CODIGO_BANCO, groups = {Post.class, Put.class}, message = CODIGO_BANCO_INVALIDO)
     private String codigoBanco;
 
     /**
@@ -124,9 +124,14 @@ public class Agencia {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("numero", numero)              
-                .append("codigoBanco", codigoBanco)
+        return new StringBuilder()
+        		.append("{")
+                .append("numero:")
+                .append(numero)
+                .append(",")
+                .append("codigoBanco:")
+                .append(codigoBanco)
+                .append("}")
                 .toString();
     }
     

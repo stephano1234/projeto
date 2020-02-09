@@ -17,9 +17,34 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>br.com.contmatic</groupId>
+			<artifactId>custom-validation</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.1.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>2.2.6</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>28.1-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -36,7 +61,6 @@
 			<groupId>br.com.contmatic</groupId>
 			<artifactId>utilities-test</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

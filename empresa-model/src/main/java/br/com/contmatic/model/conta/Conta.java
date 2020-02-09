@@ -1,18 +1,20 @@
 package br.com.contmatic.model.conta;
 
-import static br.com.contmatic.utilidades.ConstantesString.NUMERO_CONTA;
+import static br.com.contmatic.validacoes.utilidades.ConstantesString.NUMERO_CONTA;
 
-import static br.com.contmatic.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
-import static br.com.contmatic.utilidades.MensagensErro.VALOR_NULO;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.AGENCIA_INVALIDA;
+import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTA_INVALIDO;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.validacoes.groups.Put;
 
 /**
  * The Class Conta.
@@ -20,17 +22,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Conta {
 
     /** The numero. */
-    @NotNull(message = VALOR_NULO)
-    @Pattern(regexp = NUMERO_CONTA, message = NUMERO_CONTA_INVALIDO)
+    @NaoNulo(message = NUMERO_CONTA_INVALIDO, groups = {Post.class})
+    @Pattern(regexp = NUMERO_CONTA, groups = {Post.class, Put.class}, message = NUMERO_CONTA_INVALIDO)
     private String numero;
     
     /** The agencia. */
-    @NotNull(message = VALOR_NULO)
+    @NaoNulo(message = AGENCIA_INVALIDA, groups = {Post.class})
     @Valid
     private Agencia agencia;
     
     /** The tipo conta. */
-    @NotNull(message = VALOR_NULO)
+    @NaoNulo(message = TIPO_CONTA_INVALIDO, groups = {Post.class})
     private TipoConta tipoConta;
 
     /**
@@ -147,10 +149,17 @@ public class Conta {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, JSON_STYLE)
-                .append("numero", numero)
-                .append("agencia", agencia)
-                .append("tipoConta", tipoConta)
+        return new StringBuilder()
+        		.append("{")
+                .append("numero:")
+                .append(numero)
+                .append(",")
+                .append("agencia:")
+                .append(agencia)
+                .append(",")
+                .append("tipoConta:")
+                .append(tipoConta != null ? tipoConta.name() : null)
+                .append("}")
                 .toString();
     }
     

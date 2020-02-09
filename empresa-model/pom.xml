@@ -14,26 +14,15 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>br.com.contmatic</groupId>
-			<artifactId>custom-validation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>pl.pojo</groupId>
-			<artifactId>pojo-tester</artifactId>
-			<version>0.7.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>nl.jqno.equalsverifier</groupId>
 			<artifactId>equalsverifier</artifactId>
 			<version>3.1.10</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>br.com.six2six</groupId>
-			<artifactId>fixture-factory</artifactId>
-			<version>3.1.0</version>
+			<groupId>com.jparams</groupId>
+			<artifactId>to-string-verifier</artifactId>
+			<version>1.4.8</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
