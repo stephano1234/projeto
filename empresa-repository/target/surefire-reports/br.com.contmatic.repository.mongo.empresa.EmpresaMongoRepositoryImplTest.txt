@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: br.com.contmatic.repository.mongo.empresa.EmpresaMongoRepositoryImplTest
+-------------------------------------------------------------------------------
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 299.303 sec
