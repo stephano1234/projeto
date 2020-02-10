@@ -24,7 +24,7 @@ public interface EmpresaMongoRepository {
 	
 	public List<Empresa> readCnpjAndRazaoSocialByTipoPorteEmpresa(TipoPorteEmpresa tipoPorteEmpresa);
 	
-	public List<Empresa> readAllCnpjAndRazaoSocial();
+	public List<Empresa> readAllCnpjAndRazaoSocial(int pageSize);
 	
 	public long countAll();
 	

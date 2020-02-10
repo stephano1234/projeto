@@ -27,7 +27,7 @@ public final class EmpresaMongoRepositoryImpl implements EmpresaMongoRepository 
 
 	private MongoCollection<Document> mongoCollection;
 
-	private static final EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
+	private EmpresaConversorMongo empresaConversorMongo = EmpresaConversorMongo.getInstance();
 	
 	private static EmpresaMongoRepositoryImpl instance;
 		
@@ -137,11 +137,12 @@ public final class EmpresaMongoRepositoryImpl implements EmpresaMongoRepository 
 	}
 
 	@Override
-	public List<Empresa> readAllCnpjAndRazaoSocial() {
+	public List<Empresa> readAllCnpjAndRazaoSocial(int pageSize) {
 		List<Empresa> empresas = new ArrayList<>();
 		MongoCursor<Document> mongoCursor = this.mongoCollection
 				.find()
 				.projection(Projections.fields(Projections.include(FIELD_CNPJ, FIELD_RAZAO_SOCIAL), Projections.excludeId()))
+				.limit(pageSize)
 				.iterator();
 		try {
 			while (mongoCursor.hasNext()) {
