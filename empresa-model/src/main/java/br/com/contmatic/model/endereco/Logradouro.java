@@ -1,9 +1,8 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
-
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOURO_INVALIDO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.BAIRRO_INVALIDO;
 
 import javax.validation.Valid;
@@ -14,8 +13,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.TextDividedBy;
-import br.com.contmatic.validacoes.groups.Post;
-import br.com.contmatic.validacoes.groups.Put;
+
+import br.com.contmatic.model.restricoes.grupos.Post;
+import br.com.contmatic.model.restricoes.grupos.Put;
 
 /**
  * The Class Logradouro.
@@ -23,13 +23,13 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Logradouro {
 
     /** The nome. */
-    @NaoNulo(message = NOME_LOGRADOURO_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = NOME_LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
     @TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_LOGRADOURO_INVALIDO)
     @Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_LOGRADOURO_INVALIDO)
     private String nome;
     
     /** The bairro. */
-    @NaoNulo(message = BAIRRO_INVALIDO, groups = {Post.class})
+    @NaoNulo(message = BAIRRO_INVALIDO, groups = {Post.class, Put.class})
     @Valid
     private Bairro bairro;
     

@@ -15,7 +15,7 @@ public enum TipoEmpresa {
 	EIRELI("Empresa Individual de Responsabilidade Limitada"),
 	
 	/** The sociedade. */
-	SOCIEDADE("Sociedade Emppresária"),
+	SOCIEDADE("Sociedade Empresária"),
 	
 	/** The sociedade simples. */
 	SOCIEDADE_SIMPLES("Sociedade Simples");

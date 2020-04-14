@@ -11,12 +11,11 @@ import br.com.contmatic.repository.mongo.conversor.contato.CelularConversorMongo
 import br.com.contmatic.repository.mongo.conversor.contato.EmailConversorMongo;
 import br.com.contmatic.repository.mongo.conversor.contato.TelefoneFixoConversorMongo;
 import br.com.contmatic.repository.mongo.conversor.endereco.EnderecoConversorMongo;
-import br.com.contmatic.repository.mongo.conversor.pessoa.ContratoTrabalhoConversorMongo;
 import br.com.contmatic.repository.mongo.conversor.pessoa.PessoaConversorMongo;
 
 public class EmpresaConversorMongo {
 
-	private static final String FIELD_CNPJ = "cnpj";
+	private static final String ID = "_id";
 	private static final String FIELD_TIPO_PORTE_EMPRESA = "tipoPorteEmpresa";
 	private static final String FIELD_TIPO_EMPRESA = "tipoEmpresa";
 	private static final String FIELD_CONTAS = "contas";
@@ -24,15 +23,12 @@ public class EmpresaConversorMongo {
 	private static final String FIELD_EMAILS = "emails";
 	private static final String FIELD_TELEFONES_FIXO = "telefonesFixo";
 	private static final String FIELD_ENDERECOS = "enderecos";
-	private static final String FIELD_CONTRATOS_TRABALHO = "contratosTrabalho";
 	private static final String FIELD_RESPONSAVEIS = "responsaveis";
 	private static final String FIELD_DATA_ABERTURA = "dataAbertura";
 	private static final String FIELD_RAZAO_SOCIAL = "razaoSocial";
 
 	private PessoaConversorMongo pessoaConversorMongo = new PessoaConversorMongo();
 
-	private ContratoTrabalhoConversorMongo contratoTrabalhoConversorMongo = new ContratoTrabalhoConversorMongo();
-	
 	private EnderecoConversorMongo enderecoConversorMongo = new EnderecoConversorMongo();
 	
 	private CelularConversorMongo celularConversorMongo = new CelularConversorMongo();
@@ -64,11 +60,10 @@ public class EmpresaConversorMongo {
 			return null;
 		}
 		final Document docEmpresa = new Document();
-		docEmpresa.append(FIELD_CNPJ, null);
+		docEmpresa.append(ID, null);
 		docEmpresa.append(FIELD_RAZAO_SOCIAL, null);
 		docEmpresa.append(FIELD_DATA_ABERTURA, null);
 		docEmpresa.append(FIELD_RESPONSAVEIS, null);
-		docEmpresa.append(FIELD_CONTRATOS_TRABALHO, null);
 		docEmpresa.append(FIELD_ENDERECOS, null);
 		docEmpresa.append(FIELD_TELEFONES_FIXO, null);
 		docEmpresa.append(FIELD_EMAILS, null);
@@ -77,7 +72,7 @@ public class EmpresaConversorMongo {
 		docEmpresa.append(FIELD_TIPO_EMPRESA, null);
 		docEmpresa.append(FIELD_TIPO_PORTE_EMPRESA, null);
 		if (empresa.getCnpj() != null) {
-			docEmpresa.put(FIELD_CNPJ, empresa.getCnpj());
+			docEmpresa.put(ID, empresa.getCnpj());
 		}
 		if (empresa.getRazaoSocial() != null) {
 			docEmpresa.put(FIELD_RAZAO_SOCIAL, empresa.getRazaoSocial());
@@ -86,7 +81,6 @@ public class EmpresaConversorMongo {
 			docEmpresa.put(FIELD_DATA_ABERTURA, empresa.getDataAbertura().toString());
 		}
 		docEmpresa.put(FIELD_RESPONSAVEIS, pessoaConversorMongo.pessoasToDocuments(empresa.getResponsaveis()));
-		docEmpresa.put(FIELD_CONTRATOS_TRABALHO, contratoTrabalhoConversorMongo.contratoTrabalhosToDocuments(empresa.getContratosTrabalho()));
 		docEmpresa.put(FIELD_ENDERECOS, enderecoConversorMongo.enderecosToDocuments(empresa.getEnderecos()));
 		docEmpresa.put(FIELD_TELEFONES_FIXO, telefoneFixoConversorMongo.telefonesFixoToDocuments(empresa.getTelefonesFixo()));
 		docEmpresa.put(FIELD_EMAILS, emailConversorMongo.emailsToDocuments(empresa.getEmails()));
@@ -106,8 +100,8 @@ public class EmpresaConversorMongo {
 			return null;
 		}
 		Empresa empresa = new Empresa();
-		if (docEmpresa.get(FIELD_CNPJ, String.class) != null) {
-			empresa.setCnpj(docEmpresa.get(FIELD_CNPJ, String.class));			
+		if (docEmpresa.get(ID, String.class) != null) {
+			empresa.setCnpj(docEmpresa.get(ID, String.class));			
 		}
 		if (docEmpresa.get(FIELD_RAZAO_SOCIAL, String.class) != null) {
 			empresa.setRazaoSocial(docEmpresa.get(FIELD_RAZAO_SOCIAL, String.class));			
@@ -116,7 +110,6 @@ public class EmpresaConversorMongo {
 			empresa.setDataAbertura(LocalDate.parse(docEmpresa.get(FIELD_DATA_ABERTURA, String.class)));
 		}
 		empresa.setResponsaveis(pessoaConversorMongo.documentsToPessoas(docEmpresa.getList(FIELD_RESPONSAVEIS, Document.class)));
-		empresa.setContratosTrabalho(contratoTrabalhoConversorMongo.documentsToContratoTrabalhos(docEmpresa.getList(FIELD_CONTRATOS_TRABALHO, Document.class)));
 		empresa.setEnderecos(enderecoConversorMongo.documentsToEnderecos(docEmpresa.getList(FIELD_ENDERECOS, Document.class)));
 		empresa.setTelefonesFixo(telefoneFixoConversorMongo.documentsToTelefonesFixo(docEmpresa.getList(FIELD_TELEFONES_FIXO, Document.class)));
 		empresa.setEmails(emailConversorMongo.documentsToEmails(docEmpresa.getList(FIELD_EMAILS, Document.class)));

@@ -6,13 +6,9 @@ import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsula
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.BAIRRO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.COMPLEMENTO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LOGRADOURO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOURO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ENDERECO_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -25,7 +21,7 @@ import org.junit.Test;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.endereco.EnderecoTestRandomBuilder;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -178,56 +174,6 @@ public class EnderecoTest {
         assertFalse(procuraViolacao(random.buildValid(), LOGRADOURO_INVALIDO, Post.class));
         assertFalse(procuraViolacao(random.buildValid(), NOME_LOGRADOURO_INVALIDO, Post.class));
         assertFalse(procuraViolacao(random.buildValid(), BAIRRO_INVALIDO, Post.class));
-    }
-    
-    /**
-     * Deve aceitar valor nulo no telefones fixo.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_nulo_no_telefonesFixo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloTelefonesFixo(), Post.class));
-    }
-
-    /**
-     * Nao deve aceitar telefones fixo com elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar telefones fixo com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-        assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoInvalido(), Post.class));
-    }
-    
-    /**
-     * Deve aceitar telefones fixo nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_telefonesFixo_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), LISTA_TELEFONES_INVALIDA, Post.class));
-        assertFalse(procuraViolacao(random.buildValid(), DDD_INVALIDO, Post.class));
-        assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar valor nulo no tipo endereco.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_nulo_no_tipoEndereco() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloTipoEndereco(), Post.class));
-    }
-    
-    /**
-     * Deve aceitar valor nao nulo no tipo endereco.
-     */
-    @Test
-    public void deve_aceitar_valor_nao_nulo_no_tipoEndereco() {
-        assertFalse(procuraViolacao(random.buildValid(), TIPO_ENDERECO_INVALIDO, Post.class));
     }
     
     /**

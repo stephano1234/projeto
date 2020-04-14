@@ -40,7 +40,7 @@ public class TipoEmpresaTest {
      */
     @Test
     public void verifica_valor_do_atributo_descricao_da_constante_SOCIEDADE() {
-        assertThat(TipoEmpresa.SOCIEDADE.getDescricao(), is(equalTo("Sociedade Emppresária")));
+        assertThat(TipoEmpresa.SOCIEDADE.getDescricao(), is(equalTo("Sociedade Empresária")));
     }
     
     /**

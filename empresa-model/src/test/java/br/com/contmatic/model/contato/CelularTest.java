@@ -4,8 +4,6 @@ import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerVi
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DDD_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_CONTATO_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -18,7 +16,7 @@ import org.junit.Test;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -38,46 +36,6 @@ public class CelularTest {
 		CelularTestRandomBuilder.cleanBuilder();
 	}
 
-    /**
-     * Nao deve aceitar valor nulo no ddd.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_nulo_no_ddd() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloDdd(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar valor maior que tamanho no ddd.
-     */
-    @Test
-    public void nao_deve_aceitar_mais_que_2_numerais_no_ddd() {
-        assertTrue(procuraQualquerViolacao(random.buildMaisQue2NumeraisDdd(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar valor menor que tamanho no ddd.
-     */
-    @Test
-    public void nao_deve_aceitar_menos_que_2_numerais_no_ddd() {
-        assertTrue(procuraQualquerViolacao(random.buildMenosQue2NumeraisDdd(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar valor com um caractere invalido no ddd.
-     */
-    @Test
-    public void nao_deve_aceitar_caractere_nao_numeral_no_ddd() {
-        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralDdd(), Post.class));
-    }
-    
-    /**
-     * Deve aceitar ddd valido.
-     */
-    @Test
-    public void deve_aceitar_ddd_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), DDD_INVALIDO, Post.class));
-    }
-    
     /**
      * Nao deve aceitar valor nulo no numero.
      */
@@ -119,22 +77,6 @@ public class CelularTest {
     }
     
     /**
-     * Nao deve aceitar valor nulo no tipo contato celular.
-     */
-    @Test
-    public void nao_deve_aceitar_valor_nulo_no_tipoContatoCelular() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloTipoContatoCelular(), Post.class));
-    }
-    
-    /**
-     * Deve aceitar valor nao nulo no tipo contato celular.
-     */
-    @Test
-    public void deve_aceitar_valor_nao_nulo_no_tipoContatoCelular() {
-        assertFalse(procuraViolacao(random.buildValid(), TIPO_CONTATO_INVALIDO, Post.class));
-    }
-        
-    /**
      * Deve possuir getters e setters implmentados corretamente.
      */
     @Test
@@ -150,7 +92,7 @@ public class CelularTest {
         EqualsVerifier
         .forClass(Celular.class)
         .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
-        .withOnlyTheseFields("ddd", "numero")
+        .withOnlyTheseFields("numero")
         .verify();
     }
     

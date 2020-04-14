@@ -2,19 +2,9 @@ package br.com.contmatic.model.pessoa;
 
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_NASCIMENTO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_PESSOA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
@@ -31,7 +21,7 @@ import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.pessoa.PessoaTestRandomBuilder;
 import br.com.contmatic.testes.utilidades.Verificadores;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -182,44 +172,6 @@ public class PessoaTest {
     }
         
     /**
-     * Nao deve aceitar enderecos nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_enderecos_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloEnderecos(), Post.class));
-    }
-
-    @Test
-    public void nao_deve_aceitar_enderecos_vazio() {
-    	assertTrue(procuraQualquerViolacao(random.buildVazioEnderecos(), Post.class));
-    }
-
-    /**
-     * Nao deve aceitar enderecos com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_enderecos_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildEnderecosComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar enderecos com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_enderecos_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildEnderecosComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar enderecos nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_enderecos_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_ENDERECOS_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), CEP_INVALIDO, Post.class));
-    }
-
-    /**
      * Nao deve aceitar data nascimento nulo.
      */
     @Test
@@ -241,105 +193,6 @@ public class PessoaTest {
     @Test
     public void deve_aceitar_dataNascimento_valida() {
     	assertFalse(procuraViolacao(random.buildValid(), DATA_NASCIMENTO, Post.class));
-    }
-
-    /**
-     * Deve aceitar celulares nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_celulares_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloCelulares(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar celulares com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_celulares_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildCelularesComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar celulares com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_celulares_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildCelularesComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar celulares nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_celulares_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CELULARES_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), CELULAR_INVALIDO, Post.class));
-    }
-
-    /**
-     * Deve aceitar telefones fixo nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloTelefonesFixo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar telefones fixo com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar telefones fixo com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_telefonesFixo_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildTelefonesFixoComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar telefones fixo nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_telefonesFixo_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_TELEFONES_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
-    }
-
-    /**
-     * Deve aceitar emails nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloEmails(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar emails com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildEmailsComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar emails com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_emails_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildEmailsComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar emails nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_emails_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_EMAILS_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), EMAIL_INVALIDO, Post.class));
     }
 
     /**
@@ -390,39 +243,6 @@ public class PessoaTest {
     	assertFalse(procuraViolacao(random.buildValid(), TIPO_SEXO_INVALIDO, Post.class));
     }
 
-    /**
-     * Deve aceitar contas nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_contas_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloContas(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar contas com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_contas_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildContasComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar contas com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_contas_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildContasComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar contas nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_contas_nao_vazio_sem_elemento_nulo_apenas_elemento_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CONTAS_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), NUMERO_CONTA_INVALIDO, Post.class));
-    }
-    
     /**
      * Deve possuir getters e setters implmentados corretamente.
      */

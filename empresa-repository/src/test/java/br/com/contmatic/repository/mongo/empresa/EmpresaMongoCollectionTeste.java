@@ -1,8 +1,9 @@
 package br.com.contmatic.repository.mongo.empresa;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.bson.Document;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,22 +31,25 @@ public class EmpresaMongoCollectionTeste {
 	}
 	
 	@Test
-	public void popula_collection_empresa_com_20000_dados_validos_e_com_cnpjs_unicos() {
+	public void popula_collection_empresa_com_n_dados_validos_e_com_cnpjs_unicos() {
 		try {
+			long n = 500;
 			Empresa empresa = null;
-			int i = 0;
-			while (i < 20000) {
+			long i = 0;
+			while (i < n) {
 				empresa = empresaRandomBuilder.build();
-				if (empresaMongoRepository.readByCnpj(empresa.getCnpj()) == null) {
+				//if (empresaMongoRepository.findOne(empresa.getCnpj()) == null) {
 					empresaMongoRepository.create(empresa);
 					i++;
 					System.out.println(i + "º registro armazenado");
 					empresa = null;
-				}
+				//}
 			}
-			assertEquals(20000l, empresaMongoRepository.countAll());
+			assertEquals(n, empresaMongoRepository.countByParams(new Document()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
 		} finally {
-			EmpresaMongoRepositoryImpl.closeRepository();
 			MongoConnection.getInstance().close();
 		}
 	}
@@ -54,9 +58,11 @@ public class EmpresaMongoCollectionTeste {
 	public void zera_database_projeto() {
 		try {
 			MongoConnection.getInstance().getMongoDatabase().drop();
-			assertTrue(empresaMongoRepository.countAll() == 0l);
+			assertEquals(0l, empresaMongoRepository.countByParams(new Document()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
 		} finally {
-			EmpresaMongoRepositoryImpl.closeRepository();
 			MongoConnection.getInstance().close();
 		}
 	}

@@ -14,7 +14,6 @@ public class TelefoneFixoRandomBuilder {
 	
 	public TelefoneFixo build() {
 		final TelefoneFixo telefoneFixo = new TelefoneFixo();
-		telefoneFixo.setDdd(generateStringBySizeAndRegex(DDD, APENAS_NUMERAL));
 		telefoneFixo.setNumero(generateStringBySizeAndRegex(NUMERO_TELEFONE_FIXO, APENAS_NUMERAL));
 		return telefoneFixo;
 	}

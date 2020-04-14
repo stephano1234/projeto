@@ -1,12 +1,11 @@
 package br.com.contmatic.model.empresa;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.CNPJ_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTRATOS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
@@ -30,16 +29,18 @@ import br.com.contmatic.model.contato.Celular;
 import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.model.pessoa.ContratoTrabalho;
 import br.com.contmatic.model.pessoa.Pessoa;
+
 import br.com.contmatic.validacoes.CNPJbr;
 import br.com.contmatic.validacoes.NaoNulo;
 import br.com.contmatic.validacoes.NaoNuloCollection;
 import br.com.contmatic.validacoes.NotEmptyCollection;
 import br.com.contmatic.validacoes.TextDividedBy;
-import br.com.contmatic.validacoes.groups.Delete;
-import br.com.contmatic.validacoes.groups.Post;
-import br.com.contmatic.validacoes.groups.Put;
+
+import br.com.contmatic.model.restricoes.grupos.Delete;
+import br.com.contmatic.model.restricoes.grupos.Get;
+import br.com.contmatic.model.restricoes.grupos.Post;
+import br.com.contmatic.model.restricoes.grupos.Put;
 
 /**
  * The Class Empresa.
@@ -48,17 +49,17 @@ public class Empresa {
 
 	/** The cnpj. */
 	@NaoNulo(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
-	@CNPJbr(groups = {Post.class, Put.class, Delete.class})
+	@CNPJbr(groups = {Post.class, Put.class, Delete.class, Get.class})
 	private String cnpj;
 
 	/** The razao social. */
-	@NaoNulo(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class, Put.class})
 	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
 	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
 	private String razaoSocial;
 
 	/** The data abertura. */
-	@NaoNulo(message = DATA_ABERTURA, groups = {Post.class})
+	@NaoNulo(message = DATA_ABERTURA, groups = {Post.class, Put.class})
 	@Past(message = DATA_ABERTURA, groups = {Post.class, Put.class})
 	private LocalDate dataAbertura;
 
@@ -66,11 +67,6 @@ public class Empresa {
 	@NotEmptyCollection(message = LISTA_RESPONSAVEIS_INVALIDA, groups = {Post.class})
 	@Valid
 	private Set<Pessoa> responsaveis;
-
-	/** The contratos trabalho. */
-	@NaoNuloCollection(message = LISTA_CONTRATOS_INVALIDA, groups = {Post.class})
-	@Valid
-	private Set<ContratoTrabalho> contratosTrabalho;
 
 	/** The enderecos. */
 	@NotEmptyCollection(message = LISTA_ENDERECOS_INVALIDA, groups = {Post.class})
@@ -98,11 +94,11 @@ public class Empresa {
 	private Set<Conta> contas;
 
 	/** The tipo empresa. */
-	@NaoNulo(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
 	private TipoEmpresa tipoEmpresa;
 
 	/** The tipo porte empresa. */
-	@NaoNulo(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class})
+	@NaoNulo(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
 	private TipoPorteEmpresa tipoPorteEmpresa;
 
 	/**
@@ -203,24 +199,6 @@ public class Empresa {
 	 */
 	public void setResponsaveis(Set<Pessoa> responsaveis) {
 		this.responsaveis = responsaveis;
-	}
-
-	/**
-	 * Gets the contratos trabalho.
-	 *
-	 * @return the contratos trabalho
-	 */
-	public Set<ContratoTrabalho> getContratosTrabalho() {
-		return contratosTrabalho;
-	}
-
-	/**
-	 * Sets the contratos trabalho.
-	 *
-	 * @param contratosTrabalho the new contratos trabalho
-	 */
-	public void setContratosTrabalho(Set<ContratoTrabalho> contratosTrabalho) {
-		this.contratosTrabalho = contratosTrabalho;
 	}
 
 	/**
@@ -401,9 +379,6 @@ public class Empresa {
 				.append(",")
 				.append("responsaveis:")
 				.append(responsaveis)
-				.append(",")
-				.append("contratosTrabalho:")
-				.append(contratosTrabalho)
 				.append(",")
 				.append("enderecos:")
 				.append(enderecos)

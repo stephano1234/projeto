@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.model.random.empresa.EmpresaRandomBuilder;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 
 public class AllRandomBuilderTeste {
 	

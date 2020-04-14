@@ -220,8 +220,8 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));
 		}
-		Empresa empresaLida = empresaMongoRepository.readByCnpj(filtro);
-		assertEquals(empresaPassaFiltro.toString(), empresaLida.toString());
+		//Empresa empresaLida = empresaMongoRepository.findOne(filtro);
+		//assertEquals(empresaPassaFiltro.toString(), empresaLida.toString());
 	}
 
 	@Test
@@ -234,7 +234,7 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));
 		}
-		assertNull(empresaMongoRepository.readByCnpj(cnpjProcurado));		
+		//assertNull(empresaMongoRepository.findOne(cnpjProcurado));		
 	}
 	
 	@Test
@@ -257,7 +257,7 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readCnpjAndRazaoSocialByRazaoSocial(razaoSocialFiltro);
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document().append("razaoSocial", razaoSocialFiltro), new Document(), new Document().append("cnpj", 1).append("razaoSocial", 1), 0, 20);
 		assertEquals(expectedEmpresas.size(), actualEmpresas.size());
 		for (int i = 0; i < expectedEmpresas.size(); i++) {
 			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
@@ -276,7 +276,7 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));
 		}
-		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByRazaoSocial(razaoSocialFiltro);
+		List<Empresa> empresasFiltradas = empresaMongoRepository.findByParams(new Document().append("razaoSocial", razaoSocialFiltro), new Document(), new Document().append("cnpj", 1).append("razaoSocial", 1), 0, 10);
 		assertEquals(0, empresasFiltradas.size());
 	}
 	
@@ -298,7 +298,7 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));			
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readCnpjAndRazaoSocialByResponsavelCpf(cpfFiltro);
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document().append("responsaveis.cpf", cpfFiltro), new Document(), new Document().append("cnpj", 1).append("razaoSocial", 1), 0, 20);
 		assertEquals(expectedEmpresas.size(), actualEmpresas.size());
 		for (int i = 0; i < expectedEmpresas.size(); i++) {
 			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
@@ -317,7 +317,7 @@ public class EmpresaMongoRepositoryImplTest {
 			}
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresaNaoPassaFiltro));			
 		}
-		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByResponsavelCpf(cpfFiltro);
+		List<Empresa> empresasFiltradas = empresaMongoRepository.findByParams(new Document().append("responsaveis.cpf", cpfFiltro), new Document(), new Document().append("cnpj", 1).append("razaoSocial", 1), 0, 10);
 		assertEquals(0, empresasFiltradas.size());
 	}
 
@@ -332,7 +332,7 @@ public class EmpresaMongoRepositoryImplTest {
 				expectedEmpresas.add(empresa);
 			}		
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoEmpresa(filtro);
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, 20);
 		assertEquals(expectedEmpresas.size(), actualEmpresas.size());
 		for (int i = 0; i < expectedEmpresas.size(); i++) {
 			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
@@ -349,7 +349,7 @@ public class EmpresaMongoRepositoryImplTest {
 				mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
 			}
 		}
-		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoEmpresa(filtro);
+		List<Empresa> empresasFiltradas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, 20);
 		assertEquals(0, empresasFiltradas.size());
 	}
 
@@ -364,7 +364,7 @@ public class EmpresaMongoRepositoryImplTest {
 				expectedEmpresas.add(empresa);
 			}		
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoPorteEmpresa(filtro);
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, 20);
 		assertEquals(expectedEmpresas.size(), actualEmpresas.size());
 		for (int i = 0; i < expectedEmpresas.size(); i++) {
 			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
@@ -381,45 +381,49 @@ public class EmpresaMongoRepositoryImplTest {
 				mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
 			}
 		}
-		List<Empresa> empresasFiltradas = empresaMongoRepository.readCnpjAndRazaoSocialByTipoPorteEmpresa(filtro);
+		List<Empresa> empresasFiltradas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, 20);
 		assertEquals(0, empresasFiltradas.size());		
 	}
 
 	@Test
-	public void deve_ler_os_campos_cnpj_e_razaoSocial_de_todas_as_empresas_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
+	public void com_parametros_inteiros_0_e_numero_de_empresas_na_collection_deve_ler_todos_os_campos_cnpj_e_razaoSocial_de_todas_as_empresas_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
+		int randomQtdCollection = RandomUtils.nextInt(1, 11);
 		List<Empresa> expectedEmpresas = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < randomQtdCollection; i++) {
 			Empresa empresa = empresaRandomBuilder.build();
+			empresa.setRazaoSocial(Integer.toString(randomQtdCollection - i - 1) + empresa.getRazaoSocial());
 			expectedEmpresas.add(empresa);
-			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
+			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readAllCnpjAndRazaoSocial(10);
-		assertEquals(expectedEmpresas.size(), actualEmpresas.size());
-		for (int i = 0; i < expectedEmpresas.size(); i++) {
-			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
-			assertEquals(expectedEmpresas.get(i).getRazaoSocial(), actualEmpresas.get(i).getRazaoSocial());
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, randomQtdCollection);
+		assertEquals(randomQtdCollection, actualEmpresas.size());
+		for (int i = 0; i < randomQtdCollection; i++) {
+			System.out.println(actualEmpresas.get(i));
+			assertEquals(expectedEmpresas.get(randomQtdCollection - i - 1).getCnpj(), actualEmpresas.get(i).getCnpj());
+			assertEquals(expectedEmpresas.get(randomQtdCollection - i - 1).getRazaoSocial(), actualEmpresas.get(i).getRazaoSocial());
 		}
 	}
 
 	@Test
-	public void deve_ler_os_n_primeiros_campos_cnpj_e_razaoSocial_de_todas_as_empresas_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
-		List<Empresa> expectedEmpresas = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
+	public void deve_ler_n_campos_apos_pular_os_p_primeiros_cnpj_e_razaoSocial_de_todas_as_empresas_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
+		int randomQtdCollection = RandomUtils.nextInt(1, 21);
+		for (int i = 0; i < randomQtdCollection; i++) {
 			Empresa empresa = empresaRandomBuilder.build();
-			expectedEmpresas.add(empresa);
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));	
 		}
-		List<Empresa> actualEmpresas = empresaMongoRepository.readAllCnpjAndRazaoSocial(5);
-		assertEquals(5, actualEmpresas.size());
-		for (int i = 0; i < 5; i++) {
-			assertEquals(expectedEmpresas.get(i).getCnpj(), actualEmpresas.get(i).getCnpj());
-			assertEquals(expectedEmpresas.get(i).getRazaoSocial(), actualEmpresas.get(i).getRazaoSocial());
-		}
+		List<Empresa> expectedEmpresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), 0, randomQtdCollection);		
+		int n = RandomUtils.nextInt(0, randomQtdCollection + 1);
+		int p = RandomUtils.nextInt(0, randomQtdCollection + 1 - n);
+		List<Empresa> actualEmpresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), p, n);
+		assertEquals(n, actualEmpresas.size());
+		assertEquals(expectedEmpresas.get(p).toString(), actualEmpresas.get(0).toString());
 	}
 
 	@Test
-	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_independente_do_valor_do_inteiro_colocado_no_parametro_na_collection_empresa_de_uma_database_do_mongodb() {
-		List<Empresa> empresas = empresaMongoRepository.readAllCnpjAndRazaoSocial(10);
+	public void deve_trazer_conjunto_vazio_caso_nao_haja_empresa_independente_dos_valores_dos_inteiros_colocados_no_parametros_na_collection_empresa_de_uma_database_do_mongodb() {
+		int n = RandomUtils.nextInt(0, 21);
+		int p = RandomUtils.nextInt(0, 21 - n);
+		List<Empresa> empresas = empresaMongoRepository.findByParams(new Document(), new Document(), new Document(), p, n);
 		assertEquals(0, empresas.size());
 	}
 
@@ -430,13 +434,13 @@ public class EmpresaMongoRepositoryImplTest {
 			Empresa empresa = empresaRandomBuilder.build();
 			mongoCollection.insertOne(empresaConversorMongo.empresaToDocument(empresa));
 		}
-		long quantidadeComputada = empresaMongoRepository.countAll();
+		long quantidadeComputada = empresaMongoRepository.countByParams(new Document());
 		assertEquals(quantidadeEsperada, quantidadeComputada);
 	}
 	
 	@Test
 	public void deve_trazer_zero_caso_nao_haja_empresa_armazenadas_na_collection_empresa_de_uma_database_do_mongodb() {
-		long quantidadeComputada = empresaMongoRepository.countAll();
+		long quantidadeComputada = empresaMongoRepository.countByParams(new Document());
 		assertEquals(0l, quantidadeComputada);		
 	}
 	

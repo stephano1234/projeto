@@ -4,12 +4,7 @@ import static br.com.contmatic.testes.utilidades.FuncoesRandomicas.generateStrin
 import static br.com.contmatic.testes.utilidades.FuncoesRandomicas.generateStringBySizeAndRegexWithOneCharByRegex;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.model.random.contato.TelefoneFixoTestRandomBuilder;
 
 public class EnderecoTestRandomBuilder {
 
@@ -29,8 +24,6 @@ public class EnderecoTestRandomBuilder {
 	
 	private static final LogradouroTestRandomBuilder randomLogradouro = LogradouroTestRandomBuilder.getInstance();
 	
-	private static final TelefoneFixoTestRandomBuilder randomTelefoneFixo = TelefoneFixoTestRandomBuilder.getInstance();
-	
 	private final Endereco enderecoValido = new EnderecoRandomBuilder().build();
 
 	private static EnderecoTestRandomBuilder instance;
@@ -47,7 +40,6 @@ public class EnderecoTestRandomBuilder {
 
 	public static void cleanBuilder() {
 		LogradouroTestRandomBuilder.cleanBuilder();
-		TelefoneFixoTestRandomBuilder.cleanBuilder();
 		instance = null;
 	}
 	
@@ -61,8 +53,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -72,8 +62,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 	
@@ -83,8 +71,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -94,8 +80,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -105,8 +89,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(null);
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 	
@@ -116,8 +98,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero("");
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 	
@@ -127,8 +107,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(generateStringBySizeAndRegex(MAX_NUMERO_ENDERECO + 1, APENAS_NUMERAL));
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -138,8 +116,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, MAX_NUMERO_ENDERECO + 1), SEM_NUMERAL, APENAS_NUMERAL));
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -149,8 +125,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento("");
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 	
@@ -160,8 +134,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(generateStringBySizeAndRegex(TAMANHO_REGULAR + 1, VALIDO_COMPLEMENTO));
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -171,8 +143,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR + 1), INVALIDO_COMPLEMENTO));
 		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -182,8 +152,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(null);
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
 		return endereco;
 	}
 
@@ -193,58 +161,6 @@ public class EnderecoTestRandomBuilder {
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
 		endereco.setLogradouro(randomLogradouro.buildNaoApenasLetraEspacoNome());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
-		return endereco;
-	}
-
-	public Endereco buildNuloTelefonesFixo() {
-		Endereco endereco = new Endereco();
-		endereco.setCep(enderecoValido.getCep());
-		endereco.setNumero(enderecoValido.getNumero());
-		endereco.setComplemento(enderecoValido.getComplemento());
-		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(null);
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
-		return endereco;
-	}
-
-	public Endereco buildTelefonesFixoComElementoNulo() {
-		Endereco endereco = new Endereco();
-		endereco.setCep(enderecoValido.getCep());
-		endereco.setNumero(enderecoValido.getNumero());
-		endereco.setComplemento(enderecoValido.getComplemento());
-		endereco.setLogradouro(enderecoValido.getLogradouro());
-		Set<TelefoneFixo> telefonesFixoComElementoNulo = new HashSet<>();
-		telefonesFixoComElementoNulo.addAll(enderecoValido.getTelefonesFixo());
-		telefonesFixoComElementoNulo.add(null);
-		endereco.setTelefonesFixo(telefonesFixoComElementoNulo);
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
-		return endereco;
-	}
-
-	public Endereco buildTelefonesFixoComElementoInvalido() {
-		Endereco endereco = new Endereco();
-		endereco.setCep(enderecoValido.getCep());
-		endereco.setNumero(enderecoValido.getNumero());
-		endereco.setComplemento(enderecoValido.getComplemento());
-		endereco.setLogradouro(enderecoValido.getLogradouro());
-		Set<TelefoneFixo> telefonesFixoComElementoInvalido = new HashSet<>();
-		telefonesFixoComElementoInvalido.addAll(enderecoValido.getTelefonesFixo());
-		telefonesFixoComElementoInvalido.add(randomTelefoneFixo.buildNaoApenasNumeralNumero());
-		endereco.setTelefonesFixo(telefonesFixoComElementoInvalido);
-		endereco.setTipoEndereco(enderecoValido.getTipoEndereco());
-		return endereco;
-	}
-
-	public Endereco buildNuloTipoEndereco() {
-		Endereco endereco = new Endereco();
-		endereco.setCep(enderecoValido.getCep());
-		endereco.setNumero(enderecoValido.getNumero());
-		endereco.setComplemento(enderecoValido.getComplemento());
-		endereco.setLogradouro(enderecoValido.getLogradouro());
-		endereco.setTelefonesFixo(enderecoValido.getTelefonesFixo());
-		endereco.setTipoEndereco(null);
 		return endereco;
 	}
 

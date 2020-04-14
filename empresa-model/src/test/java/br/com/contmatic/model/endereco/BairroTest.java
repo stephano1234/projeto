@@ -19,7 +19,7 @@ import org.junit.Test;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.endereco.BairroTestRandomBuilder;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**

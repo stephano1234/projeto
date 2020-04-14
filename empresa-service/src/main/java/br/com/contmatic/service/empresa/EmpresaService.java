@@ -6,9 +6,10 @@ import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.repository.configuracao.mongodb.MongoConnection;
 import br.com.contmatic.repository.mongo.empresa.EmpresaMongoRepository;
 import br.com.contmatic.repository.mongo.empresa.EmpresaMongoRepositoryImpl;
+import br.com.contmatic.service.parametros.FindParams;
 
 public class EmpresaService {
-
+	
 	private EmpresaMongoRepository empresaMongoRepository = EmpresaMongoRepositoryImpl.getInstance(MongoConnection.getInstance().getMongoDatabase());
 	
 	private static EmpresaService instance;
@@ -23,8 +24,24 @@ public class EmpresaService {
 		return instance;
 	}
 	
-	public List<Empresa> findAll(int pageSize) {
-		return empresaMongoRepository.readAllCnpjAndRazaoSocial(pageSize);
+	public List<Empresa> findByParams(FindParams params) {
+		return empresaMongoRepository.findByParams(params.getFilter(), params.getSort(), params.getProjection(), params.getPageOffset(), params.getPageSize());
+	}
+
+	public long countByParams(FindParams params) {
+		return empresaMongoRepository.countByParams(params.getFilter());
+	}
+
+	public void update(Empresa empresa) {
+		empresaMongoRepository.update(empresa.getCnpj(), empresa);
 	}
 	
+	public void delete(Empresa empresa) {
+		empresaMongoRepository.delete(empresa.getCnpj());
+	}
+
+	public void create(Empresa empresa) {
+		empresaMongoRepository.create(empresa);
+	}
+
 }

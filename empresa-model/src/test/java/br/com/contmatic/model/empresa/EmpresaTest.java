@@ -10,13 +10,11 @@ import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTRATOS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.PESSOA_INVALIDA;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.RAZAO_SOCIAL_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
 import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_EMPRESA_INVALIDO;
@@ -34,7 +32,7 @@ import com.jparams.verifier.tostring.ToStringVerifier;
 
 import br.com.contmatic.model.random.empresa.EmpresaTestRandomBuilder;
 import br.com.contmatic.testes.utilidades.Verificadores;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -258,39 +256,6 @@ public class EmpresaTest {
     public void deve_aceitar_responsaveis_valido() {
     	assertFalse(procuraViolacao(random.buildValid(), LISTA_RESPONSAVEIS_INVALIDA, Post.class));
     	assertFalse(procuraViolacao(random.buildValid(), CPF_INVALIDO, Post.class));
-    }
-
-    /**
-     * Nao deve aceitar contratosTrabalho nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildNuloContratosTrabalho(), Post.class));
-    }
-        
-    /**
-     * Nao deve aceitar contratosTrabalho com pelo menos um elemento nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_com_pelo_menos_um_elemento_nulo() {
-    	assertTrue(procuraQualquerViolacao(random.buildContratosTrabalhoComElementoNulo(), Post.class));
-    }
-    
-    /**
-     * Nao deve aceitar contratosTrabalho com elemento invalido.
-     */
-    @Test
-    public void nao_deve_aceitar_contratosTrabalho_com_elemento_invalido() {
-    	assertTrue(procuraQualquerViolacao(random.buildContratosTrabalhoComElementoInvalido(), Post.class));
-    }
-
-    /**
-     * Deve aceitar contratosTrabalho nao vazio sem elemento nulo apenas elemento valido.
-     */
-    @Test
-    public void deve_aceitar_contratosTrabalho_valido() {
-    	assertFalse(procuraViolacao(random.buildValid(), LISTA_CONTRATOS_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), PESSOA_INVALIDA, Post.class));
     }
 
     /**

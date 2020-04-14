@@ -12,18 +12,13 @@ import br.com.contmatic.model.contato.TelefoneFixo;
 public class TelefoneFixoConversorMongo {
 
 	private static final String FIELD_NUMERO = "numero";
-	private static final String FIELD_DDD = "ddd";
 
 	public Document telefoneFixoToDocument(TelefoneFixo telefoneFixo) {
 		if (telefoneFixo == null) {
 			return null;
 		}
 		final Document docTelefoneFixo = new Document();
-		docTelefoneFixo.append(FIELD_DDD, null);
 		docTelefoneFixo.append(FIELD_NUMERO, null);
-		if (telefoneFixo.getDdd() != null) {
-			docTelefoneFixo.put(FIELD_DDD, telefoneFixo.getDdd());
-		}
 		if (telefoneFixo.getNumero() != null) {
 			docTelefoneFixo.put(FIELD_NUMERO, telefoneFixo.getNumero());
 		}
@@ -35,9 +30,6 @@ public class TelefoneFixoConversorMongo {
 			return null;
 		}
 		final TelefoneFixo telefoneFixo = new TelefoneFixo();
-		if (docTelefoneFixo.get(FIELD_DDD, String.class) != null) {
-			telefoneFixo.setDdd(docTelefoneFixo.get(FIELD_DDD, String.class));	
-		}
 		if (docTelefoneFixo.get(FIELD_NUMERO, String.class) != null) {
 			telefoneFixo.setNumero(docTelefoneFixo.get(FIELD_NUMERO, String.class));	
 		}
