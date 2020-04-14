@@ -2,12 +2,12 @@ package br.com.contmatic.model.pessoa;
 
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_NASCIMENTO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_PESSOA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_NASCIMENTO_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_RESPONSAVEL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_SEXO_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -168,7 +168,7 @@ public class PessoaTest {
      */
     @Test
     public void deve_aceitar_nome_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), NOME_PESSOA_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), NOME_RESPONSAVEL_INVALIDO, Post.class));
     }
         
     /**
@@ -192,7 +192,7 @@ public class PessoaTest {
      */
     @Test
     public void deve_aceitar_dataNascimento_valida() {
-    	assertFalse(procuraViolacao(random.buildValid(), DATA_NASCIMENTO, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), DATA_NASCIMENTO_INVALIDA, Post.class));
     }
 
     /**

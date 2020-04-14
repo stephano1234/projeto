@@ -2,23 +2,23 @@ package br.com.contmatic.model.empresa;
 
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CNPJ_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_CONTA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.RAZAO_SOCIAL_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_EMPRESA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_CELULAR_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CNPJ_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_ABERTURA_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.EMAIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CELULARES_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CONTAS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_EMAILS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_ENDERECOS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_CONTA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.RAZAO_SOCIAL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_TELEFONE_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_EMPRESA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -279,7 +279,7 @@ public class EmpresaTest {
      */
     @Test
     public void deve_aceitar_dataNascimento_valida() {
-    	assertFalse(procuraViolacao(random.buildValid(), DATA_ABERTURA, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), DATA_ABERTURA_INVALIDA, Post.class));
     }
 
     /**
@@ -312,7 +312,7 @@ public class EmpresaTest {
     @Test
     public void deve_aceitar_celulares_valido() {
     	assertFalse(procuraViolacao(random.buildValid(), LISTA_CELULARES_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), CELULAR_INVALIDO, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), NUMERO_CELULAR_INVALIDO, Post.class));
     }
 
     /**
@@ -345,7 +345,7 @@ public class EmpresaTest {
     @Test
     public void deve_aceitar_telefonesFixo_valido() {
     	assertFalse(procuraViolacao(random.buildValid(), LISTA_TELEFONES_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), TELEFONE_INVALIDO, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), NUMERO_TELEFONE_INVALIDO, Post.class));
     }
 
     /**

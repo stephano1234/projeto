@@ -3,10 +3,10 @@ package br.com.contmatic.model.endereco;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.CEP;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.COMPLEMENTO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NUMERO_ENDERECO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.COMPLEMENTO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LOGRADOURO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_ENDERECO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.COMPLEMENTO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LOGRADOURO_INVALIDO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.NotNull;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
@@ -25,7 +25,7 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Endereco {
 
     /** The cep. */
-    @NaoNulo(message = CEP_INVALIDO, groups = {Post.class, Put.class})
+    @NotNull(message = CEP_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = CEP, groups = {Post.class, Put.class}, message = CEP_INVALIDO)
     private String cep;
     
@@ -38,7 +38,7 @@ public class Endereco {
     private String complemento;
     
     /** The logradouro. */
-    @NaoNulo(message = LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
+    @NotNull(message = LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
     @Valid
     private Logradouro logradouro;
     

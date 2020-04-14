@@ -2,15 +2,15 @@ package br.com.contmatic.model.conta;
 
 import static br.com.contmatic.model.restricoes.RestricaoCampo.CODIGO_BANCO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NUMERO_AGENCIA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CODIGO_BANCO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_AGENCIA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CODIGO_BANCO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_AGENCIA_INVALIDO;
 
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.NotNull;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
@@ -21,12 +21,12 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Agencia {
     
     /** The numero. */
-    @NaoNulo(message = NUMERO_AGENCIA_INVALIDO, groups = {Post.class, Put.class})
+    @NotNull(message = NUMERO_AGENCIA_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = NUMERO_AGENCIA, groups = {Post.class, Put.class}, message = NUMERO_AGENCIA_INVALIDO)
     private String numero;
     
     /** The codigo banco. */
-    @NaoNulo(message = CODIGO_BANCO_INVALIDO, groups = {Post.class, Put.class})
+    @NotNull(message = CODIGO_BANCO_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = CODIGO_BANCO, groups = {Post.class, Put.class}, message = CODIGO_BANCO_INVALIDO)
     private String codigoBanco;
 

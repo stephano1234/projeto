@@ -1,14 +1,14 @@
 package br.com.contmatic.model.contato;
 
 import static br.com.contmatic.model.restricoes.RestricaoCampo.EMAIL;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.EMAIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.EMAIL_INVALIDO;
 
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.NotNull;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
@@ -19,7 +19,7 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Email {
 
     /** The endereco. */
-    @NaoNulo(message = EMAIL_INVALIDO, groups = {Post.class, Put.class})
+    @NotNull(message = EMAIL_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = EMAIL, groups = {Post.class, Put.class}, message = EMAIL_INVALIDO)
     private String endereco;
     

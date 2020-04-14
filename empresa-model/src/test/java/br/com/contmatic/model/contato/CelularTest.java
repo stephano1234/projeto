@@ -3,7 +3,7 @@ package br.com.contmatic.model.contato;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CELULAR_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_CELULAR_INVALIDO;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
@@ -73,7 +73,7 @@ public class CelularTest {
      */
     @Test
     public void deve_aceitar_numero_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), CELULAR_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(random.buildValid(), NUMERO_CELULAR_INVALIDO, Post.class));
     }
     
     /**

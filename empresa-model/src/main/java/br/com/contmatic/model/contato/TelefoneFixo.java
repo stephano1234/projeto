@@ -1,14 +1,14 @@
 package br.com.contmatic.model.contato;
 
 import static br.com.contmatic.model.restricoes.RestricaoCampo.TELEFONE;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TELEFONE_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_TELEFONE_INVALIDO;
 
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.NotNull;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
@@ -19,8 +19,8 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class TelefoneFixo {
 
     /** The numero. */
-    @NaoNulo(message = TELEFONE_INVALIDO, groups = {Post.class, Put.class})
-    @Pattern(regexp = TELEFONE, groups = {Post.class, Put.class}, message = TELEFONE_INVALIDO)
+    @NotNull(message = NUMERO_TELEFONE_INVALIDO, groups = {Post.class, Put.class})
+    @Pattern(regexp = TELEFONE, groups = {Post.class, Put.class}, message = NUMERO_TELEFONE_INVALIDO)
     private String numero;
     
     /**

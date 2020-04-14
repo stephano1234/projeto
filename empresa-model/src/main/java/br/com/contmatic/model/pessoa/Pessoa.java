@@ -3,12 +3,12 @@ package br.com.contmatic.model.pessoa;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
 
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_PESSOA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_NASCIMENTO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_RESPONSAVEL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_NASCIMENTO_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_SEXO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
 
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
@@ -18,8 +18,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.joda.time.LocalDate;
 
-import br.com.contmatic.validacoes.CPFbr;
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.validacoes.CPF;
+import br.com.contmatic.validacoes.NotNull;
 import br.com.contmatic.validacoes.TextDividedBy;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
@@ -31,31 +31,31 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Pessoa {
 
 	/** The cpf. */
-	@NaoNulo(message = CPF_INVALIDO, groups = {Post.class, Put.class})
-	@CPFbr(groups = {Post.class, Put.class})
+	@NotNull(message = CPF_INVALIDO, groups = {Post.class, Put.class})
+	@CPF(message = CPF_INVALIDO, groups = {Post.class, Put.class})
 	private String cpf;
 
 	/** The nome. */
-	@NaoNulo(message = NOME_PESSOA_INVALIDO, groups = {Post.class, Put.class})
-	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
-	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
+	@NotNull(message = NOME_RESPONSAVEL_INVALIDO, groups = {Post.class, Put.class})
+	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_RESPONSAVEL_INVALIDO)
+	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_RESPONSAVEL_INVALIDO)
 	private String nome;
 
 	/** The data nascimento. */
-	@NaoNulo(message = DATA_NASCIMENTO, groups = {Post.class, Put.class})
-	@Past(message = DATA_NASCIMENTO, groups = {Post.class, Put.class})
+	@NotNull(message = DATA_NASCIMENTO_INVALIDA, groups = {Post.class, Put.class})
+	@Past(message = DATA_NASCIMENTO_INVALIDA, groups = {Post.class, Put.class})
 	private LocalDate dataNascimento;
 
 	/** The tipo grau instrucao. */
-	@NaoNulo(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class, Put.class})
 	private TipoGrauInstrucao tipoGrauInstrucao;
 
 	/** The tipo estado civil. */
-	@NaoNulo(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class, Put.class})
 	private TipoEstadoCivil tipoEstadoCivil;
 
 	/** The tipo sexo. */
-	@NaoNulo(message = TIPO_SEXO_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = TIPO_SEXO_INVALIDO, groups = {Post.class, Put.class})
 	private TipoSexo tipoSexo;
 	
 	/**

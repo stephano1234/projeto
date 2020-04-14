@@ -2,17 +2,17 @@ package br.com.contmatic.model.empresa;
 
 import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CNPJ_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_ABERTURA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.RAZAO_SOCIAL_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_EMPRESA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CNPJ_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_ABERTURA_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CELULARES_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CONTAS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_EMAILS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_ENDERECOS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_RESPONSAVEIS_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_TELEFONES_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.RAZAO_SOCIAL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_EMPRESA_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_PORTE_EMPRESA_INVALIDO;
 
 import java.util.Set;
 
@@ -31,9 +31,9 @@ import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.endereco.Endereco;
 import br.com.contmatic.model.pessoa.Pessoa;
 
-import br.com.contmatic.validacoes.CNPJbr;
-import br.com.contmatic.validacoes.NaoNulo;
-import br.com.contmatic.validacoes.NaoNuloCollection;
+import br.com.contmatic.validacoes.CNPJ;
+import br.com.contmatic.validacoes.NotNull;
+import br.com.contmatic.validacoes.NotNullCollection;
 import br.com.contmatic.validacoes.NotEmptyCollection;
 import br.com.contmatic.validacoes.TextDividedBy;
 
@@ -48,19 +48,19 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Empresa {
 
 	/** The cnpj. */
-	@NaoNulo(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
-	@CNPJbr(groups = {Post.class, Put.class, Delete.class, Get.class})
+	@NotNull(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
+	@CNPJ(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class, Get.class})
 	private String cnpj;
 
 	/** The razao social. */
-	@NaoNulo(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = RAZAO_SOCIAL_INVALIDO, groups = {Post.class, Put.class})
 	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
 	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = RAZAO_SOCIAL_INVALIDO)
 	private String razaoSocial;
 
 	/** The data abertura. */
-	@NaoNulo(message = DATA_ABERTURA, groups = {Post.class, Put.class})
-	@Past(message = DATA_ABERTURA, groups = {Post.class, Put.class})
+	@NotNull(message = DATA_ABERTURA_INVALIDA, groups = {Post.class, Put.class})
+	@Past(message = DATA_ABERTURA_INVALIDA, groups = {Post.class, Put.class})
 	private LocalDate dataAbertura;
 
 	/** The responsaveis. */
@@ -74,31 +74,31 @@ public class Empresa {
 	private Set<Endereco> enderecos;
 
 	/** The telefones fixo. */
-	@NaoNuloCollection(message = LISTA_TELEFONES_INVALIDA, groups = {Post.class})
+	@NotNullCollection(message = LISTA_TELEFONES_INVALIDA, groups = {Post.class})
 	@Valid
 	private Set<TelefoneFixo> telefonesFixo;
 
 	/** The emails. */
-	@NaoNuloCollection(message = LISTA_EMAILS_INVALIDA, groups = {Post.class})
+	@NotNullCollection(message = LISTA_EMAILS_INVALIDA, groups = {Post.class})
 	@Valid
 	private Set<Email> emails;
 
 	/** The celulares. */
-	@NaoNuloCollection(message = LISTA_CELULARES_INVALIDA, groups = {Post.class})
+	@NotNullCollection(message = LISTA_CELULARES_INVALIDA, groups = {Post.class})
 	@Valid
 	private Set<Celular> celulares;
 
 	/** The contas. */
-	@NaoNuloCollection(message = LISTA_CONTAS_INVALIDA, groups = {Post.class})
+	@NotNullCollection(message = LISTA_CONTAS_INVALIDA, groups = {Post.class})
 	@Valid
 	private Set<Conta> contas;
 
 	/** The tipo empresa. */
-	@NaoNulo(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = TIPO_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
 	private TipoEmpresa tipoEmpresa;
 
 	/** The tipo porte empresa. */
-	@NaoNulo(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
+	@NotNull(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
 	private TipoPorteEmpresa tipoPorteEmpresa;
 
 	/**
