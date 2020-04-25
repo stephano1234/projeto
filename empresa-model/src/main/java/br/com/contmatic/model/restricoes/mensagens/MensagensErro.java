@@ -24,7 +24,7 @@ public class MensagensErro {
 	public static final String LISTA_ENDERECOS_INVALIDA = "O conjunto de endereços não pode ser nulo, não pode ser vazio e não pode possuir elementos nulos.";
 	
     /** The Constant EMAIL_INVALIDO. */
-    public static final String EMAIL_INVALIDO = "O e-mail deve possuir um endereço válido.";
+    public static final String ENDERECO_EMAIL_INVALIDO = "O e-mail deve possuir um endereço válido.";
     
     /** The Constant CPF_INVALIDO. */
     public static final String CPF_INVALIDO = "O responsável legal deve possuir um C.P.F. válido.";

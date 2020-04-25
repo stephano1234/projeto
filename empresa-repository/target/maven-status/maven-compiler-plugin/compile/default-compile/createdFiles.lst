@@ -1,0 +1,14 @@
+br\com\contmatic\repository\configuracao\mongodb\MongoConnection.class
+br\com\contmatic\repository\mongo\conversor\contato\CelularConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\empresa\EmpresaConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\contato\TelefoneFixoConversorMongo.class
+br\com\contmatic\repository\mongo\empresa\EmpresaMongoRepository.class
+br\com\contmatic\repository\mongo\conversor\endereco\LogradouroConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\pessoa\PessoaConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\contato\EmailConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\conta\ContaConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\endereco\EnderecoConversorMongo.class
+br\com\contmatic\repository\mongo\empresa\EmpresaMongoRepositoryImpl.class
+br\com\contmatic\repository\mongo\conversor\endereco\BairroConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\conta\AgenciaConversorMongo.class
+br\com\contmatic\repository\mongo\conversor\endereco\CidadeConversorMongo.class

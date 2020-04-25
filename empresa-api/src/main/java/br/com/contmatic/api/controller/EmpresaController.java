@@ -9,22 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.LocalDate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import br.com.contmatic.api.controller.adapters.LocalDateTypeAdapter;
+import br.com.contmatic.assembler.empresa.EmpresaResourceAssembler;
+import br.com.contmatic.dto.empresa.v1.EmpresaResource;
 import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.service.empresa.EmpresaService;
-import br.com.contmatic.service.empresa.EmpresaValidador;
+import br.com.contmatic.service.mensagens.MensagemServidor;
 import br.com.contmatic.service.parametros.FindParams;
 
 public class EmpresaController extends HttpServlet {
 
-	private static final String X_FIND_PARAMS = "X-Find-Params";
+	private static final String FIND_PARAMS = "FindParams";
 
-	private static final String X_COUNT_QUERY = "X-Count-Query";
+	private static final String X_QUERY_QTD = "X-Query-Qtd";
 
 	private static final String TEXT_HTML = "text/html";
 
@@ -32,17 +30,11 @@ public class EmpresaController extends HttpServlet {
 
 	private static final String APPLICATION_JSON = "application/json";
 
-	private static final String X_SERVER_MSG = "X-Server-Msg";
-
-	private static final String PUT_SUCESSO = "Empresa alterada com sucesso.";
-
-	private static final String DELETE_SUCESSO = "Empresa apagada com sucesso.";
-	
-	private static final String POST_SUCESSO = "Empresa salva com sucesso.";
-	
 	private static final long serialVersionUID = 1L;
 
-	private static final EmpresaValidador empresaValidador = EmpresaValidador.getInstance();
+	private static final ObjectMapper mapper = new ObjectMapper();
+
+	private static final EmpresaResourceAssembler empresaResourceAssembler = EmpresaResourceAssembler.getInstance();
 
 	private static final EmpresaService empresaService = EmpresaService.getInstance();
 
@@ -68,70 +60,50 @@ public class EmpresaController extends HttpServlet {
 
 	private void getEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
-		Gson gson = configGson();
-		FindParams findParams = gson.fromJson(req.getHeader(X_FIND_PARAMS), FindParams.class);
-		if (empresaValidador.validaGet(findParams)) {
-			resp.setContentType(APPLICATION_JSON);
-			if (findParams.getToCount()) {
-				resp.addHeader(X_COUNT_QUERY, Long.toString(empresaService.countByParams(findParams)));
-			}
-			PrintWriter out = resp.getWriter();
-			List<Empresa> empresas = empresaService.findByParams(findParams);
-			out.print(gson.toJson(empresas));
-			out.flush();
-		} else {
-			resp.setContentType(TEXT_HTML);
-			resp.setHeader(X_SERVER_MSG, gson.toJson(empresaValidador.procuraViolacoesGet(findParams)));
-			resp.sendError(422);
-		}
+		resp.setContentType(APPLICATION_JSON);
+		FindParams findParams = mapper.readValue(req.getParameter(FIND_PARAMS), FindParams.class);
+		resp.addHeader(X_QUERY_QTD, empresaService.countByParams(findParams));
+		PrintWriter out = resp.getWriter();
+		List<Empresa> entities = empresaService.findByParams(findParams);
+		List<EmpresaResource> resources = empresaResourceAssembler.toResources(entities);
+		out.print(mapper.writeValueAsString(resources));
+		out.flush();
 	}
 
 	private void updateEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
 		resp.setContentType(TEXT_HTML);
-		Gson gson = configGson();
-		Empresa empresa = gson.fromJson(req.getReader().readLine(), Empresa.class);
-		if (empresaValidador.validaPut(empresa)) {
-			empresaService.update(empresa);
-			resp.setHeader(X_SERVER_MSG, PUT_SUCESSO);
-		} else {
-			resp.setHeader(X_SERVER_MSG, gson.toJson(empresaValidador.procuraViolacoesPut(empresa)));
-			resp.sendError(422);
-		}
+		EmpresaResource resource = mapper.readValue(req.getReader().readLine(), EmpresaResource.class);
+		Empresa entity = empresaResourceAssembler.toEntity(resource);
+		MensagemServidor mensagemServidor = empresaService.update(entity);
+		PrintWriter out = resp.getWriter();
+		resp.setStatus(mensagemServidor.getStatusCode());
+		out.print(mapper.writeValueAsString(mensagemServidor.getMensagens()));
+		out.flush();
 	}
 
 	private void deleteEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
 		resp.setContentType(TEXT_HTML);
-		Gson gson = configGson();
-		Empresa empresa = gson.fromJson(req.getReader().readLine(), Empresa.class);
-		if (empresaValidador.validaDelete(empresa)) {
-			empresaService.delete(empresa);
-			resp.setHeader(X_SERVER_MSG, DELETE_SUCESSO);
-		} else {
-			resp.setHeader(X_SERVER_MSG, gson.toJson(empresaValidador.procuraViolacoesDelete(empresa)));
-			resp.sendError(422);
-		}
+		EmpresaResource resource = mapper.readValue(req.getReader().readLine(), EmpresaResource.class);
+		Empresa entity = empresaResourceAssembler.toEntity(resource);
+		MensagemServidor mensagemServidor = empresaService.delete(entity);
+		PrintWriter out = resp.getWriter();
+		resp.setStatus(mensagemServidor.getStatusCode());
+		out.print(mapper.writeValueAsString(mensagemServidor.getMensagens()));
+		out.flush();
 	}
 
 	private void createEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
 		resp.setContentType(TEXT_HTML);
-		Gson gson = configGson();
-		Empresa empresa = gson.fromJson(req.getReader().readLine(), Empresa.class);
-		if (empresaValidador.validaPost(empresa)) {
-			empresaService.create(empresa);
-			resp.setHeader(X_SERVER_MSG, POST_SUCESSO);
-		} else {
-			resp.setHeader(X_SERVER_MSG, gson.toJson(empresaValidador.procuraViolacoesPost(empresa)));
-			resp.sendError(422);
-		}
-	}
-
-	private Gson configGson() {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter().nullSafe());
-		return gsonBuilder.setPrettyPrinting().create();
+		EmpresaResource resource = mapper.readValue(req.getReader().readLine(), EmpresaResource.class);
+		Empresa entity = empresaResourceAssembler.toEntity(resource);
+		MensagemServidor mensagemServidor = empresaService.create(entity);
+		PrintWriter out = resp.getWriter();
+		resp.setStatus(mensagemServidor.getStatusCode());
+		out.print(mapper.writeValueAsString(mensagemServidor.getMensagens()));
+		out.flush();
 	}
 
 }

@@ -37,8 +37,6 @@ import br.com.contmatic.validacoes.NotNullCollection;
 import br.com.contmatic.validacoes.NotEmptyCollection;
 import br.com.contmatic.validacoes.TextDividedBy;
 
-import br.com.contmatic.model.restricoes.grupos.Delete;
-import br.com.contmatic.model.restricoes.grupos.Get;
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
 
@@ -48,8 +46,8 @@ import br.com.contmatic.model.restricoes.grupos.Put;
 public class Empresa {
 
 	/** The cnpj. */
-	@NotNull(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class})
-	@CNPJ(message = CNPJ_INVALIDO, groups = {Post.class, Put.class, Delete.class, Get.class})
+	@NotNull(message = CNPJ_INVALIDO, groups = {Post.class, Put.class})
+	@CNPJ(message = CNPJ_INVALIDO, groups = {Post.class, Put.class})
 	private String cnpj;
 
 	/** The razao social. */

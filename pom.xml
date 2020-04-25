@@ -11,6 +11,7 @@
 		<module>empresa-repository</module>
 		<module>empresa-service</module>
 		<module>empresa-api</module>
+		<module>empresa-assembler</module>
 	</modules>
 	<dependencies>
 		<dependency>

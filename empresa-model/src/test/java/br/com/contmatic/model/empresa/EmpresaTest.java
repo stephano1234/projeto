@@ -7,7 +7,7 @@ import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CEP_INVA
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CNPJ_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CPF_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_ABERTURA_INVALIDA;
-import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.EMAIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.ENDERECO_EMAIL_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CELULARES_INVALIDA;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_CONTAS_INVALIDA;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LISTA_EMAILS_INVALIDA;
@@ -378,7 +378,7 @@ public class EmpresaTest {
     @Test
     public void deve_aceitar_emails_valido() {
     	assertFalse(procuraViolacao(random.buildValid(), LISTA_EMAILS_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), EMAIL_INVALIDO, Post.class));
+    	assertFalse(procuraViolacao(random.buildValid(), ENDERECO_EMAIL_INVALIDO, Post.class));
     }
 
     /**
