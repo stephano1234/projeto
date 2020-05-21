@@ -6,11 +6,19 @@
 	version="4.0" metadata-complete="true">
 	<display-name>empresa-api</display-name>
 	<servlet>
-		<servlet-name>empresaServlet</servlet-name>
-		<servlet-class>br.com.contmatic.api.controller.EmpresaController</servlet-class>
+		<servlet-name>empresasServlet</servlet-name>
+		<servlet-class>br.com.contmatic.api.controller.empresa.EmpresasController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>empresaServlet</servlet-name>
+		<servlet-name>empresasServlet</servlet-name>
 		<url-pattern>/empresas</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>empresasCnpjServlet</servlet-name>
+		<servlet-class>br.com.contmatic.api.controller.empresa.EmpresasCnpjController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>empresasCnpjServlet</servlet-name>
+		<url-pattern>/empresas/*</url-pattern>
 	</servlet-mapping>
 </web-app>

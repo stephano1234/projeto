@@ -9,11 +9,12 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class Agencia.
@@ -29,23 +30,6 @@ public class Agencia {
     @NotNull(message = CODIGO_BANCO_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = CODIGO_BANCO, groups = {Post.class, Put.class}, message = CODIGO_BANCO_INVALIDO)
     private String codigoBanco;
-
-    /**
-     * Instantiates a new agencia.
-     *
-     * @param numero the numero
-     * @param codigoBanco the codigo banco
-     */
-    public Agencia(String numero, String codigoBanco) {
-        this.numero = numero;     
-        this.codigoBanco = codigoBanco;
-    }
-
-    /**
-     * Instantiates a new agencia.
-     */
-    public Agencia() {
-    }
     
     /**
      * Gets the numero.
@@ -124,15 +108,10 @@ public class Agencia {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("numero:")
-                .append(numero)
-                .append(",")
-                .append("codigoBanco:")
-                .append(codigoBanco)
-                .append("}")
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("numero", this.numero)
+        		.append("codigoBanco", this.codigoBanco)
+        		.toString();
     }
     
 }

@@ -22,6 +22,8 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.model.conta.Conta;
@@ -47,7 +49,7 @@ public class Empresa {
 
 	/** The cnpj. */
 	@NotNull(message = CNPJ_INVALIDO, groups = {Post.class, Put.class})
-	@CNPJ(message = CNPJ_INVALIDO, groups = {Post.class, Put.class})
+	@CNPJ(message = CNPJ_INVALIDO, groups = {Post.class})
 	private String cnpj;
 
 	/** The razao social. */
@@ -99,34 +101,6 @@ public class Empresa {
 	@NotNull(message = TIPO_PORTE_EMPRESA_INVALIDO, groups = {Post.class, Put.class})
 	private TipoPorteEmpresa tipoPorteEmpresa;
 
-	/**
-	 * Instantiates a new empresa.
-	 *
-	 * @param cnpj the cnpj
-	 * @param razaoSocial the razao social
-	 * @param dataAbertura the data abertura
-	 * @param responsaveis the responsaveis
-	 * @param enderecos the enderecos
-	 * @param tipoEmpresa the tipo empresa
-	 * @param tipoPorteEmpresa the tipo porte empresa
-	 */
-	public Empresa(String cnpj, String razaoSocial, LocalDate dataAbertura, Set<Pessoa> responsaveis,
-			Set<Endereco> enderecos, TipoEmpresa tipoEmpresa, TipoPorteEmpresa tipoPorteEmpresa) {
-		this.cnpj = cnpj;
-		this.razaoSocial = razaoSocial;
-		this.dataAbertura = dataAbertura;
-		this.responsaveis = responsaveis;
-		this.enderecos = enderecos;
-		this.tipoEmpresa = tipoEmpresa;
-		this.tipoPorteEmpresa = tipoPorteEmpresa;
-	}
-
-	/**
-	 * Instantiates a new empresa.
-	 */
-	public Empresa() {
-	}
-	
 	/**
 	 * Gets the cnpj.
 	 *
@@ -364,41 +338,18 @@ public class Empresa {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder()
-				.append("{")
-				.append("cnpj:")
-				.append(cnpj)
-				.append(",")
-				.append("razaoSocial:")
-				.append(razaoSocial)
-				.append(",")
-				.append("dataAbertura:")
-				.append(dataAbertura)
-				.append(",")
-				.append("responsaveis:")
-				.append(responsaveis)
-				.append(",")
-				.append("enderecos:")
-				.append(enderecos)
-				.append(",")
-				.append("telefonesFixo:")
-				.append(telefonesFixo)
-				.append(",")
-				.append("emails:")
-				.append(emails)
-				.append(",")
-				.append("celulares:")
-				.append(celulares)
-				.append(",")
-				.append("contas:")
-				.append(contas)
-				.append(",")
-				.append("tipoEmpresa:")
-				.append(tipoEmpresa != null ? tipoEmpresa.name() : null)
-				.append(",")
-				.append("tipoPorteEmpresa:")
-				.append(tipoPorteEmpresa != null ? tipoPorteEmpresa.name() : null)
-				.append("}")
+		return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+				.append("cnpj", this.cnpj)
+				.append("razaoSocial", this.razaoSocial)
+				.append("dataAbertura", this.dataAbertura)
+				.append("responsaveis", this.responsaveis)
+				.append("enderecos", this.enderecos)
+				.append("telefonesFixo", this.telefonesFixo)
+				.append("emails", this.emails)
+				.append("celulares", this.celulares)
+				.append("contas", this.contas)
+				.append("tipoEmpresa", this.tipoEmpresa)
+				.append("tipoPorteEmpresa", this.tipoPorteEmpresa)
 				.toString();
 	}
 	

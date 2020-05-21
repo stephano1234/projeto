@@ -10,6 +10,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.LocalDate;
 
+import br.com.contmatic.assembler.exception.AssemblerException;
 import br.com.contmatic.dto.empresa.v1.CelularResource;
 import br.com.contmatic.dto.empresa.v1.ContaBancariaResource;
 import br.com.contmatic.dto.empresa.v1.EmailResource;
@@ -19,6 +20,7 @@ import br.com.contmatic.dto.empresa.v1.ResponsavelResource;
 import br.com.contmatic.dto.empresa.v1.TelefoneFixoResource;
 import br.com.contmatic.model.conta.Agencia;
 import br.com.contmatic.model.conta.Conta;
+import br.com.contmatic.model.conta.TipoConta;
 import br.com.contmatic.model.contato.Celular;
 import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
@@ -38,66 +40,112 @@ import br.com.contmatic.model.pessoa.TipoSexo;
 public class EmpresaResourceAssembler {
 
 	private static EmpresaResourceAssembler instance;
-	
+
 	private EmpresaResourceAssembler() {
 	}
-	
+
 	public static EmpresaResourceAssembler getInstance() {
 		if (instance == null) {
 			instance = new EmpresaResourceAssembler();
 		}
 		return instance;
 	}
-	
-	public Empresa toEntity(EmpresaResource resource) {
-		Empresa entity = null;
-		if (resource != null) {
-			entity = new Empresa();
-			entity.setCnpj(resource.getCnpj());
-			entity.setRazaoSocial(resource.getRazaoSocial());
-			entity.setDataAbertura(toEntityDate(resource.getDataAbertura()));
-			entity.setResponsaveis(new HashSet<>());
-			for (ResponsavelResource responsavelResource : resource.getResponsaveis()) {
-				entity.getResponsaveis().add(toEntityResponsavel(responsavelResource));
+
+	public Empresa toEntity(EmpresaResource resource) throws AssemblerException  {
+		try {
+			Empresa entity = null;
+			if (resource != null) {
+				entity = new Empresa();
+				entity.setCnpj(resource.getCnpj());
+				entity.setRazaoSocial(resource.getRazaoSocial());
+				entity.setDataAbertura(toEntityDate(resource.getDataAbertura()));
+				toEntityResponsaveis(resource, entity);
+				toEntityEnderecos(resource, entity);
+				toEntityTelefonesFixos(resource, entity);
+				toEntityEmails(resource, entity);
+				toEntityCelulares(resource, entity);
+				toEntityContasBancarias(resource, entity);
+				toEntityTipoEmpresa(resource, entity);
+				toEntityTipoPorteEmpresa(resource, entity);
+				if (resource.getTipoPorteEmpresa() != null) {
+					entity.setTipoPorteEmpresa(TipoPorteEmpresa.valueOf(resource.getTipoPorteEmpresa()));
+				}
 			}
-			entity.setEnderecos(new HashSet<>());
-			for (EnderecoResource enderecoResource : resource.getEnderecos()) {
-				entity.getEnderecos().add(toEntityEndereco(enderecoResource));
-			}
-			entity.setTelefonesFixo(new HashSet<>());
-			for (TelefoneFixoResource telefoneFixoResource : resource.getTelefonesFixos()) {
-				entity.getTelefonesFixo().add(toEntityTelefoneFixo(telefoneFixoResource));
-			}
-			entity.setEmails(new HashSet<>());
-			for (EmailResource emailResource : resource.getEmails()) {
-				entity.getEmails().add(toEntityEmail(emailResource));
-			}
-			entity.setCelulares(new HashSet<>());
-			for (CelularResource celularResource : resource.getCelulares()) {
-				entity.getCelulares().add(toEntityCelular(celularResource));
-			}
-			entity.setContas(new HashSet<>());
-			for (ContaBancariaResource contaResource : resource.getContasBancarias()) {
-				entity.getContas().add(toEntityContaBancaria(contaResource));
-			}
-			if (resource.getTipoEmpresa() != null) {
-				entity.setTipoEmpresa(TipoEmpresa.valueOf(resource.getTipoEmpresa()));				
-			}
-			if (resource.getTipoPorteEmpresa() != null) {
-				entity.setTipoPorteEmpresa(TipoPorteEmpresa.valueOf(resource.getTipoPorteEmpresa()));				
-			}
+			return entity;			
+		} catch (Exception e) {
+			throw new AssemblerException(e.toString());
 		}
-		return entity;
 	}
 
-	public List<Empresa> toEntities(List<EmpresaResource> resources) {
-		List<Empresa> entities = new ArrayList<>();
-		for (EmpresaResource resource : resources) {
-			entities.add(toEntity(resource));
+	private void toEntityResponsaveis(EmpresaResource resource, Empresa entity) {
+		entity.setResponsaveis(new HashSet<>());
+		for (ResponsavelResource responsavelResource : resource.getResponsaveis()) {
+			entity.getResponsaveis().add(toEntityResponsavel(responsavelResource));
 		}
-		return entities;
 	}
-	
+
+	private void toEntityEnderecos(EmpresaResource resource, Empresa entity) {
+		entity.setEnderecos(new HashSet<>());
+		for (EnderecoResource enderecoResource : resource.getEnderecos()) {
+			entity.getEnderecos().add(toEntityEndereco(enderecoResource));
+		}
+	}
+
+	private void toEntityTelefonesFixos(EmpresaResource resource, Empresa entity) {
+		entity.setTelefonesFixo(new HashSet<>());
+		for (TelefoneFixoResource telefoneFixoResource : resource.getTelefonesFixos()) {
+			entity.getTelefonesFixo().add(toEntityTelefoneFixo(telefoneFixoResource));
+		}
+	}
+
+	private void toEntityEmails(EmpresaResource resource, Empresa entity) {
+		entity.setEmails(new HashSet<>());
+		for (EmailResource emailResource : resource.getEmails()) {
+			entity.getEmails().add(toEntityEmail(emailResource));
+		}
+	}
+
+	private void toEntityCelulares(EmpresaResource resource, Empresa entity) {
+		entity.setCelulares(new HashSet<>());
+		for (CelularResource celularResource : resource.getCelulares()) {
+			entity.getCelulares().add(toEntityCelular(celularResource));
+		}
+	}
+
+	private void toEntityContasBancarias(EmpresaResource resource, Empresa entity) {
+		entity.setContas(new HashSet<>());
+		for (ContaBancariaResource contaResource : resource.getContasBancarias()) {
+			entity.getContas().add(toEntityContaBancaria(contaResource));
+		}
+	}
+
+	private void toEntityTipoEmpresa(EmpresaResource resource, Empresa entity) {
+		if (resource.getTipoEmpresa() != null) {
+			entity.setTipoEmpresa(TipoEmpresa.valueOf(resource.getTipoEmpresa()));
+		}
+	}
+
+	private void toEntityTipoPorteEmpresa(EmpresaResource resource, Empresa entity) {
+		if (resource.getTipoPorteEmpresa() != null) {
+			entity.setTipoPorteEmpresa(TipoPorteEmpresa.valueOf(resource.getTipoPorteEmpresa()));
+		}
+	}
+
+	public List<Empresa> toEntities(List<EmpresaResource> resources) throws AssemblerException  {
+		try {
+			List<Empresa> entities = null;
+			if (resources != null) {
+				entities = new ArrayList<>();
+				for (EmpresaResource resource : resources) {
+					entities.add(toEntity(resource));
+				}
+			}
+			return entities;			
+		} catch (Exception e) {
+			throw new AssemblerException(e.toString());
+		}
+	}
+
 	private Pessoa toEntityResponsavel(ResponsavelResource resource) {
 		Pessoa entity = null;
 		if (resource != null) {
@@ -106,13 +154,13 @@ public class EmpresaResourceAssembler {
 			entity.setNome(resource.getNome());
 			entity.setDataNascimento(toEntityDate(resource.getDataNascimento()));
 			if (resource.getTipoGrauInstrucao() != null) {
-				entity.setTipoGrauInstrucao(TipoGrauInstrucao.valueOf(resource.getTipoGrauInstrucao()));				
+				entity.setTipoGrauInstrucao(TipoGrauInstrucao.valueOf(resource.getTipoGrauInstrucao()));
 			}
 			if (resource.getTipoEstadoCivil() != null) {
-				entity.setTipoEstadoCivil(TipoEstadoCivil.valueOf(resource.getTipoEstadoCivil()));				
+				entity.setTipoEstadoCivil(TipoEstadoCivil.valueOf(resource.getTipoEstadoCivil()));
 			}
 			if (resource.getTipoSexo() != null) {
-				entity.setTipoSexo(TipoSexo.valueOf(resource.getTipoSexo()));				
+				entity.setTipoSexo(TipoSexo.valueOf(resource.getTipoSexo()));
 			}
 		}
 		return entity;
@@ -132,7 +180,7 @@ public class EmpresaResourceAssembler {
 			entity.getLogradouro().getBairro().setCidade(new Cidade());
 			entity.getLogradouro().getBairro().getCidade().setNome(resource.getCidade());
 			if (resource.getTipoUf() != null) {
-				entity.getLogradouro().getBairro().getCidade().setTipoUf(TipoUf.valueOf(resource.getTipoUf()));				
+				entity.getLogradouro().getBairro().getCidade().setTipoUf(TipoUf.valueOf(resource.getTipoUf()));
 			}
 		}
 		return entity;
@@ -173,6 +221,9 @@ public class EmpresaResourceAssembler {
 			entity.setAgencia(new Agencia());
 			entity.getAgencia().setNumero(resource.getNumeroAgencia());
 			entity.getAgencia().setCodigoBanco(resource.getCodigoBanco());
+			if (resource.getTipoContaBancaria() != null) {
+				entity.setTipoConta(TipoConta.valueOf(resource.getTipoContaBancaria()));
+			}
 		}
 		return entity;
 	}
@@ -185,47 +236,91 @@ public class EmpresaResourceAssembler {
 		return entity;
 	}
 
-	public EmpresaResource toResource(Empresa entity) {
-		EmpresaResource resource = null;
-		if (entity != null) {
-			resource = new EmpresaResource();
-			resource.setCnpj(entity.getCnpj());
-			resource.setRazaoSocial(entity.getRazaoSocial());
-			resource.setDataAbertura(toResourceDate(entity.getDataAbertura()));
-			for (Pessoa pessoa : entity.getResponsaveis()) {
-				resource.getResponsaveis().add(toResourceResponsavel(pessoa));
+	public EmpresaResource toResource(Empresa entity) throws AssemblerException {
+		try {
+			EmpresaResource resource = null;
+			if (entity != null) {
+				resource = new EmpresaResource();
+				resource.setCnpj(entity.getCnpj());
+				resource.setRazaoSocial(entity.getRazaoSocial());
+				resource.setDataAbertura(toResourceDate(entity.getDataAbertura()));
+				toResourceResponsaveis(resource, entity);
+				toResourceEnderecos(resource, entity);
+				toResourceTelefonesFixos(resource, entity);
+				toResourceEmails(resource, entity);
+				toResourceCelulares(resource, entity);
+				toResourceContasBancarias(resource, entity);
+				toResourceTipoEmpresa(resource, entity);
+				toResourceTipoPorteEmpresa(resource, entity);
 			}
-			for (Endereco endereco : entity.getEnderecos()) {
-				resource.getEnderecos().add(toResourceEndereco(endereco));
-			}
-			for (TelefoneFixo telefoneFixo : entity.getTelefonesFixo()) {
-				resource.getTelefonesFixos().add(toResourceTelefoneFixo(telefoneFixo));
-			}
-			for (Email email : entity.getEmails()) {
-				resource.getEmails().add(toResourceEmail(email));
-			}
-			for (Celular celular : entity.getCelulares()) {
-				resource.getCelulares().add(toResourceCelular(celular));
-			}
-			for (Conta conta : entity.getContas()) {
-				resource.getContasBancarias().add(toResourceContaBancaria(conta));
-			}
-			resource.setTipoEmpresa(entity.getTipoEmpresa() != null ? entity.getTipoEmpresa().name() : null);
-			resource.setTipoPorteEmpresa(
-					entity.getTipoPorteEmpresa().name() != null ? entity.getTipoPorteEmpresa().name() : null);
+			return resource;
+		} catch (Exception e) {
+			throw new AssemblerException(e.toString());
 		}
-		return resource;
 	}
 
-	public List<EmpresaResource> toResources(List<Empresa> entities) {
-		List<EmpresaResource> resources = new ArrayList<>();
-		for (Empresa entity : entities) {
-			resources.add(toResource(entity));
+	private void toResourceResponsaveis(EmpresaResource resource, Empresa entity)
+			throws DatatypeConfigurationException {
+		for (Pessoa pessoa : entity.getResponsaveis() != null ? entity.getResponsaveis() : new HashSet<Pessoa>()) {
+			resource.getResponsaveis().add(toResourceResponsavel(pessoa));
 		}
-		return resources;
 	}
-	
-	private ResponsavelResource toResourceResponsavel(Pessoa entity) {
+
+	private void toResourceEnderecos(EmpresaResource resource, Empresa entity) {
+		for (Endereco endereco : entity.getEnderecos() != null ? entity.getEnderecos() : new HashSet<Endereco>()) {
+			resource.getEnderecos().add(toResourceEndereco(endereco));
+		}
+	}
+
+	private void toResourceTelefonesFixos(EmpresaResource resource, Empresa entity) {
+		for (TelefoneFixo telefoneFixo : entity.getTelefonesFixo() != null ? entity.getTelefonesFixo()
+				: new HashSet<TelefoneFixo>()) {
+			resource.getTelefonesFixos().add(toResourceTelefoneFixo(telefoneFixo));
+		}
+	}
+
+	private void toResourceEmails(EmpresaResource resource, Empresa entity) {
+		for (Email email : entity.getEmails() != null ? entity.getEmails() : new HashSet<Email>()) {
+			resource.getEmails().add(toResourceEmail(email));
+		}
+	}
+
+	private void toResourceCelulares(EmpresaResource resource, Empresa entity) {
+		for (Celular celular : entity.getCelulares() != null ? entity.getCelulares() : new HashSet<Celular>()) {
+			resource.getCelulares().add(toResourceCelular(celular));
+		}
+	}
+
+	private void toResourceContasBancarias(EmpresaResource resource, Empresa entity) {
+		for (Conta conta : entity.getContas() != null ? entity.getContas() : new HashSet<Conta>()) {
+			resource.getContasBancarias().add(toResourceContaBancaria(conta));
+		}
+	}
+
+	private void toResourceTipoEmpresa(EmpresaResource resource, Empresa entity) {
+		resource.setTipoEmpresa(entity.getTipoEmpresa() != null ? entity.getTipoEmpresa().name() : null);
+	}
+
+	private void toResourceTipoPorteEmpresa(EmpresaResource resource, Empresa entity) {
+		resource.setTipoPorteEmpresa(entity.getTipoPorteEmpresa() != null ? entity.getTipoPorteEmpresa().name() : null);
+	}
+
+	public List<EmpresaResource> toResources(List<Empresa> entities) throws AssemblerException {
+		try {
+			List<EmpresaResource> resources = null;
+			if (entities != null) {
+				resources = new ArrayList<>();
+				for (Empresa entity : entities) {
+					resources.add(toResource(entity));
+				}
+			}
+			return resources;			
+		} catch (Exception e) {
+			throw new AssemblerException(e.toString());
+		}
+	}
+
+	private ResponsavelResource toResourceResponsavel(Pessoa entity) throws DatatypeConfigurationException {
 		ResponsavelResource resource = null;
 		if (entity != null) {
 			resource = new ResponsavelResource();
@@ -299,18 +394,15 @@ public class EmpresaResourceAssembler {
 			resource.setNumero(entity.getNumero());
 			resource.setNumeroAgencia(entity.getAgencia() != null ? entity.getAgencia().getNumero() : null);
 			resource.setCodigoBanco(entity.getAgencia() != null ? entity.getAgencia().getCodigoBanco() : null);
+			resource.setTipoContaBancaria(entity.getTipoConta() != null ? entity.getTipoConta().name() : null);
 		}
 		return resource;
 	}
 
-	private XMLGregorianCalendar toResourceDate(LocalDate entity) {
+	private XMLGregorianCalendar toResourceDate(LocalDate entity) throws DatatypeConfigurationException {
 		XMLGregorianCalendar resource = null;
 		if (entity != null) {
-			try {
-				resource = DatatypeFactory.newInstance().newXMLGregorianCalendar(entity.toString());
-			} catch (DatatypeConfigurationException e) {
-				return null;
-			}
+			resource = DatatypeFactory.newInstance().newXMLGregorianCalendar(entity.toString());
 		}
 		return resource;
 	}

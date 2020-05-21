@@ -22,8 +22,6 @@ public class EnderecoTestRandomBuilder {
 	
 	private static final String APENAS_NUMERAL = "[0-9]";
 	
-	private static final LogradouroTestRandomBuilder randomLogradouro = LogradouroTestRandomBuilder.getInstance();
-	
 	private final Endereco enderecoValido = new EnderecoRandomBuilder().build();
 
 	private static EnderecoTestRandomBuilder instance;
@@ -160,7 +158,25 @@ public class EnderecoTestRandomBuilder {
 		endereco.setCep(enderecoValido.getCep());
 		endereco.setNumero(enderecoValido.getNumero());
 		endereco.setComplemento(enderecoValido.getComplemento());
-		endereco.setLogradouro(randomLogradouro.buildNaoApenasLetraEspacoNome());
+		endereco.setLogradouro(LogradouroTestRandomBuilder.getInstance().buildNaoApenasLetraEspacoNome());
+		return endereco;
+	}
+
+	public Endereco buildBairroInvalido() {
+		Endereco endereco = new Endereco();
+		endereco.setCep(enderecoValido.getCep());
+		endereco.setNumero(enderecoValido.getNumero());
+		endereco.setComplemento(enderecoValido.getComplemento());
+		endereco.setLogradouro(LogradouroTestRandomBuilder.getInstance().buildBairroInvalido());
+		return endereco;
+	}
+
+	public Endereco buildCidadeInvalido() {
+		Endereco endereco = new Endereco();
+		endereco.setCep(enderecoValido.getCep());
+		endereco.setNumero(enderecoValido.getNumero());
+		endereco.setComplemento(enderecoValido.getComplemento());
+		endereco.setLogradouro(LogradouroTestRandomBuilder.getInstance().buildCidadeInvalido());
 		return endereco;
 	}
 

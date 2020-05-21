@@ -9,6 +9,8 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.validacoes.NotNull;
 import br.com.contmatic.validacoes.TextDividedBy;
@@ -30,23 +32,6 @@ public class Cidade {
     /** The tipo uf. */
     @NotNull(message = TIPO_UF_INVALIDO, groups = {Post.class, Put.class})
     private TipoUf tipoUf;
-    
-    /**
-     * Instantiates a new cidade.
-     *
-     * @param nome the nome
-     * @param tipoUf the tipo uf
-     */
-    public Cidade(String nome, TipoUf tipoUf) {
-        this.nome = nome;
-        this.tipoUf = tipoUf;
-    }
-
-    /**
-     * Instantiates a new cidade.
-     */
-    public Cidade() {
-    }
     
     /**
      * Gets the nome.
@@ -125,14 +110,9 @@ public class Cidade {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("nome:")
-                .append(nome)
-                .append(",")
-                .append("tipoUf:")
-                .append(tipoUf != null ? tipoUf.name() : null)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("nome", this.nome)
+        		.append("tipoUf", this.tipoUf)
                 .toString();
     }
     

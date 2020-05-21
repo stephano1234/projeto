@@ -7,11 +7,12 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class TelefoneFixo.
@@ -22,22 +23,6 @@ public class TelefoneFixo {
     @NotNull(message = NUMERO_TELEFONE_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = TELEFONE, groups = {Post.class, Put.class}, message = NUMERO_TELEFONE_INVALIDO)
     private String numero;
-    
-    /**
-     * Instantiates a new telefone fixo.
-     *
-     * @param ddd the ddd
-     * @param numero the numero
-     */
-    public TelefoneFixo(String numero) {
-        this.numero = numero;
-    }
-
-    /**
-     * Instantiates a new telefone fixo.
-     */
-    public TelefoneFixo() {
-    }
     
     /**
      * Gets the numero.
@@ -96,11 +81,8 @@ public class TelefoneFixo {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("numero:")
-                .append(numero)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("numero", this.numero)
                 .toString();
     }
     

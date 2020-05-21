@@ -41,12 +41,6 @@ public class TelefoneFixoTestRandomBuilder {
 		return telefoneFixo;
 	}
 	
-	public TelefoneFixo buildVazioNumero() {
-		TelefoneFixo telefoneFixo = new TelefoneFixo();
-		telefoneFixo.setNumero("");
-		return telefoneFixo;
-	}
-	
 	public TelefoneFixo buildNaoApenasNumeralNumero() {
 		TelefoneFixo telefoneFixo = new TelefoneFixo();
 		telefoneFixo.setNumero(generateStringBySizeAndRegexWithOneCharByRegex(NUMERO_TELEFONE_FIXO, SEM_NUMERAL, APENAS_NUMERAL));
@@ -55,7 +49,7 @@ public class TelefoneFixoTestRandomBuilder {
 	
 	public TelefoneFixo buildMenosQue8NumeraisNumero() {
 		TelefoneFixo telefoneFixo = new TelefoneFixo();
-		telefoneFixo.setNumero(generateStringBySizeAndRegex(NUMERO_TELEFONE_FIXO - 1, APENAS_NUMERAL));
+		telefoneFixo.setNumero(telefoneFixoValido.getNumero().substring(0, 7));
 		return telefoneFixo;
 	}
 	

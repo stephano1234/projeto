@@ -4,20 +4,21 @@ import static br.com.contmatic.model.restricoes.RestricaoCampo.CEP;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.COMPLEMENTO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NUMERO_ENDERECO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_ENDERECO_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.COMPLEMENTO_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LOGRADOURO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_ENDERECO_INVALIDO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class Endereco.
@@ -41,26 +42,6 @@ public class Endereco {
     @NotNull(message = LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
     @Valid
     private Logradouro logradouro;
-    
-    /**
-     * Instantiates a new endereco.
-     *
-     * @param cep the cep
-     * @param numero the numero
-     * @param logradouro the logradouro
-     * @param tipoEndereco the tipo endereco
-     */
-    public Endereco(String cep, String numero, Logradouro logradouro) {
-        this.cep = cep;
-        this.numero = numero;
-        this.logradouro = logradouro;
-    }
-
-    /**
-     * Instantiates a new endereco.
-     */
-    public Endereco() {
-    }
     
     /**
      * Gets the cep.
@@ -177,20 +158,11 @@ public class Endereco {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("cep:")
-                .append(cep)
-                .append(",")
-                .append("numero:")
-                .append(numero)
-                .append(",")
-                .append("complemento:")
-                .append(complemento)
-                .append(",")
-                .append("logradouro:")
-                .append(logradouro)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("cep", this.cep)
+        		.append("numero", this.numero)
+        		.append("complemento", this.complemento)
+        		.append("logradouro", this.logradouro)
                 .toString();
     }
     

@@ -1,19 +1,19 @@
 package br.com.contmatic.model.contato;
 
+import static br.com.contmatic.model.random.contato.EmailTestRandomBuilder.cleanBuilder;
+import static br.com.contmatic.model.random.contato.EmailTestRandomBuilder.getInstance;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
-import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
 import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -22,16 +22,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class EmailTest {
     
-	private static EmailTestRandomBuilder random;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() {
-		random = EmailTestRandomBuilder.getInstance();
-	}
-	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		EmailTestRandomBuilder.cleanBuilder();
+		cleanBuilder();
 	}
 
     /**
@@ -39,7 +32,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloEndereco(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloEndereco(), Post.class));
     }
     
     /**
@@ -47,7 +40,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildVazioEndereco(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildVazioEndereco(), Post.class));
     }
         
     /**
@@ -55,7 +48,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildSemArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildSemArroba(), Post.class));
     }
     
     /**
@@ -63,7 +56,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_arroba_precedido_por_caractere_invalido_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildArrobaPrecedidoPorCaractereInvalido(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildArrobaPrecedidoPorCaractereInvalido(), Post.class));
     }
 
     /**
@@ -71,7 +64,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_mais_de_um_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildMaisDeUmArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaisDeUmArroba(), Post.class));
     }
     
     /**
@@ -79,7 +72,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_ponto_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildSemPonto(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildSemPonto(), Post.class));
     }
         
     /**
@@ -87,7 +80,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_antes_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildVazioAntesArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildVazioAntesArroba(), Post.class));
     }
 
     /**
@@ -95,7 +88,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_antes_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoAntesArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaiorTamanhoAntesArroba(), Post.class));
     }
 
     /**
@@ -103,7 +96,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_primeiro_valor_invalido_antes_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildPrimeiroCaractereInvalidoAntesArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildPrimeiroCaractereInvalidoAntesArroba(), Post.class));
     }
     
     /**
@@ -111,7 +104,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_antes_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoAntesArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildCaractereInvalidoAntesArroba(), Post.class));
     }
     
     /**
@@ -119,7 +112,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildVazioDepoisArrobaAtePontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildVazioDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
 
     /**
@@ -127,7 +120,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoDepoisArrobaAtePontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaiorTamanhoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
 
     /**
@@ -135,7 +128,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_primeiro_valor_invalido_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-    	assertTrue(procuraQualquerViolacao(random.buildPrimeiroCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
+    	assertTrue(procuraQualquerViolacao(getInstance().buildPrimeiroCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
     
     /**
@@ -143,7 +136,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_depois_do_arroba_antes_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildCaractereInvalidoDepoisArrobaAtePontoObrigatorio(), Post.class));
     }
     
     /**
@@ -151,7 +144,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_sem_ponto_obrigatorio_depois_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildSemPontoObrigatorioDepoisArroba(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildSemPontoObrigatorioDepoisArroba(), Post.class));
     }
     
     /**
@@ -159,7 +152,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_ponto_precedido_por_caractere_invalido_depois_do_arroba_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildPontoObrigatorioPrecedidoPorCaractereInvalido(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildPontoObrigatorioPrecedidoPorCaractereInvalido(), Post.class));
     }
     
     /**
@@ -167,7 +160,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_menor_que_tamanho_depois_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildMenorTamanhoDepoisPontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMenorTamanhoDepoisPontoObrigatorio(), Post.class));
     }
     
     /**
@@ -175,7 +168,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_depois_do_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoDepoisPontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaiorTamanhoDepoisPontoObrigatorio(), Post.class));
     }
         
     /**
@@ -183,7 +176,7 @@ public class EmailTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_depois_ponto_obrigatorio_no_endereco() {
-        assertTrue(procuraQualquerViolacao(random.buildCaractereInvalidoDepoisPontoObrigatorio(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildCaractereInvalidoDepoisPontoObrigatorio(), Post.class));
     }
     
     /**
@@ -191,27 +184,15 @@ public class EmailTest {
      */
     @Test
     public void deve_aceitar_valor_valido_no_endereco() {
-        assertFalse(procuraQualquerViolacao(random.buildValid(), Post.class));
+        assertFalse(procuraQualquerViolacao(getInstance().buildValid(), Post.class));
     }
 
-    /**
-     * Deve possuir getters e setters implmentados corretamente.
-     */
-    @Test
-    public void deve_possuir_getters_e_setters_implmentados_corretamente() {
-    	assertTrue(verificaEncapsulamentos(Email.class));
-    }
-    
     /**
      * Verifica consistencia da implementacao do metodo equals de acordo com a regra estabelecida de comparacao.
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier
-        .forClass(Email.class)
-        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
-        .withOnlyTheseFields("endereco")
-        .verify();
+        EqualsVerifier.forClass(Email.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).withOnlyTheseFields("endereco").verify();
     }
     
     /**
@@ -219,9 +200,7 @@ public class EmailTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-    	ToStringVerifier
-    	.forClass(Email.class)
-    	.verify();
+    	ToStringVerifier.forClass(Email.class).withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE).verify();
     }
     
 }

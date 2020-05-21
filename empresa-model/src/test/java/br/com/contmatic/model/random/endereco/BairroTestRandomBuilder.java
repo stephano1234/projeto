@@ -17,8 +17,6 @@ public class BairroTestRandomBuilder {
 
 	private static final int TAMANHO_REGULAR = 100;
 
-	private static final CidadeTestRandomBuilder randomCidade = CidadeTestRandomBuilder.getInstance();
-	
 	private final Bairro bairroValido = new BairroRandomBuilder().build();
 
 	private static BairroTestRandomBuilder instance;
@@ -110,7 +108,7 @@ public class BairroTestRandomBuilder {
 	public Bairro buildCidadeInvalido() {
 		Bairro bairro = new Bairro();
 		bairro.setNome(bairroValido.getNome());
-		bairro.setCidade(randomCidade.buildNaoApenasLetraEspacoNome());
+		bairro.setCidade(CidadeTestRandomBuilder.getInstance().buildNaoApenasLetraEspacoNome());
 		return bairro;
 	}
 

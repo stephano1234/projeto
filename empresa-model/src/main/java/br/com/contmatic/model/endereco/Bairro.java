@@ -1,21 +1,22 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_BAIRRO_INVALIDO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
 import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CIDADE_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_BAIRRO_INVALIDO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
-import br.com.contmatic.validacoes.TextDividedBy;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
+import br.com.contmatic.validacoes.TextDividedBy;
 
 /**
  * The Class Bairro.
@@ -32,23 +33,6 @@ public class Bairro {
     @NotNull(message = CIDADE_INVALIDA, groups = {Post.class, Put.class})
     @Valid
     private Cidade cidade;
-    
-    /**
-     * Instantiates a new bairro.
-     *
-     * @param nome the nome
-     * @param cidade the cidade
-     */
-    public Bairro(String nome, Cidade cidade) {
-        this.nome = nome;
-        this.cidade = cidade;
-    }
-
-    /**
-     * Instantiates a new bairro.
-     */
-    public Bairro() {
-    }
     
     /**
      * Gets the nome.
@@ -127,14 +111,9 @@ public class Bairro {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("nome:")
-                .append(nome)
-                .append(",")
-                .append("cidade:")
-                .append(cidade)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("nome", this.nome)
+        		.append("cidade", this.cidade)
                 .toString();
     }
     

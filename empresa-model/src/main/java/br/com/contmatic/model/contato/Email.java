@@ -7,11 +7,12 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class Email.
@@ -22,21 +23,6 @@ public class Email {
     @NotNull(message = ENDERECO_EMAIL_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = EMAIL, groups = {Post.class, Put.class}, message = ENDERECO_EMAIL_INVALIDO)
     private String endereco;
-    
-    /**
-     * Instantiates a new email.
-     *
-     * @param endereco the endereco
-     */
-    public Email(String endereco) {
-        this.endereco = endereco;
-    }
-
-    /**
-     * Instantiates a new email.
-     */
-    public Email() {
-    }
     
     /**
      * Gets the endereco.
@@ -95,11 +81,8 @@ public class Email {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("endereco:")
-                .append(endereco)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("endereco", this.endereco)
                 .toString();
     }
     

@@ -1,25 +1,25 @@
 package br.com.contmatic.model.conta;
 
-import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
-import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
+import static br.com.contmatic.model.random.conta.ContaTestRandomBuilder.cleanBuilder;
+import static br.com.contmatic.model.random.conta.ContaTestRandomBuilder.getInstance;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.AGENCIA_INVALIDA;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CODIGO_BANCO_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_AGENCIA_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_CONTA_INVALIDO;
 import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_CONTA_INVALIDO;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
+import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
+import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
-import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
 import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -28,16 +28,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class ContaTest {
 
-	private static ContaTestRandomBuilder random;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() {
-		random = ContaTestRandomBuilder.getInstance();
-	}
-	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		ContaTestRandomBuilder.cleanBuilder();
+		cleanBuilder();
 	}
 
 	/**
@@ -45,7 +38,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_numero() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloNumero(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloNumero(), Post.class));
     }
     
     /**
@@ -53,7 +46,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_numero() {
-        assertTrue(procuraQualquerViolacao(random.buildVazioNumero(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildVazioNumero(), Post.class));
     }
     
     /**
@@ -61,7 +54,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_numero() {
-        assertTrue(procuraQualquerViolacao(random.buildMaisQue12NumeraisNumero(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaisQue12NumeraisNumero(), Post.class));
     }
     
     /**
@@ -69,7 +62,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_invalido_no_numero() {
-        assertTrue(procuraQualquerViolacao(random.buildNaoApenasNumeralNumero(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNaoApenasNumeralNumero(), Post.class));
     }
     
     /**
@@ -77,7 +70,7 @@ public class ContaTest {
      */
     @Test
     public void deve_aceitar_numero_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), NUMERO_CONTA_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), NUMERO_CONTA_INVALIDO, Post.class));
     }
 
     /**
@@ -85,7 +78,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_agencia() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloAgencia(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloAgencia(), Post.class));
     }
     
     /**
@@ -93,14 +86,14 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_agencia_invalido() {
-        assertTrue(procuraQualquerViolacao(random.buildAgenciaIvalido(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildAgenciaIvalido(), Post.class));
     }
     
     @Test
     public void deve_aceitar_agencia_valida() {
-    	assertFalse(procuraViolacao(random.buildValid(), AGENCIA_INVALIDA, Post.class));
-    	assertFalse(procuraViolacao(random.buildValid(), NUMERO_AGENCIA_INVALIDO, Post.class));
-        assertFalse(procuraViolacao(random.buildValid(), CODIGO_BANCO_INVALIDO, Post.class));
+    	assertFalse(procuraViolacao(getInstance().buildValid(), AGENCIA_INVALIDA, Post.class));
+    	assertFalse(procuraViolacao(getInstance().buildValid(), NUMERO_AGENCIA_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), CODIGO_BANCO_INVALIDO, Post.class));
     }
 
     /**
@@ -108,7 +101,7 @@ public class ContaTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_tipoConta() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloTipoConta(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloTipoConta(), Post.class));
     }
     
     /**
@@ -116,27 +109,15 @@ public class ContaTest {
      */
     @Test
     public void deve_aceitar_valor_nao_nulo_no_tipoConta() {
-        assertFalse(procuraViolacao(random.buildValid(), TIPO_CONTA_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), TIPO_CONTA_INVALIDO, Post.class));
     }    
-    
-    /**
-     * Deve possuir getters e setters implmentados corretamente.
-     */
-    @Test
-    public void deve_possuir_getters_e_setters_implmentados_corretamente() {
-    	assertTrue(verificaEncapsulamentos(Conta.class));
-    }
-    
+        
     /**
      * Verifica consistencia da implementacao do metodo equals de acordo com a regra estabelecida de comparacao.
      */
     @Test
     public void deve_possuir_equals_hashcode_implementados_corretamente() {
-        EqualsVerifier
-        .forClass(Conta.class)
-        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
-        .withOnlyTheseFields("agencia", "numero")
-        .verify();
+        EqualsVerifier.forClass(Conta.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).withOnlyTheseFields("agencia", "numero").verify();
     }
     
     /**
@@ -144,9 +125,7 @@ public class ContaTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-    	ToStringVerifier
-    	.forClass(Conta.class)
-    	.verify();
+    	ToStringVerifier.forClass(Conta.class).withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE).verify();
     }
     
 }

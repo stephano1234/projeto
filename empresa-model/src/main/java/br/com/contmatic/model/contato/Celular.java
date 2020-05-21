@@ -7,11 +7,12 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import br.com.contmatic.validacoes.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import br.com.contmatic.model.restricoes.grupos.Post;
 import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class Celular.
@@ -22,23 +23,6 @@ public class Celular {
     @NotNull(message = NUMERO_CELULAR_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = CELULAR, groups = {Post.class, Put.class}, message = NUMERO_CELULAR_INVALIDO)
     private String numero;
-    
-    /**
-     * Instantiates a new celular.
-     *
-     * @param ddd the ddd
-     * @param numero the numero
-     * @param tipoContatoCelular the tipo contato celular
-     */
-    public Celular(String numero) {
-        this.numero = numero;
-    }
-
-    /**
-     * Instantiates a new celular.
-     */
-    public Celular() {
-    }
     
     /**
      * Gets the numero.
@@ -97,11 +81,8 @@ public class Celular {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("numero:")
-                .append(numero)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("numero", this.numero)
                 .toString();
     }
     

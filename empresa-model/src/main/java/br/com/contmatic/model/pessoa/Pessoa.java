@@ -15,7 +15,8 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.validacoes.CPF;
@@ -57,33 +58,6 @@ public class Pessoa {
 	/** The tipo sexo. */
 	@NotNull(message = TIPO_SEXO_INVALIDO, groups = {Post.class, Put.class})
 	private TipoSexo tipoSexo;
-	
-	/**
-	 * Instantiates a new pessoa.
-	 *
-	 * @param cpf the cpf
-	 * @param nome the nome
-	 * @param enderecos the enderecos
-	 * @param dataNascimento the data nascimento
-	 * @param tipoGrauInstrucao the tipo grau instrucao
-	 * @param tipoEstadoCivil the tipo estado civil
-	 * @param tipoSexo the tipo sexo
-	 */
-	public Pessoa(String cpf, String nome, LocalDate dataNascimento,
-			TipoGrauInstrucao tipoGrauInstrucao, TipoEstadoCivil tipoEstadoCivil, TipoSexo tipoSexo) {
-		this.cpf = cpf;
-		this.nome = nome;
-		this.dataNascimento = dataNascimento;
-		this.tipoGrauInstrucao = tipoGrauInstrucao;
-		this.tipoEstadoCivil = tipoEstadoCivil;
-		this.tipoSexo = tipoSexo;
-	}
-
-	/**
-	 * Instantiates a new pessoa.
-	 */
-	public Pessoa() {
-	}
 	
 	/**
 	 * Gets the cpf.
@@ -232,26 +206,13 @@ public class Pessoa {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder()
-				.append("{")
-				.append("cpf:")
-				.append(cpf)
-				.append(",")
-				.append("nome:")
-				.append(nome)
-				.append(",")
-				.append("dataNascimento:")
-				.append(dataNascimento)
-				.append(",")
-				.append("tipoGrauInstrucao:")
-				.append(tipoGrauInstrucao != null ? tipoGrauInstrucao.name() : null)
-				.append(",")
-				.append("tipoEstadoCivil:")
-				.append(tipoEstadoCivil != null ? tipoEstadoCivil.name() : null)
-				.append(",")
-				.append("tipoSexo:")
-				.append(tipoSexo != null ? tipoSexo.name() : null)
-				.append("}")
+		return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+				.append("cpf", this.cpf)
+				.append("nome", this.nome)
+				.append("dataNascimento", this.dataNascimento)
+				.append("tipoGrauInstrucao", this.tipoGrauInstrucao)
+				.append("tipoEstadoCivil", this.tipoEstadoCivil)
+				.append("tipoSexo", this.tipoSexo)
 				.toString();
 	}
 

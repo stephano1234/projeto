@@ -17,8 +17,6 @@ public class LogradouroTestRandomBuilder {
 
 	private static final int TAMANHO_REGULAR = 100;
 
-	private static final BairroTestRandomBuilder randomBairro = BairroTestRandomBuilder.getInstance();
-	
 	private final Logradouro logradouroValido = new LogradouroRandomBuilder().build();
 
 	private static LogradouroTestRandomBuilder instance;
@@ -110,7 +108,14 @@ public class LogradouroTestRandomBuilder {
 	public Logradouro buildBairroInvalido() {
 		Logradouro logradouro = new Logradouro();
 		logradouro.setNome(logradouroValido.getNome());
-		logradouro.setBairro(randomBairro.buildNaoApenasLetraEspacoNome());
+		logradouro.setBairro(BairroTestRandomBuilder.getInstance().buildNaoApenasLetraEspacoNome());
+		return logradouro;
+	}
+
+	public Logradouro buildCidadeInvalido() {
+		Logradouro logradouro = new Logradouro();
+		logradouro.setNome(logradouroValido.getNome());
+		logradouro.setBairro(BairroTestRandomBuilder.getInstance().buildCidadeInvalido());
 		return logradouro;
 	}
 

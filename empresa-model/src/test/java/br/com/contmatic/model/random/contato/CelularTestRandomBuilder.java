@@ -41,12 +41,6 @@ public class CelularTestRandomBuilder {
 		return celular;
 	}
 	
-	public Celular buildVazioNumero() {
-		Celular celular = new Celular();
-		celular.setNumero("");
-		return celular;
-	}
-	
 	public Celular buildNaoApenasNumeralNumero() {
 		Celular celular = new Celular();
 		celular.setNumero(generateStringBySizeAndRegexWithOneCharByRegex(NUMERO_CELULAR, SEM_NUMERAL, APENAS_NUMERAL));
@@ -55,7 +49,7 @@ public class CelularTestRandomBuilder {
 	
 	public Celular buildMenosQue9NumeraisNumero() {
 		Celular celular = new Celular();
-		celular.setNumero(generateStringBySizeAndRegex(NUMERO_CELULAR - 1, APENAS_NUMERAL));
+		celular.setNumero(celularValido.getNumero().substring(0, 8));
 		return celular;
 	}
 	
