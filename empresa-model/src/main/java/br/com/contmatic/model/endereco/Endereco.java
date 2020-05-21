@@ -1,28 +1,24 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.CEP;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.COMPLEMENTO;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.NUMERO_ENDERECO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CEP_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NUMERO_ENDERECO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.COMPLEMENTO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LOGRADOURO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ENDERECO_INVALIDO;
-
-import java.util.Set;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.CEP;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.COMPLEMENTO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.NUMERO_ENDERECO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CEP_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.COMPLEMENTO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.LOGRADOURO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NUMERO_ENDERECO_INVALIDO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import br.com.contmatic.model.contato.TelefoneFixo;
-import br.com.contmatic.validacoes.NaoNulo;
-import br.com.contmatic.validacoes.NaoNuloCollection;
-import br.com.contmatic.validacoes.groups.Post;
-import br.com.contmatic.validacoes.groups.Put;
+import br.com.contmatic.model.restricoes.grupos.Post;
+import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 
 /**
  * The Class Endereco.
@@ -30,7 +26,7 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Endereco {
 
     /** The cep. */
-    @NaoNulo(message = CEP_INVALIDO, groups = {Post.class})
+    @NotNull(message = CEP_INVALIDO, groups = {Post.class, Put.class})
     @Pattern(regexp = CEP, groups = {Post.class, Put.class}, message = CEP_INVALIDO)
     private String cep;
     
@@ -43,39 +39,9 @@ public class Endereco {
     private String complemento;
     
     /** The logradouro. */
-    @NaoNulo(message = LOGRADOURO_INVALIDO, groups = {Post.class})
+    @NotNull(message = LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
     @Valid
     private Logradouro logradouro;
-    
-	/** The telefones fixo. */
-    @NaoNuloCollection(groups = {Post.class}, message = LISTA_TELEFONES_INVALIDA)
-    @Valid
-    private Set<TelefoneFixo> telefonesFixo;
-    
-    /** The tipo endereco. */
-    @NaoNulo(message = TIPO_ENDERECO_INVALIDO, groups = {Post.class})
-    private TipoEndereco tipoEndereco;
-    
-    /**
-     * Instantiates a new endereco.
-     *
-     * @param cep the cep
-     * @param numero the numero
-     * @param logradouro the logradouro
-     * @param tipoEndereco the tipo endereco
-     */
-    public Endereco(String cep, String numero, Logradouro logradouro, TipoEndereco tipoEndereco) {
-        this.cep = cep;
-        this.numero = numero;
-        this.logradouro = logradouro;
-        this.tipoEndereco = tipoEndereco;
-    }
-
-    /**
-     * Instantiates a new endereco.
-     */
-    public Endereco() {
-    }
     
     /**
      * Gets the cep.
@@ -150,42 +116,6 @@ public class Endereco {
     }
 
     /**
-     * Gets the telefones fixo.
-     *
-     * @return the telefones fixo
-     */
-    public Set<TelefoneFixo> getTelefonesFixo() {
-        return telefonesFixo;
-    }
-
-    /**
-     * Sets the telefones fixo.
-     *
-     * @param telefonesFixo the new telefones fixo
-     */
-    public void setTelefonesFixo(Set<TelefoneFixo> telefonesFixo) {
-        this.telefonesFixo = telefonesFixo;
-    }
-
-    /**
-     * Gets the tipo endereco.
-     *
-     * @return the tipo endereco
-     */
-    public TipoEndereco getTipoEndereco() {
-        return tipoEndereco;
-    }
-
-    /**
-     * Sets the tipo endereco.
-     *
-     * @param tipoEndereco the new tipo endereco
-     */
-    public void setTipoEndereco(TipoEndereco tipoEndereco) {
-        this.tipoEndereco = tipoEndereco;
-    }
-    
-    /**
      * Hash code.
      *
      * @return the int
@@ -228,26 +158,11 @@ public class Endereco {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("cep:")
-                .append(cep)
-                .append(",")
-                .append("numero:")
-                .append(numero)
-                .append(",")
-                .append("complemento:")
-                .append(complemento)
-                .append(",")
-                .append("logradouro:")
-                .append(logradouro)
-                .append(",")
-                .append("telefonesFixo:")
-                .append(telefonesFixo)
-                .append(",")
-                .append("tipoEndereco:")
-                .append(tipoEndereco != null ? tipoEndereco.name() : null)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("cep", this.cep)
+        		.append("numero", this.numero)
+        		.append("complemento", this.complemento)
+        		.append("logradouro", this.logradouro)
                 .toString();
     }
     

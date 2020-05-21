@@ -1,21 +1,22 @@
 package br.com.contmatic.model.endereco;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
-
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOURO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.BAIRRO_INVALIDO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.BAIRRO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_LOGRADOURO_INVALIDO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import br.com.contmatic.validacoes.NaoNulo;
+import br.com.contmatic.model.restricoes.grupos.Post;
+import br.com.contmatic.model.restricoes.grupos.Put;
+import br.com.contmatic.validacoes.NotNull;
 import br.com.contmatic.validacoes.TextDividedBy;
-import br.com.contmatic.validacoes.groups.Post;
-import br.com.contmatic.validacoes.groups.Put;
 
 /**
  * The Class Logradouro.
@@ -23,32 +24,15 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Logradouro {
 
     /** The nome. */
-    @NaoNulo(message = NOME_LOGRADOURO_INVALIDO, groups = {Post.class})
+    @NotNull(message = NOME_LOGRADOURO_INVALIDO, groups = {Post.class, Put.class})
     @TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_LOGRADOURO_INVALIDO)
     @Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_LOGRADOURO_INVALIDO)
     private String nome;
     
     /** The bairro. */
-    @NaoNulo(message = BAIRRO_INVALIDO, groups = {Post.class})
+    @NotNull(message = BAIRRO_INVALIDO, groups = {Post.class, Put.class})
     @Valid
     private Bairro bairro;
-    
-    /**
-     * Instantiates a new logradouro.
-     *
-     * @param nome the nome
-     * @param bairro the bairro
-     */
-    public Logradouro(String nome, Bairro bairro) {
-        this.nome = nome;
-        this.bairro = bairro;
-    }
-
-    /**
-     * Instantiates a new logradouro.
-     */
-    public Logradouro() {
-    }
     
     /**
      * Gets the nome.
@@ -127,14 +111,9 @@ public class Logradouro {
      */
     @Override
     public String toString() {
-        return new StringBuilder()
-        		.append("{")
-                .append("nome:")
-                .append(nome)
-                .append(",")
-                .append("bairro:")
-                .append(bairro)
-                .append("}")
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+        		.append("nome", this.nome)
+        		.append("bairro", this.bairro)
                 .toString();
     }
     

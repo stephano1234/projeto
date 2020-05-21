@@ -17,14 +17,12 @@ import br.com.contmatic.model.contato.Email;
 import br.com.contmatic.model.contato.TelefoneFixo;
 import br.com.contmatic.model.empresa.Empresa;
 import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.model.pessoa.ContratoTrabalho;
 import br.com.contmatic.model.pessoa.Pessoa;
 import br.com.contmatic.model.random.conta.ContaTestRandomBuilder;
 import br.com.contmatic.model.random.contato.CelularTestRandomBuilder;
 import br.com.contmatic.model.random.contato.EmailTestRandomBuilder;
 import br.com.contmatic.model.random.contato.TelefoneFixoTestRandomBuilder;
 import br.com.contmatic.model.random.endereco.EnderecoTestRandomBuilder;
-import br.com.contmatic.model.random.pessoa.ContratoTrabalhoTestRandomBuilder;
 import br.com.contmatic.model.random.pessoa.PessoaTestRandomBuilder;
 
 public class EmpresaTestRandomBuilder {
@@ -43,38 +41,24 @@ public class EmpresaTestRandomBuilder {
 
 	public static final String INVALIDO_NOME = "[^A-ZÁÉÍÓÚÃÕÀÂÊÔÇ &\\-ªº\\.']";
 
-	private static final TelefoneFixoTestRandomBuilder randomTelefoneFixo = TelefoneFixoTestRandomBuilder.getInstance();
-
-	private static final EnderecoTestRandomBuilder randomEndereco = EnderecoTestRandomBuilder.getInstance();
-
-	private static final ContaTestRandomBuilder randomConta = ContaTestRandomBuilder.getInstance();
-
-	private static final CelularTestRandomBuilder randomCelular = CelularTestRandomBuilder.getInstance();
-
-	private static final EmailTestRandomBuilder randomEmail = EmailTestRandomBuilder.getInstance();
-
-	private static final PessoaTestRandomBuilder randomPessoa = PessoaTestRandomBuilder.getInstance();
-
-	private static final ContratoTrabalhoTestRandomBuilder randomContratoTrabalho = ContratoTrabalhoTestRandomBuilder.getInstance();
-	
 	private final Empresa empresaValida = EmpresaRandomBuilder.getInstance().build();
-	
+
 	private static EmpresaTestRandomBuilder instance;
-	
+
 	private EmpresaTestRandomBuilder() {
 	}
-	
+
 	public static EmpresaTestRandomBuilder getInstance() {
 		if (instance == null) {
 			instance = new EmpresaTestRandomBuilder();
 		}
 		return instance;
 	}
-	
+
 	public Empresa buildValid() {
 		return empresaValida;
 	}
-	
+
 	public static void cleanBuilder() {
 		EmailTestRandomBuilder.cleanBuilder();
 		CelularTestRandomBuilder.cleanBuilder();
@@ -82,7 +66,7 @@ public class EmpresaTestRandomBuilder {
 		EnderecoTestRandomBuilder.cleanBuilder();
 		TelefoneFixoTestRandomBuilder.cleanBuilder();
 		PessoaTestRandomBuilder.cleanBuilder();
-		ContratoTrabalhoTestRandomBuilder.cleanBuilder();
+		EmpresaRandomBuilder.closeBuilder();
 		instance = null;
 	}
 
@@ -91,7 +75,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(null);
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -108,7 +91,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(generateStringBySizeAndRegex(CNPJ + 1, APENAS_NUMERAL));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -125,7 +107,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(generateStringBySizeAndRegex(CNPJ - 1, APENAS_NUMERAL));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -142,7 +123,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(generateStringBySizeAndRegexWithOneCharByRegex(CNPJ, SEM_NUMERAL, APENAS_NUMERAL));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -159,7 +139,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(generateStringBySizeAndRegex(CNPJ, Integer.toString(nextInt(0, 10))));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -176,7 +155,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(cnpjInvalido(12));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -193,7 +171,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(cnpjInvalido(13));
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -210,7 +187,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(null);
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -227,7 +203,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial("");
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -244,7 +219,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR + 1), ESPACO));
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -261,7 +235,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(ESPACO + empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -278,7 +251,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial() + ESPACO);
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -295,7 +267,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(generateStringBySizeAndRegexWithSeparator(TAMANHO_REGULAR + 1, VALIDO_NOME, ESPACO));
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -313,7 +284,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setRazaoSocial(generateStringBySizeAndRegexWithOneCharByRegex(nextInt(1, TAMANHO_REGULAR + 1),
 				INVALIDO_NOME, VALIDO_NOME));
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -331,7 +301,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setRazaoSocial(generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME) + "  "
 				+ generateStringBySizeAndRegex(nextInt(1, TAMANHO_REGULAR / 2), VALIDO_NOME));
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -348,7 +317,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(null);
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -365,7 +333,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(new HashSet<>());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -382,7 +349,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		Set<Endereco> enderecosComElementoNulo = new HashSet<>();
 		enderecosComElementoNulo.addAll(empresaValida.getEnderecos());
 		enderecosComElementoNulo.add(null);
@@ -402,10 +368,9 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		Set<Endereco> enderecosComElementoInvalido = new HashSet<>();
 		enderecosComElementoInvalido.addAll(empresaValida.getEnderecos());
-		enderecosComElementoInvalido.add(randomEndereco.buildNaoApenasNumeralCep());
+		enderecosComElementoInvalido.add(EnderecoTestRandomBuilder.getInstance().buildNaoApenasNumeralCep());
 		empresa.setEnderecos(enderecosComElementoInvalido);
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -417,13 +382,15 @@ public class EmpresaTestRandomBuilder {
 		return empresa;
 	}
 
-	public Empresa buildNuloContratosTrabalho() {
+	public Empresa buildEnderecosComLogradouroInvalido() {
 		Empresa empresa = new Empresa();
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(null);
-		empresa.setEnderecos(empresaValida.getEnderecos());
+		Set<Endereco> enderecosComElementoInvalido = new HashSet<>();
+		enderecosComElementoInvalido.addAll(empresaValida.getEnderecos());
+		enderecosComElementoInvalido.add(EnderecoTestRandomBuilder.getInstance().buildLogradouroInvalido());
+		empresa.setEnderecos(enderecosComElementoInvalido);
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
 		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
@@ -434,16 +401,15 @@ public class EmpresaTestRandomBuilder {
 		return empresa;
 	}
 
-	public Empresa buildContratosTrabalhoComElementoNulo() {
+	public Empresa buildEnderecosComBairroInvalido() {
 		Empresa empresa = new Empresa();
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		Set<ContratoTrabalho> contratosTrabalhoComElementoNulo = new HashSet<>();
-		contratosTrabalhoComElementoNulo.addAll(empresaValida.getContratosTrabalho());
-		contratosTrabalhoComElementoNulo.add(null);
-		empresa.setContratosTrabalho(contratosTrabalhoComElementoNulo);
-		empresa.setEnderecos(empresaValida.getEnderecos());
+		Set<Endereco> enderecosComElementoInvalido = new HashSet<>();
+		enderecosComElementoInvalido.addAll(empresaValida.getEnderecos());
+		enderecosComElementoInvalido.add(EnderecoTestRandomBuilder.getInstance().buildBairroInvalido());
+		empresa.setEnderecos(enderecosComElementoInvalido);
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
 		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
@@ -454,16 +420,15 @@ public class EmpresaTestRandomBuilder {
 		return empresa;
 	}
 
-	public Empresa buildContratosTrabalhoComElementoInvalido() {
+	public Empresa buildEnderecosComCidadeInvalido() {
 		Empresa empresa = new Empresa();
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		Set<ContratoTrabalho> contratosTrabalhoComElementoInvalido = new HashSet<>();
-		contratosTrabalhoComElementoInvalido.addAll(empresaValida.getContratosTrabalho());
-		contratosTrabalhoComElementoInvalido.add(randomContratoTrabalho.buildNuloPessoa());
-		empresa.setContratosTrabalho(contratosTrabalhoComElementoInvalido);
-		empresa.setEnderecos(empresaValida.getEnderecos());
+		Set<Endereco> enderecosComElementoInvalido = new HashSet<>();
+		enderecosComElementoInvalido.addAll(empresaValida.getEnderecos());
+		enderecosComElementoInvalido.add(EnderecoTestRandomBuilder.getInstance().buildCidadeInvalido());
+		empresa.setEnderecos(enderecosComElementoInvalido);
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
 		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
@@ -479,7 +444,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(null);
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -496,7 +460,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(new HashSet<>());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -516,7 +479,6 @@ public class EmpresaTestRandomBuilder {
 		responsaveisComElementoNulo.addAll(empresaValida.getResponsaveis());
 		responsaveisComElementoNulo.add(null);
 		empresa.setResponsaveis(responsaveisComElementoNulo);
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -534,9 +496,8 @@ public class EmpresaTestRandomBuilder {
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		Set<Pessoa> responsaveisComElementoInvalido = new HashSet<>();
 		responsaveisComElementoInvalido.addAll(empresaValida.getResponsaveis());
-		responsaveisComElementoInvalido.add(randomPessoa.buildNuloCpf());
+		responsaveisComElementoInvalido.add(PessoaTestRandomBuilder.getInstance().buildNuloCpf());
 		empresa.setResponsaveis(responsaveisComElementoInvalido);
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -553,7 +514,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -570,7 +530,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -590,13 +549,12 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
 		Set<TelefoneFixo> telefonesFixoComElementoInvalido = new HashSet<>();
 		telefonesFixoComElementoInvalido.addAll(empresaValida.getTelefonesFixo());
-		telefonesFixoComElementoInvalido.add(randomTelefoneFixo.buildNaoApenasNumeralNumero());
+		telefonesFixoComElementoInvalido.add(TelefoneFixoTestRandomBuilder.getInstance().buildNaoApenasNumeralNumero());
 		empresa.setTelefonesFixo(telefonesFixoComElementoInvalido);
 		empresa.setEmails(empresaValida.getEmails());
 		empresa.setTipoEmpresa(empresaValida.getTipoEmpresa());
@@ -610,7 +568,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(null);
@@ -627,7 +584,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		Set<Celular> celularesComElementoNulo = new HashSet<>();
@@ -647,12 +603,11 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		Set<Celular> celularesComElementoInvalido = new HashSet<>();
 		celularesComElementoInvalido.addAll(empresaValida.getCelulares());
-		celularesComElementoInvalido.add(randomCelular.buildNaoApenasNumeralNumero());
+		celularesComElementoInvalido.add(CelularTestRandomBuilder.getInstance().buildNaoApenasNumeralNumero());
 		empresa.setCelulares(celularesComElementoInvalido);
 		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
 		empresa.setEmails(empresaValida.getEmails());
@@ -667,7 +622,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -684,7 +638,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -704,14 +657,13 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
 		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
 		Set<Email> emailsComElementoInvalido = new HashSet<>();
 		emailsComElementoInvalido.addAll(empresaValida.getEmails());
-		emailsComElementoInvalido.add(randomEmail.buildNuloEndereco());
+		emailsComElementoInvalido.add(EmailTestRandomBuilder.getInstance().buildNuloEndereco());
 		empresa.setEmails(emailsComElementoInvalido);
 		empresa.setTipoEmpresa(empresaValida.getTipoEmpresa());
 		empresa.setTipoPorteEmpresa(empresaValida.getTipoPorteEmpresa());
@@ -724,7 +676,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -741,7 +692,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -761,7 +711,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -771,7 +720,26 @@ public class EmpresaTestRandomBuilder {
 		empresa.setTipoPorteEmpresa(empresaValida.getTipoPorteEmpresa());
 		Set<Conta> contasComElementoInvalido = new HashSet<>();
 		contasComElementoInvalido.addAll(empresaValida.getContas());
-		contasComElementoInvalido.add(randomConta.buildNaoApenasNumeralNumero());
+		contasComElementoInvalido.add(ContaTestRandomBuilder.getInstance().buildNaoApenasNumeralNumero());
+		empresa.setContas(contasComElementoInvalido);
+		return empresa;
+	}
+
+	public Empresa buildContasComAgenciaInvalido() {
+		Empresa empresa = new Empresa();
+		empresa.setCnpj(empresaValida.getCnpj());
+		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
+		empresa.setResponsaveis(empresaValida.getResponsaveis());
+		empresa.setEnderecos(empresaValida.getEnderecos());
+		empresa.setDataAbertura(empresaValida.getDataAbertura());
+		empresa.setCelulares(empresaValida.getCelulares());
+		empresa.setTelefonesFixo(empresaValida.getTelefonesFixo());
+		empresa.setEmails(empresaValida.getEmails());
+		empresa.setTipoEmpresa(empresaValida.getTipoEmpresa());
+		empresa.setTipoPorteEmpresa(empresaValida.getTipoPorteEmpresa());
+		Set<Conta> contasComElementoInvalido = new HashSet<>();
+		contasComElementoInvalido.addAll(empresaValida.getContas());
+		contasComElementoInvalido.add(ContaTestRandomBuilder.getInstance().buildAgenciaIvalido());
 		empresa.setContas(contasComElementoInvalido);
 		return empresa;
 	}
@@ -781,7 +749,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(null);
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -798,7 +765,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(LocalDate.now().plusDays(nextInt(1, 100)));
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -815,7 +781,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -832,7 +797,6 @@ public class EmpresaTestRandomBuilder {
 		empresa.setCnpj(empresaValida.getCnpj());
 		empresa.setRazaoSocial(empresaValida.getRazaoSocial());
 		empresa.setResponsaveis(empresaValida.getResponsaveis());
-		empresa.setContratosTrabalho(empresaValida.getContratosTrabalho());
 		empresa.setEnderecos(empresaValida.getEnderecos());
 		empresa.setDataAbertura(empresaValida.getDataAbertura());
 		empresa.setCelulares(empresaValida.getCelulares());
@@ -843,5 +807,5 @@ public class EmpresaTestRandomBuilder {
 		empresa.setContas(empresaValida.getContas());
 		return empresa;
 	}
-	
+
 }

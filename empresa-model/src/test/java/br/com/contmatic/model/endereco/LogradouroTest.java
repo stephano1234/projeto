@@ -1,25 +1,25 @@
 package br.com.contmatic.model.endereco;
 
+import static br.com.contmatic.model.random.endereco.LogradouroTestRandomBuilder.cleanBuilder;
+import static br.com.contmatic.model.random.endereco.LogradouroTestRandomBuilder.getInstance;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.BAIRRO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CIDADE_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_BAIRRO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_LOGRADOURO_INVALIDO;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraQualquerViolacao;
 import static br.com.contmatic.testes.utilidades.Verificadores.procuraViolacao;
-import static br.com.contmatic.testes.utilidades.Verificadores.verificaEncapsulamentos;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.BAIRRO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CIDADE_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_BAIRRO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_LOGRADOURO_INVALIDO;
+import static com.jparams.verifier.tostring.preset.Presets.APACHE_TO_STRING_BUILDER_JSON_STYLE;
 import static nl.jqno.equalsverifier.Warning.ALL_FIELDS_SHOULD_BE_USED;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
-import br.com.contmatic.model.random.endereco.LogradouroTestRandomBuilder;
-import br.com.contmatic.validacoes.groups.Post;
+import br.com.contmatic.model.restricoes.grupos.Post;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
@@ -27,16 +27,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  */
 public class LogradouroTest {
     
-	private static LogradouroTestRandomBuilder random;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() {
-		random = LogradouroTestRandomBuilder.getInstance();
-	}
-	
 	@AfterClass
 	public static void tearDownAfterClass() {
-		LogradouroTestRandomBuilder.cleanBuilder();
+		cleanBuilder();
 	}
 
     /**
@@ -44,7 +37,7 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloNome(), Post.class));
     }
     
     /**
@@ -52,7 +45,7 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_vazio_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildVazioNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildVazioNome(), Post.class));
     }
     
     /**
@@ -60,7 +53,7 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_maior_que_tamanho_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildMaiorTamanhoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildMaiorTamanhoNome(), Post.class));
     }
 
     /**
@@ -68,17 +61,17 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_apenas_espaco_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildApenasEspacoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildApenasEspacoNome(), Post.class));
     }
     
     @Test
     public void nao_deve_aceitar_valor_com_espaco_no_inicio_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildInicioEspacoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildInicioEspacoNome(), Post.class));
     }
     
     @Test
     public void nao_deve_aceitar_valor_com_apenas_espaco_no_fim_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildFimEspacoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildFimEspacoNome(), Post.class));
     }
     
     /**
@@ -86,7 +79,7 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_um_caractere_nao_letra_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildNaoApenasLetraEspacoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNaoApenasLetraEspacoNome(), Post.class));
     }
     
     /**
@@ -94,7 +87,7 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_com_dois_espacos_juntos_no_nome() {
-        assertTrue(procuraQualquerViolacao(random.buildEspacoSeguidoDeEspacoNome(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildEspacoSeguidoDeEspacoNome(), Post.class));
     }
     
     /**
@@ -102,7 +95,7 @@ public class LogradouroTest {
      */
     @Test
     public void deve_aceitar_nome_valido() {
-        assertFalse(procuraViolacao(random.buildValid(), NOME_LOGRADOURO_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), NOME_LOGRADOURO_INVALIDO, Post.class));
     }
     
     /**
@@ -110,12 +103,13 @@ public class LogradouroTest {
      */
     @Test
     public void nao_deve_aceitar_valor_nulo_na_bairro() {
-        assertTrue(procuraQualquerViolacao(random.buildNuloBairro(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildNuloBairro(), Post.class));
     }
     
     @Test
     public void nao_deve_aceitar_valor_invalido_na_bairro() {
-        assertTrue(procuraQualquerViolacao(random.buildBairroInvalido(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildBairroInvalido(), Post.class));
+        assertTrue(procuraQualquerViolacao(getInstance().buildCidadeInvalido(), Post.class));
     }
     
     /**
@@ -123,17 +117,9 @@ public class LogradouroTest {
      */
     @Test
     public void deve_aceitar_bairro_valida() {
-        assertFalse(procuraViolacao(random.buildValid(), BAIRRO_INVALIDO, Post.class));
-        assertFalse(procuraViolacao(random.buildValid(), NOME_BAIRRO_INVALIDO, Post.class));
-        assertFalse(procuraViolacao(random.buildValid(), CIDADE_INVALIDA, Post.class));
-    }
-    
-    /**
-     * Deve possuir getters e setters implmentados corretamente.
-     */
-    @Test
-    public void deve_possuir_getters_e_setters_implmentados_corretamente() {
-    	assertTrue(verificaEncapsulamentos(Logradouro.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), BAIRRO_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), NOME_BAIRRO_INVALIDO, Post.class));
+        assertFalse(procuraViolacao(getInstance().buildValid(), CIDADE_INVALIDA, Post.class));
     }
     
     /**
@@ -141,11 +127,7 @@ public class LogradouroTest {
      */
     @Test
     public void verifica_consistencia_da_implementacao_do_metodo_equals_de_acordo_com_a_regra_estabelecida_de_comparacao() {
-        EqualsVerifier
-        .forClass(Logradouro.class)
-        .suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED)
-        .withOnlyTheseFields("nome", "bairro")
-        .verify();
+        EqualsVerifier.forClass(Logradouro.class).suppress(NONFINAL_FIELDS, ALL_FIELDS_SHOULD_BE_USED).withOnlyTheseFields("nome", "bairro").verify();
     }
     
     /**
@@ -153,9 +135,7 @@ public class LogradouroTest {
      */
     @Test
     public void metodo_toString_deve_gerar_representacao_do_objeto_em_json_com_todos_os_atributos_da_classe() {
-    	ToStringVerifier
-    	.forClass(Logradouro.class)
-    	.verify();
+    	ToStringVerifier.forClass(Logradouro.class).withPreset(APACHE_TO_STRING_BUILDER_JSON_STYLE).verify();
     }
     
 }

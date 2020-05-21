@@ -19,8 +19,6 @@ public class ContaTestRandomBuilder {
 	/** The Constant SEM_LETRA_NUMERAL. */
 	private static final String SEM_LETRA_NUMERAL = "[^A-Za-z0-9]";
 
-	private static final AgenciaTestRandomBuilder randomAgencia = AgenciaTestRandomBuilder.getInstance();
-	
 	private final Conta contaValida = new ContaRandomBuilder().build();
 	
 	private static ContaTestRandomBuilder instance;
@@ -59,7 +57,7 @@ public class ContaTestRandomBuilder {
 	 */
 	public Conta buildAgenciaIvalido() {
 		final Conta conta = new Conta();
-		conta.setAgencia(randomAgencia.buildNaoApenasNumeralNumero());
+		conta.setAgencia(AgenciaTestRandomBuilder.getInstance().buildNaoApenasNumeralNumero());
 		conta.setNumero(contaValida.getNumero());
 		conta.setTipoConta(contaValida.getTipoConta());
 		return conta;

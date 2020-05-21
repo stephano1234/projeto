@@ -1,42 +1,30 @@
 package br.com.contmatic.model.pessoa;
 
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.NOME;
-import static br.com.contmatic.validacoes.utilidades.ConstantesString.ESPACO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.CPF_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.NOME_PESSOA_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.DATA_NASCIMENTO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CELULARES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_CONTAS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_EMAILS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_ENDERECOS_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.LISTA_TELEFONES_INVALIDA;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_SEXO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
-import static br.com.contmatic.validacoes.utilidades.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.ESPACO;
+import static br.com.contmatic.model.restricoes.RestricaoCampo.NOME;
 
-import java.util.Set;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.CPF_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.NOME_RESPONSAVEL_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.DATA_NASCIMENTO_INVALIDA;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_SEXO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_GRAU_INSTRUCAO_INVALIDO;
+import static br.com.contmatic.model.restricoes.mensagens.MensagensErro.TIPO_ESTADO_CIVIL_INVALIDO;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.LocalDate;
 
-import br.com.contmatic.model.conta.Conta;
-import br.com.contmatic.model.contato.Celular;
-import br.com.contmatic.model.contato.Email;
-import br.com.contmatic.model.contato.TelefoneFixo;
-import br.com.contmatic.model.endereco.Endereco;
-import br.com.contmatic.validacoes.CPFbr;
-import br.com.contmatic.validacoes.NaoNulo;
-import br.com.contmatic.validacoes.NaoNuloCollection;
-import br.com.contmatic.validacoes.NotEmptyCollection;
+import br.com.contmatic.validacoes.CPF;
+import br.com.contmatic.validacoes.NotNull;
 import br.com.contmatic.validacoes.TextDividedBy;
-import br.com.contmatic.validacoes.groups.Post;
-import br.com.contmatic.validacoes.groups.Put;
+
+import br.com.contmatic.model.restricoes.grupos.Post;
+import br.com.contmatic.model.restricoes.grupos.Put;
 
 /**
  * The Class Pessoa.
@@ -44,85 +32,32 @@ import br.com.contmatic.validacoes.groups.Put;
 public class Pessoa {
 
 	/** The cpf. */
-	@NaoNulo(message = CPF_INVALIDO, groups = {Post.class})
-	@CPFbr(groups = {Post.class, Put.class})
+	@NotNull(message = CPF_INVALIDO, groups = {Post.class, Put.class})
+	@CPF(message = CPF_INVALIDO, groups = {Post.class, Put.class})
 	private String cpf;
 
 	/** The nome. */
-	@NaoNulo(message = NOME_PESSOA_INVALIDO, groups = {Post.class})
-	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
-	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_PESSOA_INVALIDO)
+	@NotNull(message = NOME_RESPONSAVEL_INVALIDO, groups = {Post.class, Put.class})
+	@TextDividedBy(separator = ESPACO, groups = {Post.class, Put.class}, message = NOME_RESPONSAVEL_INVALIDO)
+	@Pattern(regexp = NOME, groups = {Post.class, Put.class}, message = NOME_RESPONSAVEL_INVALIDO)
 	private String nome;
 
-	/** The enderecos. */
-	@NotEmptyCollection(groups = {Post.class}, message = LISTA_ENDERECOS_INVALIDA)
-	@Valid
-	private Set<Endereco> enderecos;
-
 	/** The data nascimento. */
-	@NaoNulo(message = DATA_NASCIMENTO, groups = {Post.class})
-	@Past(message = DATA_NASCIMENTO, groups = {Post.class, Put.class})
+	@NotNull(message = DATA_NASCIMENTO_INVALIDA, groups = {Post.class, Put.class})
+	@Past(message = DATA_NASCIMENTO_INVALIDA, groups = {Post.class, Put.class})
 	private LocalDate dataNascimento;
 
-	/** The celulares. */
-	@NaoNuloCollection(groups = {Post.class}, message = LISTA_CELULARES_INVALIDA)
-	@Valid
-	private Set<Celular> celulares;
-	
-	/** The telefones fixo. */
-	@NaoNuloCollection(groups = {Post.class}, message = LISTA_TELEFONES_INVALIDA)
-	@Valid
-	private Set<TelefoneFixo> telefonesFixo;
-
-	/** The emails. */
-	@NaoNuloCollection(groups = {Post.class}, message = LISTA_EMAILS_INVALIDA)
-	@Valid
-	private Set<Email> emails;
-
 	/** The tipo grau instrucao. */
-	@NaoNulo(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class})
+	@NotNull(message = TIPO_GRAU_INSTRUCAO_INVALIDO, groups = {Post.class, Put.class})
 	private TipoGrauInstrucao tipoGrauInstrucao;
 
 	/** The tipo estado civil. */
-	@NaoNulo(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class})
+	@NotNull(message = TIPO_ESTADO_CIVIL_INVALIDO, groups = {Post.class, Put.class})
 	private TipoEstadoCivil tipoEstadoCivil;
 
 	/** The tipo sexo. */
-	@NaoNulo(message = TIPO_SEXO_INVALIDO, groups = {Post.class})
+	@NotNull(message = TIPO_SEXO_INVALIDO, groups = {Post.class, Put.class})
 	private TipoSexo tipoSexo;
-	
-	/** The contas. */
-	@NaoNuloCollection(groups = {Post.class}, message = LISTA_CONTAS_INVALIDA)
-	@Valid
-	private Set<Conta> contas;
-
-	/**
-	 * Instantiates a new pessoa.
-	 *
-	 * @param cpf the cpf
-	 * @param nome the nome
-	 * @param enderecos the enderecos
-	 * @param dataNascimento the data nascimento
-	 * @param tipoGrauInstrucao the tipo grau instrucao
-	 * @param tipoEstadoCivil the tipo estado civil
-	 * @param tipoSexo the tipo sexo
-	 */
-	public Pessoa(String cpf, String nome, Set<Endereco> enderecos, LocalDate dataNascimento,
-			TipoGrauInstrucao tipoGrauInstrucao, TipoEstadoCivil tipoEstadoCivil, TipoSexo tipoSexo) {
-		this.cpf = cpf;
-		this.nome = nome;
-		this.enderecos = enderecos;
-		this.dataNascimento = dataNascimento;
-		this.tipoGrauInstrucao = tipoGrauInstrucao;
-		this.tipoEstadoCivil = tipoEstadoCivil;
-		this.tipoSexo = tipoSexo;
-	}
-
-	/**
-	 * Instantiates a new pessoa.
-	 */
-	public Pessoa() {
-	}
 	
 	/**
 	 * Gets the cpf.
@@ -161,24 +96,6 @@ public class Pessoa {
 	}
 
 	/**
-	 * Gets the enderecos.
-	 *
-	 * @return the enderecos
-	 */
-	public Set<Endereco> getEnderecos() {
-		return enderecos;
-	}
-
-	/**
-	 * Sets the enderecos.
-	 *
-	 * @param enderecos the new enderecos
-	 */
-	public void setEnderecos(Set<Endereco> enderecos) {
-		this.enderecos = enderecos;
-	}
-
-	/**
 	 * Gets the data nascimento.
 	 *
 	 * @return the data nascimento
@@ -194,60 +111,6 @@ public class Pessoa {
 	 */
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
-	}
-
-	/**
-	 * Gets the celulares.
-	 *
-	 * @return the celulares
-	 */
-	public Set<Celular> getCelulares() {
-		return celulares;
-	}
-
-	/**
-	 * Sets the celulares.
-	 *
-	 * @param celulares the new celulares
-	 */
-	public void setCelulares(Set<Celular> celulares) {
-		this.celulares = celulares;
-	}
-
-	/**
-	 * Gets the telefones fixo.
-	 *
-	 * @return the telefones fixo
-	 */
-	public Set<TelefoneFixo> getTelefonesFixo() {
-		return telefonesFixo;
-	}
-
-	/**
-	 * Sets the telefones fixo.
-	 *
-	 * @param telefonesFixo the new telefones fixo
-	 */
-	public void setTelefonesFixo(Set<TelefoneFixo> telefonesFixo) {
-		this.telefonesFixo = telefonesFixo;
-	}
-
-	/**
-	 * Gets the emails.
-	 *
-	 * @return the emails
-	 */
-	public Set<Email> getEmails() {
-		return emails;
-	}
-
-	/**
-	 * Sets the emails.
-	 *
-	 * @param emails the new emails
-	 */
-	public void setEmails(Set<Email> emails) {
-		this.emails = emails;
 	}
 
 	/**
@@ -305,24 +168,6 @@ public class Pessoa {
 	}
 
 	/**
-	 * Gets the contas.
-	 *
-	 * @return the contas
-	 */
-	public Set<Conta> getContas() {
-		return contas;
-	}
-
-	/**
-	 * Sets the contas.
-	 *
-	 * @param contas the new contas
-	 */
-	public void setContas(Set<Conta> contas) {
-		this.contas = contas;
-	}
-
-	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -361,41 +206,13 @@ public class Pessoa {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder()
-				.append("{")
-				.append("cpf:")
-				.append(cpf)
-				.append(",")
-				.append("nome:")
-				.append(nome)
-				.append(",")
-				.append("enderecos:")
-				.append(enderecos)
-				.append(",")
-				.append("dataNascimento:")
-				.append(dataNascimento)
-				.append(",")
-				.append("celulares:")
-				.append(celulares)
-				.append(",")
-				.append("telefonesFixo:")
-				.append(telefonesFixo)
-				.append(",")
-				.append("emails:")
-				.append(emails)
-				.append(",")
-				.append("tipoGrauInstrucao:")
-				.append(tipoGrauInstrucao != null ? tipoGrauInstrucao.name() : null)
-				.append(",")
-				.append("tipoEstadoCivil:")
-				.append(tipoEstadoCivil != null ? tipoEstadoCivil.name() : null)
-				.append(",")
-				.append("tipoSexo:")
-				.append(tipoSexo != null ? tipoSexo.name() : null)
-				.append(",")
-				.append("contas:")
-				.append(contas)
-				.append("}")
+		return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+				.append("cpf", this.cpf)
+				.append("nome", this.nome)
+				.append("dataNascimento", this.dataNascimento)
+				.append("tipoGrauInstrucao", this.tipoGrauInstrucao)
+				.append("tipoEstadoCivil", this.tipoEstadoCivil)
+				.append("tipoSexo", this.tipoSexo)
 				.toString();
 	}
 
