@@ -237,8 +237,12 @@ public class EmpresaResourceAssemblerTest {
 						conta.getTipoConta().name());
 				indexOfResourceArray++;
 			}
+			EmpresaResource resourceWithAssemblerError = new EmpresaResource();
+			resourceWithAssemblerError.setTipoEmpresa("INCOMPATIVEL_COM_NAME_EXISTENTE");
+			getInstance().toEntity(resourceWithAssemblerError);
+			fail();
 		} catch (AssemblerException e) {
-			fail(e.toString());
+			assertNotNull(e);
 		}
 	}
 
@@ -252,8 +256,13 @@ public class EmpresaResourceAssemblerTest {
 				resources.add(EmpresaResourceV1RandomBuilder.getInstance().build());
 			}
 			assertEquals(10, getInstance().toEntities(resources).size());			
+			EmpresaResource resourceWithAssemblerError = new EmpresaResource();
+			resourceWithAssemblerError.setTipoEmpresa("INCOMPATIVEL_COM_NAME_EXISTENTE");
+			resources.add(resourceWithAssemblerError);
+			getInstance().toEntities(resources);
+			fail();
 		} catch (AssemblerException e) {
-			fail(e.toString());
+			assertNotNull(e);
 		}
 	}
 

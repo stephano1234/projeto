@@ -3,7 +3,6 @@ package br.com.contmatic.service.empresa;
 import java.util.List;
 
 import br.com.contmatic.model.empresa.Empresa;
-import br.com.contmatic.repository.configuracao.MongoConnection;
 import br.com.contmatic.repository.empresa.EmpresaRepository;
 import br.com.contmatic.repository.empresa.EmpresaRepositoryImpl;
 import br.com.contmatic.service.mensagens.MensagemServidor;
@@ -21,17 +20,24 @@ public class EmpresaService {
 	
 	private static final String CHAVE_PRIMARIA_DUPLICADA = "Já existe uma empresa armazenada com o mesmo C.N.P.J. no banco de dados.";
 
-	private EmpresaRepository empresaMongoRepository = EmpresaRepositoryImpl
-			.getInstance(MongoConnection.getInstance().getMongoDatabase());
+	private EmpresaRepository empresaMongoRepository;
 
 	private static EmpresaService instance;
 
-	private EmpresaService() {
+	private EmpresaService(EmpresaRepository empresaMongoRepository) {
+		this.empresaMongoRepository = empresaMongoRepository;
 	}
 
 	public static EmpresaService getInstance() {
 		if (instance == null) {
-			instance = new EmpresaService();
+			instance = new EmpresaService(EmpresaRepositoryImpl.getInstance());
+		}
+		return instance;
+	}
+
+	public static EmpresaService getInstance(EmpresaRepository empresaMongoRepository) {
+		if (instance == null) {
+			instance = new EmpresaService(empresaMongoRepository);
 		}
 		return instance;
 	}
