@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import br.com.contmatic.assembler.empresa.EmpresaResourceAssembler;
 import br.com.contmatic.assembler.exception.AssemblerException;
@@ -18,6 +19,10 @@ import br.com.contmatic.service.empresa.EmpresaService;
 import br.com.contmatic.service.mensagens.MensagemServidor;
 
 public class EmpresasCnpjController extends HttpServlet {
+
+	private static final String APPLICATION_XML = "application/xml";
+
+	private static final String ACCEPT = "Accept";
 
 	private static final String ALLOW = "Allow";
 
@@ -29,7 +34,9 @@ public class EmpresasCnpjController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final ObjectMapper mapper = new ObjectMapper();
+	private static final ObjectMapper mapperJson = new ObjectMapper();
+	
+	private static final XmlMapper mapperXml = new XmlMapper();
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -50,7 +57,11 @@ public class EmpresasCnpjController extends HttpServlet {
 
 	private void getEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
-		resp.setContentType(APPLICATION_JSON);
+		if (req.getHeader(ACCEPT).equals(APPLICATION_XML)) {
+			resp.setContentType(APPLICATION_XML);
+		} else {		
+			resp.setContentType(APPLICATION_JSON);
+		}
 		PrintWriter out = resp.getWriter();
 		String cnpj = req.getPathInfo().substring(1);
 		Empresa entity = EmpresaService.getInstance().findByCnpj(cnpj);
@@ -63,24 +74,40 @@ public class EmpresasCnpjController extends HttpServlet {
 				out.print(e.toString());
 			}
 			if (resource != null) {
-				out.print(mapper.writeValueAsString(resource));
+				if (req.getHeader(ACCEPT).equals(APPLICATION_XML)) {
+					out.print(mapperXml.writeValueAsString(resource));
+				} else {		
+					out.print(mapperJson.writeValueAsString(resource));
+				}
 			}			
 		} else {
 			MensagemServidor mensagemServidor = EmpresaService.getInstance().sendNotFoundResponse();
 			resp.setStatus(mensagemServidor.getStatusCode());
-			out.print(mapper.writeValueAsString(mensagemServidor));
+			if (req.getHeader(ACCEPT).equals(APPLICATION_XML)) {
+				out.print(mapperXml.writeValueAsString(mensagemServidor));
+			} else {		
+				out.print(mapperJson.writeValueAsString(mensagemServidor));
+			}
 		}
 		out.flush();
 	}
 
 	private void deleteEmpresa(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setCharacterEncoding(UTF_8);
-		resp.setContentType(APPLICATION_JSON);
+		if (req.getHeader(ACCEPT).equals(APPLICATION_XML)) {
+			resp.setContentType(APPLICATION_XML);
+		} else {		
+			resp.setContentType(APPLICATION_JSON);
+		}
 		PrintWriter out = resp.getWriter();
 		String cnpj = req.getPathInfo().substring(1);
 		MensagemServidor mensagemServidor = EmpresaService.getInstance().delete(cnpj);
 		resp.setStatus(mensagemServidor.getStatusCode());
-		out.print(mapper.writeValueAsString(mensagemServidor));
+		if (req.getHeader(ACCEPT).equals(APPLICATION_XML)) {
+			out.print(mapperXml.writeValueAsString(mensagemServidor));
+		} else {		
+			out.print(mapperJson.writeValueAsString(mensagemServidor));
+		}
 		out.flush();
 	}
 

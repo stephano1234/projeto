@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -58,69 +57,6 @@ public class EmpresaResourceAssemblerTest {
 	public void testToEntity() {
 		try {
 			assertNull(getInstance().toEntity(null));
-			Empresa entityWithAllEmptyArrays = getInstance().toEntity(new EmpresaResource());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getCelulares());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getTelefonesFixo());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getEmails());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getEnderecos());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getResponsaveis());
-			assertEquals(Collections.EMPTY_SET, entityWithAllEmptyArrays.getContas());
-			EmpresaResource resourceWithAllRecursiveNullAtributtes = new EmpresaResource();
-			resourceWithAllRecursiveNullAtributtes.getCelulares().add(new CelularResource());
-			resourceWithAllRecursiveNullAtributtes.getTelefonesFixos().add(new TelefoneFixoResource());
-			resourceWithAllRecursiveNullAtributtes.getEmails().add(new EmailResource());
-			resourceWithAllRecursiveNullAtributtes.getEnderecos().add(new EnderecoResource());
-			resourceWithAllRecursiveNullAtributtes.getResponsaveis().add(new ResponsavelResource());
-			resourceWithAllRecursiveNullAtributtes.getContasBancarias().add(new ContaBancariaResource());
-			Empresa entityWithAllRecursiveNullAtributtes = getInstance()
-					.toEntity(resourceWithAllRecursiveNullAtributtes);
-			assertNull(entityWithAllRecursiveNullAtributtes.getCnpj());
-			assertNull(entityWithAllRecursiveNullAtributtes.getRazaoSocial());
-			assertNull(entityWithAllRecursiveNullAtributtes.getDataAbertura());
-			assertNull(entityWithAllRecursiveNullAtributtes.getTipoEmpresa());
-			assertNull(entityWithAllRecursiveNullAtributtes.getTipoPorteEmpresa());
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getCelulares());
-			for (Celular celular : entityWithAllRecursiveNullAtributtes.getCelulares()) {
-				assertNull(celular.getNumero());
-			}
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getTelefonesFixo());
-			for (TelefoneFixo telefoneFixo : entityWithAllRecursiveNullAtributtes.getTelefonesFixo()) {
-				assertNull(telefoneFixo.getNumero());
-			}
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getEmails());
-			for (Email email : entityWithAllRecursiveNullAtributtes.getEmails()) {
-				assertNull(email.getEndereco());
-			}
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getEnderecos());
-			for (Endereco endereco : entityWithAllRecursiveNullAtributtes.getEnderecos()) {
-				assertNull(endereco.getCep());
-				assertNull(endereco.getNumero());
-				assertNull(endereco.getComplemento());
-				assertNotNull(endereco.getLogradouro());
-				assertNull(endereco.getLogradouro().getNome());
-				assertNotNull(endereco.getLogradouro().getBairro());
-				assertNull(endereco.getLogradouro().getBairro().getNome());
-				assertNotNull(endereco.getLogradouro().getBairro().getCidade());
-				assertNull(endereco.getLogradouro().getBairro().getCidade().getNome());
-				assertNull(endereco.getLogradouro().getBairro().getCidade().getTipoUf());
-			}
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getResponsaveis());
-			for (Pessoa pessoa : entityWithAllRecursiveNullAtributtes.getResponsaveis()) {
-				assertNull(pessoa.getCpf());
-				assertNull(pessoa.getNome());
-				assertNull(pessoa.getDataNascimento());
-				assertNull(pessoa.getTipoGrauInstrucao());
-				assertNull(pessoa.getTipoEstadoCivil());
-				assertNull(pessoa.getTipoSexo());
-			}
-			assertNotNull(entityWithAllRecursiveNullAtributtes.getContas());
-			for (Conta conta : entityWithAllRecursiveNullAtributtes.getContas()) {
-				assertNull(conta.getNumero());
-				assertNotNull(conta.getAgencia());
-				assertNull(conta.getAgencia().getNumero());
-				assertNull(conta.getAgencia().getCodigoBanco());
-				assertNull(conta.getTipoConta());
-			}
 			Empresa entity = getInstance().toEntity(resource);
 			assertEquals(resource.getCnpj(), entity.getCnpj());
 			assertEquals(resource.getRazaoSocial(), entity.getRazaoSocial());
@@ -237,12 +173,8 @@ public class EmpresaResourceAssemblerTest {
 						conta.getTipoConta().name());
 				indexOfResourceArray++;
 			}
-			EmpresaResource resourceWithAssemblerError = new EmpresaResource();
-			resourceWithAssemblerError.setTipoEmpresa("INCOMPATIVEL_COM_NAME_EXISTENTE");
-			getInstance().toEntity(resourceWithAssemblerError);
-			fail();
 		} catch (AssemblerException e) {
-			assertNotNull(e);
+			fail(e.toString());
 		}
 	}
 
@@ -256,13 +188,8 @@ public class EmpresaResourceAssemblerTest {
 				resources.add(EmpresaResourceV1RandomBuilder.getInstance().build());
 			}
 			assertEquals(10, getInstance().toEntities(resources).size());			
-			EmpresaResource resourceWithAssemblerError = new EmpresaResource();
-			resourceWithAssemblerError.setTipoEmpresa("INCOMPATIVEL_COM_NAME_EXISTENTE");
-			resources.add(resourceWithAssemblerError);
-			getInstance().toEntities(resources);
-			fail();
 		} catch (AssemblerException e) {
-			assertNotNull(e);
+			fail(e.toString());
 		}
 	}
 
@@ -270,72 +197,6 @@ public class EmpresaResourceAssemblerTest {
 	public void testToResource() {
 		try {
 			assertNull(getInstance().toResource(null));
-			EmpresaResource resourceWithAllEmptyArrays = getInstance().toResource(new Empresa());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getCelulares());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getTelefonesFixos());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getEmails());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getEnderecos());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getResponsaveis());
-			assertEquals(Collections.EMPTY_LIST, resourceWithAllEmptyArrays.getContasBancarias());
-			Empresa entityWithAllRecursiveNullAtributtes = new Empresa();
-			entityWithAllRecursiveNullAtributtes.setCelulares(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getCelulares().add(new Celular());
-			entityWithAllRecursiveNullAtributtes.setTelefonesFixo(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getTelefonesFixo().add(new TelefoneFixo());
-			entityWithAllRecursiveNullAtributtes.setEmails(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getEmails().add(new Email());
-			entityWithAllRecursiveNullAtributtes.setEnderecos(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getEnderecos().add(new Endereco());
-			entityWithAllRecursiveNullAtributtes.setResponsaveis(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getResponsaveis().add(new Pessoa());
-			entityWithAllRecursiveNullAtributtes.setContas(new HashSet<>());
-			entityWithAllRecursiveNullAtributtes.getContas().add(new Conta());
-			EmpresaResource resourceWithAllRecursiveNullAtributtes = getInstance()
-					.toResource(entityWithAllRecursiveNullAtributtes);
-			assertNull(resourceWithAllRecursiveNullAtributtes.getCnpj());
-			assertNull(resourceWithAllRecursiveNullAtributtes.getRazaoSocial());
-			assertNull(resourceWithAllRecursiveNullAtributtes.getDataAbertura());
-			assertNull(resourceWithAllRecursiveNullAtributtes.getTipoEmpresa());
-			assertNull(resourceWithAllRecursiveNullAtributtes.getTipoPorteEmpresa());
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getCelulares());
-			for (CelularResource celular : resourceWithAllRecursiveNullAtributtes.getCelulares()) {
-				assertNull(celular.getNumero());
-			}
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getTelefonesFixos());
-			for (TelefoneFixoResource telefoneFixo : resourceWithAllRecursiveNullAtributtes.getTelefonesFixos()) {
-				assertNull(telefoneFixo.getNumero());
-			}
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getEmails());
-			for (EmailResource email : resourceWithAllRecursiveNullAtributtes.getEmails()) {
-				assertNull(email.getEndereco());
-			}
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getEnderecos());
-			for (EnderecoResource endereco : resourceWithAllRecursiveNullAtributtes.getEnderecos()) {
-				assertNull(endereco.getCep());
-				assertNull(endereco.getNumero());
-				assertNull(endereco.getComplemento());
-				assertNull(endereco.getLogradouro());
-				assertNull(endereco.getLogradouro());
-				assertNull(endereco.getBairro());
-				assertNull(endereco.getCidade());
-				assertNull(endereco.getTipoUf());
-			}
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getResponsaveis());
-			for (ResponsavelResource pessoa : resourceWithAllRecursiveNullAtributtes.getResponsaveis()) {
-				assertNull(pessoa.getCpf());
-				assertNull(pessoa.getNome());
-				assertNull(pessoa.getDataNascimento());
-				assertNull(pessoa.getTipoGrauInstrucao());
-				assertNull(pessoa.getTipoEstadoCivil());
-				assertNull(pessoa.getTipoSexo());
-			}
-			assertNotNull(resourceWithAllRecursiveNullAtributtes.getContasBancarias());
-			for (ContaBancariaResource conta : resourceWithAllRecursiveNullAtributtes.getContasBancarias()) {
-				assertNull(conta.getNumero());
-				assertNull(conta.getNumeroAgencia());
-				assertNull(conta.getCodigoBanco());
-				assertNull(conta.getTipoContaBancaria());
-			}
 			EmpresaResource resource = getInstance().toResource(entity);
 			assertEquals(resource.getCnpj(), entity.getCnpj());
 			assertEquals(resource.getRazaoSocial(), entity.getRazaoSocial());
