@@ -11,16 +11,26 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import br.com.contmatic.model.empresa.Empresa;
+import br.com.contmatic.repository.configuracao.MongoConnection;
 import br.com.contmatic.repository.empresa.conversores.EmpresaConversor;
 
 public final class EmpresaRepositoryImpl implements EmpresaRepository {
+
+	private static final String COLLECTION_EMPRESA = "empresa";
 
 	private static final String ID = "_id";
 
 	private MongoCollection<Document> mongoCollection;
 
 	private static EmpresaRepositoryImpl instance;
-		
+
+	public static EmpresaRepositoryImpl getInstance() {
+		if (instance == null) {
+			instance = new EmpresaRepositoryImpl(MongoConnection.getInstance().getMongoDatabase());
+		}
+		return instance;
+	}
+
 	public static EmpresaRepositoryImpl getInstance(MongoDatabase mongoDatabase) {
 		if (instance == null) {
 			instance = new EmpresaRepositoryImpl(mongoDatabase);
@@ -29,7 +39,7 @@ public final class EmpresaRepositoryImpl implements EmpresaRepository {
 	}
 	
 	private EmpresaRepositoryImpl(MongoDatabase mongoDatabase) {
-		this.mongoCollection = mongoDatabase.getCollection("empresa");
+		this.mongoCollection = mongoDatabase.getCollection(COLLECTION_EMPRESA);
 	}
 
 	public static void closeRepository() {

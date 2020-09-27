@@ -67,9 +67,6 @@ public class EmpresaResourceAssembler {
 				toEntityContasBancarias(resource, entity);
 				toEntityTipoEmpresa(resource, entity);
 				toEntityTipoPorteEmpresa(resource, entity);
-				if (resource.getTipoPorteEmpresa() != null) {
-					entity.setTipoPorteEmpresa(TipoPorteEmpresa.valueOf(resource.getTipoPorteEmpresa()));
-				}
 			}
 			return entity;			
 		} catch (Exception e) {

@@ -17,9 +17,6 @@
         <dependent-module archiveName="empresa-assembler-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/empresa-assembler/empresa-assembler">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="modelo-canonico-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modelo-canonico/modelo-canonico">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="empresa-api"/>
         <property name="java-output-path" value="/empresa-api/target/classes"/>
     </wb-module>
